@@ -1,16 +1,52 @@
-# cartaapp
+# Carta
 
-A new Flutter project.
+Audiobook app for LibriVox and Internet Archive.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+# How to build
 
-A few resources to get you started if this is your first Flutter project:
+Check [this page for Android](https://docs.flutter.dev/deployment/android) and
+[this page for iOS](https://docs.flutter.dev/deployment/ios).
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Note that the source is expecting `/android/key.properties` file for Android build.
+Otherwise you need to delete keystore information from `/android/app/build.gradle`.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+In other words, delete following lines from the build.gradle.
+```
+   def keystoreProperties = new Properties()
+   def keystorePropertiesFile = rootProject.file('key.properties')
+   if (keystorePropertiesFile.exists()) {
+       keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+   }
+```
+And replace these lines
+```
+   signingConfigs {
+       release {
+           keyAlias keystoreProperties['keyAlias']
+           keyPassword keystoreProperties['keyPassword']
+           storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+           storePassword keystoreProperties['storePassword']
+       }
+   }
+   buildTypes {
+       release {
+           signingConfig signingConfigs.release
+       }
+   }
+```
+with the lines below
+```
+   buildTypes {
+       release {
+           // TODO: Add your own signing config for the release build.
+           // Signing with the debug keys for now,
+           // so `flutter run --release` works.
+           signingConfig signingConfigs.debug
+       }
+   }
+```
+
+[Check this for details.](https://docs.flutter.dev/deployment/android#create-an-upload-keystore).
+
+
