@@ -1,0 +1,2036 @@
+{
+  "version": 1,
+  "createdAt": "2023-02-21T21:29:46.030341",
+  "data": [
+    {
+      "title": "Alice in Blunderland: an Iridescent Dream",
+      "source": "librivox",
+      "authors": "John Kendrick Bangs",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/alice-in-blunderland-an-iridescent-dream-by-john-kendrick-bangs/"
+      }
+    },
+    {
+      "title": "Alice's Adventures in Wonderland (version 7)",
+      "source": "librivox",
+      "authors": "Lewis Carroll",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/alices-adventures-in-wonderland-version-7-by-lewis-carroll/"
+      }
+    },
+    {
+      "title": "Childhood's Favorites and Fairy Stories",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/childhoods-favorites-and-fairy-stories-by-various/"
+      }
+    },
+    {
+      "title": "Children's Short Works, Vol. 001",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/childrens-short-works-vol-001/"
+      }
+    },
+    {
+      "title": "Children's Short Works, Vol. 002",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/childrens-short-works-collection-vol-002-by-various/"
+      }
+    },
+    {
+      "title": "Children's Short Works, Vol. 003",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/childrens-short-works-collection-vol-003/"
+      }
+    },
+    {
+      "title": "Christmas Short Works Collection 2017",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/christmas-short-works-collection-2017-by-various/"
+      }
+    },
+    {
+      "title": "Favorite Fairy Tales",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/favorite-fairy-tales-by-various"
+      }
+    },
+    {
+      "title": "Merry Clappum Junction",
+      "source": "librivox",
+      "authors": "Arnold Kennedy",
+      "readers": "Ruth Golding",
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/merry-clappum-junction-by-arnold-kennedy/"
+      }
+    },
+    {
+      "title": "Peter and Wendy (Version 2)",
+      "source": "librivox",
+      "authors": "J. M. Barrie",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/peter-and-wendy-version-2-by-j-m-barrie/"
+      }
+    },
+    {
+      "title": "Pollyanna (version 2)",
+      "source": "librivox",
+      "authors": "Eleanor H. Porter",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/pollyanna-by-eleanor-h-porter-2/"
+      }
+    },
+    {
+      "title": "Raggedy Ann Stories",
+      "source": "librivox",
+      "authors": "Johnny Gruelle",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/raggedy-ann-stories-by-john-b-gruelle"
+      }
+    },
+    {
+      "title": "The Adventures of Pinocchio (version 2)",
+      "source": "librivox",
+      "authors": "Carlo Collodi",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/the-adventures-of-pinocchio-by-carlo-collodi/"
+      }
+    },
+    {
+      "title": "The Children's Shakespeare",
+      "source": "librivox",
+      "authors": "E. Nesbit",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/the-childrens-shakespeare-by-edith-nesbit/"
+      }
+    },
+    {
+      "title": "The Magic City",
+      "source": "librivox",
+      "authors": "E. Nesbit",
+      "readers": "Ruth Golding",
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/the-magic-city-by-e-nesbit/"
+      }
+    },
+    {
+      "title": "The Magic Pudding",
+      "source": "librivox",
+      "authors": "Norman Lindsay",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/the-magic-pudding-by-norman-lindsay/"
+      }
+    },
+    {
+      "title": "The Magic World",
+      "source": "librivox",
+      "authors": "E. Nesbit",
+      "readers": "Ruth Golding",
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/the-magic-world-by-e-nesbit/"
+      }
+    },
+    {
+      "title": "The Secret Garden",
+      "source": "librivox",
+      "authors": "Frances Hodgson Burnett",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/the-secret-garden-by-frances-hodgson-burnett/"
+      }
+    },
+    {
+      "title": "The Story of Doctor Dolittle",
+      "source": "librivox",
+      "authors": "Hugh Lofting",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/the-story-of-doctor-dolittle-by-hugh-lofting/"
+      }
+    },
+    {
+      "title": "The Wind in the Willows (version 3)",
+      "source": "librivox",
+      "authors": "Kenneth Grahame",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/the-wind-in-the-willows-by-kenneth-grahame-solo/"
+      }
+    },
+    {
+      "title": "The Wonderful Garden",
+      "source": "librivox",
+      "authors": "E. Nesbit",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/the-wonderful-garden-or-the-three-c-s-by-e-nesbit/"
+      }
+    },
+    {
+      "title": "The Wonderful Wizard of Oz (version 3) (Dramatic Reading)",
+      "source": "librivox",
+      "authors": "L. Frank Baum",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/the-wonderful-wizard-of-oz-by-l-frank-baum/"
+      }
+    },
+    {
+      "title": "Winnie-the-Pooh",
+      "source": "librivox",
+      "authors": "A. A. Milne",
+      "readers": null,
+      "genre": "Children's",
+      "data": {
+        "siteUrl": "https://librivox.org/winnie-the-pooh-by-a-a-milne/"
+      }
+    },
+    {
+      "title": "A Florentine Tragedy and La Sainte Courtisane",
+      "source": "librivox",
+      "authors": "Oscar Wilde",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/a-florentine-tragedy-and-la-sainte-courtisane-by-oscar-wilde/"
+      }
+    },
+    {
+      "title": "A Midsummer Night's Dream (version 2)",
+      "source": "librivox",
+      "authors": "William Shakespeare",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/a-midsummer-nights-dream-version-2-by-william-shakespeare/"
+      }
+    },
+    {
+      "title": "All's Well That Ends Well",
+      "source": "librivox",
+      "authors": "William Shakespeare",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/alls-well-that-ends-well-by-william-shakespeare/"
+      }
+    },
+    {
+      "title": "As You Like It",
+      "source": "librivox",
+      "authors": "William Shakespeare",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/as-you-like-it-by-william-shakespeare/"
+      }
+    },
+    {
+      "title": "Cinderella",
+      "source": "librivox",
+      "authors": "George Calderon",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/cinderella-by-george-calderon/"
+      }
+    },
+    {
+      "title": "Creditors",
+      "source": "librivox",
+      "authors": "August Strindberg",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/creditors-by-august-strindberg/"
+      }
+    },
+    {
+      "title": "Cymbeline",
+      "source": "librivox",
+      "authors": "William Shakespeare",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/cymbeline-by-william-shakespeare/"
+      }
+    },
+    {
+      "title": "Eugénie Grandet",
+      "source": "librivox",
+      "authors": "Honoré de Balzac",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/eugenie-grandet-by-honore-de-balzac/"
+      }
+    },
+    {
+      "title": "Exiles",
+      "source": "librivox",
+      "authors": "James Joyce",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/exiles-by-james-joyce/"
+      }
+    },
+    {
+      "title": "Father Goriot (version 2)",
+      "source": "librivox",
+      "authors": "Honoré de Balzac",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/father-goriot-version-2-by-honore-de-balzac/"
+      }
+    },
+    {
+      "title": "Five O'Clock Tea",
+      "source": "librivox",
+      "authors": "William Dean Howells",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/five-oclock-tea-by-william-dean-howells/"
+      }
+    },
+    {
+      "title": "He and She",
+      "source": "librivox",
+      "authors": "Rachel Crothers",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/he-and-she-by-rachel-crothers/"
+      }
+    },
+    {
+      "title": "Headlong Hall (dramatic reading)",
+      "source": "librivox",
+      "authors": "Thomas Love Peacock",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/headlong-hall-by-thomas-love-peacock/"
+      }
+    },
+    {
+      "title": "Heartbreak House",
+      "source": "librivox",
+      "authors": "George Bernard Shaw",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/heartbreak-house-by-george-bernard-shaw/"
+      }
+    },
+    {
+      "title": "Henry VIII",
+      "source": "librivox",
+      "authors": "William Shakespeare",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/henry-viii-by-william-shakespeare/"
+      }
+    },
+    {
+      "title": "Hippolytus",
+      "source": "librivox",
+      "authors": "Euripides",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/hippolytus-by-euripides/"
+      }
+    },
+    {
+      "title": "Ivanov",
+      "source": "librivox",
+      "authors": "Anton Chekhov",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/ivanov-by-anton-chekhov/"
+      }
+    },
+    {
+      "title": "John Gabriel Borkman",
+      "source": "librivox",
+      "authors": "Henrik Ibsen",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/john-gabriel-borkman-by-henrik-ibsen/"
+      }
+    },
+    {
+      "title": "Lady Windermere's Fan",
+      "source": "librivox",
+      "authors": "Oscar Wilde",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/lady-windermeres-fan-by-oscar-wilde/"
+      }
+    },
+    {
+      "title": "Little Eyolf",
+      "source": "librivox",
+      "authors": "Henrik Ibsen",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/little-eyolf-by-henrik-ibsen/"
+      }
+    },
+    {
+      "title": "Measure For Measure",
+      "source": "librivox",
+      "authors": "William Shakespeare",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/measure-for-measure-by-william-shakespeare/"
+      }
+    },
+    {
+      "title": "Mr. Punch's Dramatic Sequels",
+      "source": "librivox",
+      "authors": "St. John Emile Clavering Hankin",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/mr-punchs-dramatic-sequels-by-st-john-hankin/"
+      }
+    },
+    {
+      "title": "One-Act Play Collection 006",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/one-act-play-collection-006-by-various/"
+      }
+    },
+    {
+      "title": "Orestes",
+      "source": "librivox",
+      "authors": "Euripides",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/orestes-by-euripides/"
+      }
+    },
+    {
+      "title": "Othello",
+      "source": "librivox",
+      "authors": "William Shakespeare",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/othello-by-william-shakespeare/"
+      }
+    },
+    {
+      "title": "Richard III",
+      "source": "librivox",
+      "authors": "William Shakespeare",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/richard-iii-by-william-shakespeare/"
+      }
+    },
+    {
+      "title": "Salome",
+      "source": "librivox",
+      "authors": "Oscar Wilde",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/salome-by-oscar-wilde/"
+      }
+    },
+    {
+      "title": "Shakespeare Monologues Collection vol. 07",
+      "source": "librivox",
+      "authors": "William Shakespeare",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/shakespeare-monologues-007-by-william-shakespeare/"
+      }
+    },
+    {
+      "title": "Six Characters in Search of an Author",
+      "source": "librivox",
+      "authors": "Luigi Pirandello",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/six-characters-in-search-of-an-author-by-pirandello/"
+      }
+    },
+    {
+      "title": "The Cherry Orchard",
+      "source": "librivox",
+      "authors": "Anton Chekhov",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/the-cherry-orchard-by-anton-chekhov/"
+      }
+    },
+    {
+      "title": "The Dance of Death",
+      "source": "librivox",
+      "authors": "August Strindberg",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/the-dance-of-death-by-august-strindberg/"
+      }
+    },
+    {
+      "title": "The Divine Comedy (version 2 Dramatic Reading)",
+      "source": "librivox",
+      "authors": "Dante Alighieri",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/the-divine-comedy-version-2-dramatic-reading-by-dante-alighieri/"
+      }
+    },
+    {
+      "title": "The Importance of Being Earnest (version 3)",
+      "source": "librivox",
+      "authors": "Oscar Wilde",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/the-importance-of-being-earnest-version-3-by-oscar-wilde/"
+      }
+    },
+    {
+      "title": "The Lady From the Sea",
+      "source": "librivox",
+      "authors": "Henrik Ibsen",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/the-lady-from-the-sea-by-henrik-ibsen/"
+      }
+    },
+    {
+      "title": "The Proposal",
+      "source": "librivox",
+      "authors": "Anton Chekhov",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/the-proposal-by-anton-chekhov/"
+      }
+    },
+    {
+      "title": "The Seagull",
+      "source": "librivox",
+      "authors": "Anton Chekhov",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/the-seagull-by-anton-chekhov-trans-fell/"
+      }
+    },
+    {
+      "title": "The Tragedy of Macbeth",
+      "source": "librivox",
+      "authors": "William Shakespeare",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/the-tragedy-of-macbeth-by-william-shakespeare/"
+      }
+    },
+    {
+      "title": "Uncle Vanya",
+      "source": "librivox",
+      "authors": "Anton Chekhov",
+      "readers": null,
+      "genre": "Comedy Tragedy",
+      "data": {
+        "siteUrl": "https://librivox.org/uncle-vanya-by-anton-chekhov/"
+      }
+    },
+    {
+      "title": "A Daughter of Today",
+      "source": "librivox",
+      "authors": "Sara Jeannette Duncan",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/a-daughter-of-today-by-sara-jeannette-duncan/"
+      }
+    },
+    {
+      "title": "A House to Let",
+      "source": "librivox",
+      "authors": "Charles Dickens",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/a-house-to-let-by-charles-dickens-and-others/"
+      }
+    },
+    {
+      "title": "A House-Boat on the Styx",
+      "source": "librivox",
+      "authors": "John Kendrick Bangs",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/a-house-boat-on-the-styx-by-john-kendrick-bangs/"
+      }
+    },
+    {
+      "title": "A Superfluous Woman",
+      "source": "librivox",
+      "authors": "Emma Francis  Brooke",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/a-superfluous-woman-by-emma-francis-brooke/"
+      }
+    },
+    {
+      "title": "Aristopia: A Romance-History of the New World",
+      "source": "librivox",
+      "authors": "Castello Newton Holford",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/aristopia-by-castello-newton-holford/"
+      }
+    },
+    {
+      "title": "Armand Durand",
+      "source": "librivox",
+      "authors": "Rosanna Eleanor Leprohon",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/armand-durand-by-rosanna-eleanor-leprohon/"
+      }
+    },
+    {
+      "title": "Brothers Karamazov (version 3)",
+      "source": "librivox",
+      "authors": "Fyodor Dostoyevsky",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/brothers-karamazov-v3-by-fyodor-dostoyevsky/"
+      }
+    },
+    {
+      "title": "Buddenbrooks",
+      "source": "librivox",
+      "authors": "Thomas Mann",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/buddenbrooks-by-thomas-mann/"
+      }
+    },
+    {
+      "title": "Cleek of Scotland Yard",
+      "source": "librivox",
+      "authors": "Thomas W. Hanshew",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/cleek-of-scotland-yard-by-thomas-w-hanshew/"
+      }
+    },
+    {
+      "title": "Cleek: The Man of the Forty Faces",
+      "source": "librivox",
+      "authors": "Thomas W. Hanshew",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/cleek-the-man-of-the-forty-faces-by-thomas-w-hanshew/"
+      }
+    },
+    {
+      "title": "Cousin Betty",
+      "source": "librivox",
+      "authors": "Honoré de Balzac",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/cousin-betty-by-honore-de-balzac/"
+      }
+    },
+    {
+      "title": "Cousin Pons",
+      "source": "librivox",
+      "authors": "Honoré de Balzac",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/cousin-pons-by-honore-de-balzac/"
+      }
+    },
+    {
+      "title": "Crime and Punishment (Version 3)",
+      "source": "librivox",
+      "authors": "Fyodor Dostoyevsky",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/crime-and-punishment-version-3-by-fyodor-dostoyevsky/"
+      }
+    },
+    {
+      "title": "Les Misérables, Volume 1",
+      "source": "librivox",
+      "authors": "Victor Hugo",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/les-miserables-vol-1-by-victor-hugo/"
+      }
+    },
+    {
+      "title": "Les Misérables, Volume 2",
+      "source": "librivox",
+      "authors": "Victor Hugo",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/les-miserables-volume-02-by-victor-hugo/"
+      }
+    },
+    {
+      "title": "Les Misérables, Volume 3",
+      "source": "librivox",
+      "authors": "Victor Hugo",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/les-miserables-vol-3-by-victor-hugo/"
+      }
+    },
+    {
+      "title": "Les Misérables, Volume 4",
+      "source": "librivox",
+      "authors": "Victor Hugo",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/les-miserables-vol-4-by-victor-hugo/"
+      }
+    },
+    {
+      "title": "Les Misérables, Volume 5",
+      "source": "librivox",
+      "authors": "Victor Hugo",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/les-miserables-vol-5-by-victor-hugo/"
+      }
+    },
+    {
+      "title": "Lost Illusions: Two Poets",
+      "source": "librivox",
+      "authors": "Honoré de Balzac",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/lost-illusions-two-poets-by-honore-de-balzac/"
+      }
+    },
+    {
+      "title": "Maria Chapdelaine (version 2)",
+      "source": "librivox",
+      "authors": "Louis Hémon",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/maria-chapdelaine-version-2-by-louis-hemon/"
+      }
+    },
+    {
+      "title": "Moby Dick, or the Whale",
+      "source": "librivox",
+      "authors": "Herman Melville",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/moby-dick-by-herman-melville/"
+      }
+    },
+    {
+      "title": "Mother Goose for Grownups",
+      "source": "librivox",
+      "authors": "Guy Wetmore Carryl",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/mother-goose-for-grownups-by-guy-wetmore-carryl/"
+      }
+    },
+    {
+      "title": "Ormond",
+      "source": "librivox",
+      "authors": "Maria Edgeworth",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/ormond-by-maria-edgeworth/"
+      }
+    },
+    {
+      "title": "Over Prairie Trails",
+      "source": "librivox",
+      "authors": "Frederick  Philip Grove",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/over-prairie-trails-by-frederick-philip-grove/"
+      }
+    },
+    {
+      "title": "Scenes of Clerical Life",
+      "source": "librivox",
+      "authors": "George Eliot",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/scenes-of-clerical-life-by-george-eliot/"
+      }
+    },
+    {
+      "title": "Settlers of the Marsh",
+      "source": "librivox",
+      "authors": "Frederick  Philip Grove",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/settlers-of-the-marsh-by-frederick-philip-grove/"
+      }
+    },
+    {
+      "title": "Tea-table Talk",
+      "source": "librivox",
+      "authors": "Jerome K. Jerome",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/tea-table-talk-by-jerome-k-jerome/"
+      }
+    },
+    {
+      "title": "The Absentee",
+      "source": "librivox",
+      "authors": "Maria Edgeworth",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-absentee-by-maria-edgeworth/"
+      }
+    },
+    {
+      "title": "The Adventures of Sherlock Holmes (version 2)",
+      "source": "librivox",
+      "authors": "Sir Arthur Conan Doyle",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-adventures-of-sherlock-holmes-by-sir-arthur-conan-doyle/"
+      }
+    },
+    {
+      "title": "The British Barbarians",
+      "source": "librivox",
+      "authors": "Grant Allen",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-british-barbarians-by-grant-allen/"
+      }
+    },
+    {
+      "title": "The Call of the Wild (Version 3)",
+      "source": "librivox",
+      "authors": "Jack London",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-call-of-the-wild-by-jack-london-3/"
+      }
+    },
+    {
+      "title": "The Canadians of Old",
+      "source": "librivox",
+      "authors": "Philippe Aubert de Gaspé",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-canadians-of-old-by-philippe-aubert-de-gaspe/"
+      }
+    },
+    {
+      "title": "The Chimes",
+      "source": "librivox",
+      "authors": "Charles Dickens",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-chimes-by-charles-dickens/"
+      }
+    },
+    {
+      "title": "The Count of Monte Cristo",
+      "source": "librivox",
+      "authors": "Alexandre Dumas",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-count-of-monte-cristo-by-alexandre-dumas/"
+      }
+    },
+    {
+      "title": "The Cricket on the Hearth (Version 2)",
+      "source": "librivox",
+      "authors": "Charles Dickens",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-cricket-on-the-hearth-by-charles-dickens-2/"
+      }
+    },
+    {
+      "title": "The Fearsome Island",
+      "source": "librivox",
+      "authors": "Albert Kinross",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-fearsome-island-by-albert-kinross/"
+      }
+    },
+    {
+      "title": "The Greater Inclination",
+      "source": "librivox",
+      "authors": "Edith Wharton",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-greater-inclination-by-edith-wharton/"
+      }
+    },
+    {
+      "title": "The Haunted Man and the Ghost's Bargain (version 2)",
+      "source": "librivox",
+      "authors": "Charles Dickens",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-haunted-man-and-the-ghosts-bargain-by-charles-dickens-2/"
+      }
+    },
+    {
+      "title": "The Imperialist",
+      "source": "librivox",
+      "authors": "Sara Jeannette Duncan",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-imperialist-by-mrs-everard-cotes/"
+      }
+    },
+    {
+      "title": "The Life And Adventures Of Nicholas Nickleby",
+      "source": "librivox",
+      "authors": "Charles Dickens",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-life-and-adventures-of-nicholas-nickleby-by/"
+      }
+    },
+    {
+      "title": "The Lifted Veil",
+      "source": "librivox",
+      "authors": "George Eliot",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-lifted-veil-by-george-eliot/"
+      }
+    },
+    {
+      "title": "The Lost World (version 3)",
+      "source": "librivox",
+      "authors": "Sir Arthur Conan Doyle",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-lost-world-by-sir-arthur-conan-doyle-2/"
+      }
+    },
+    {
+      "title": "The Man from Glengarry",
+      "source": "librivox",
+      "authors": "Ralph Connor",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-man-from-glengarry-by-ralph-connor/"
+      }
+    },
+    {
+      "title": "The Mayor of Casterbridge (version 2)",
+      "source": "librivox",
+      "authors": "Thomas Hardy",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-mayor-of-casterbridge-version-2-by-thomas-hardy/"
+      }
+    },
+    {
+      "title": "The Riddle Ring",
+      "source": "librivox",
+      "authors": "Justin McCarthy",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-riddle-ring-by-justin-mccarthy/"
+      }
+    },
+    {
+      "title": "The Riddle of the Frozen Flame",
+      "source": "librivox",
+      "authors": "Thomas W. Hanshew",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-riddle-of-the-frozen-flame-by-mary-e-hanshew-and-thomas-w-hanshew/"
+      }
+    },
+    {
+      "title": "The Riddle of the Purple Emperor",
+      "source": "librivox",
+      "authors": "Thomas W. Hanshew",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-riddle-of-the-purple-emperor-by-m-e-and-t-w-hanshew/"
+      }
+    },
+    {
+      "title": "The Seven Poor Travellers",
+      "source": "librivox",
+      "authors": "Charles Dickens",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-seven-poor-travellers-by-charles-dickens/"
+      }
+    },
+    {
+      "title": "The Sign of the Four (version 2 dramatic reading)",
+      "source": "librivox",
+      "authors": "Sir Arthur Conan Doyle",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-sign-of-the-four-dramatic-reading-by-sir-arthur-conan-doyle/"
+      }
+    },
+    {
+      "title": "The Tempest",
+      "source": "librivox",
+      "authors": "William Shakespeare",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-tempest-by-william-shakespeare/"
+      }
+    },
+    {
+      "title": "The Untempered Wind",
+      "source": "librivox",
+      "authors": "Joanna E. Wood",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-untempered-wind-by-joanna-e-wood/"
+      }
+    },
+    {
+      "title": "The Woman Who Did",
+      "source": "librivox",
+      "authors": "Grant Allen",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-woman-who-did-by-grant-allen/"
+      }
+    },
+    {
+      "title": "Told after Supper",
+      "source": "librivox",
+      "authors": "Jerome K. Jerome",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/told-after-supper-by-jerome-k-jerome/"
+      }
+    },
+    {
+      "title": "Tourmalin’s Time Cheques",
+      "source": "librivox",
+      "authors": "F. Anstey",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/tourmalins-time-cheques-by-thomas-anstey-guthrie/"
+      }
+    },
+    {
+      "title": "Underground Man",
+      "source": "librivox",
+      "authors": "Gabriel Tarde",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/underground-man-by-gabriel-tarde/"
+      }
+    },
+    {
+      "title": "Utopia (Robinson translation)",
+      "source": "librivox",
+      "authors": "Thomas More",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/utopia-by-thomas-more-tr-robinson/"
+      }
+    },
+    {
+      "title": "Women in Love",
+      "source": "librivox",
+      "authors": "D. H. Lawrence",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/women-in-love-by-d-h-lawrence/"
+      }
+    },
+    {
+      "title": "Wuthering Heights (Version 2)",
+      "source": "librivox",
+      "authors": "Emily Brontë",
+      "readers": null,
+      "genre": "Fiction",
+      "data": {
+        "siteUrl": "https://librivox.org/wuthering-heights-by-emily-bronte-2/"
+      }
+    },
+    {
+      "title": "Multilingual 1910 Collection",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Multilingual",
+      "data": {
+        "siteUrl": "https://librivox.org/multilingual-1910-collection/"
+      }
+    },
+    {
+      "title": "Multilingual Poetry Collection 017",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Multilingual",
+      "data": {
+        "siteUrl": "https://librivox.org/multilingual-poetry-collection-017/"
+      }
+    },
+    {
+      "title": "Multilingual Short Works Collection 012",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Multilingual",
+      "data": {
+        "siteUrl": "https://librivox.org/multilingual-short-works-collection-012-by-various/"
+      }
+    },
+    {
+      "title": "唐诗三百首 卷一 Three Hundred Tang Poems, Volume 1",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Multilingual",
+      "data": {
+        "siteUrl": "https://librivox.org/three-hundred-tang-poems-volume-1-by-various/"
+      }
+    },
+    {
+      "title": "An Enquiry Concerning the Principles of Morals",
+      "source": "librivox",
+      "authors": "David Hume",
+      "readers": null,
+      "genre": "Nonfiction",
+      "data": {
+        "siteUrl": "https://librivox.org/enquiry-principles-morals-by-david-hume/"
+      }
+    },
+    {
+      "title": "An Iron Will",
+      "source": "librivox",
+      "authors": "Orison Swett Marden",
+      "readers": null,
+      "genre": "Nonfiction",
+      "data": {
+        "siteUrl": "https://librivox.org/an-iron-will-by-orison-swett-marden/"
+      }
+    },
+    {
+      "title": "Diary of a Nursing Sister on the Western Front 1914-1915",
+      "source": "librivox",
+      "authors": "Anonymous",
+      "readers": null,
+      "genre": "Nonfiction",
+      "data": {
+        "siteUrl": "https://librivox.org/diary-of-a-nursing-sister-on-the-western-front-1914-1915-by-anonymous/"
+      }
+    },
+    {
+      "title": "Hints for Lovers",
+      "source": "librivox",
+      "authors": "Arnold Haultain",
+      "readers": null,
+      "genre": "Nonfiction",
+      "data": {
+        "siteUrl": "https://librivox.org/hints-for-lovers-bytheodore-arnold-haultain/"
+      }
+    },
+    {
+      "title": "How to Listen to Music",
+      "source": "librivox",
+      "authors": "Henry Edward Krehbiel",
+      "readers": null,
+      "genre": "Nonfiction",
+      "data": {
+        "siteUrl": "https://librivox.org/how-to-listen-to-music-by-henry-edward-krehbiel/"
+      }
+    },
+    {
+      "title": "Mental Efficiency",
+      "source": "librivox",
+      "authors": "Arnold Bennett",
+      "readers": null,
+      "genre": "Nonfiction",
+      "data": {
+        "siteUrl": "https://librivox.org/mental-efficiency-and-other-hints-to-men-and-women-by-arnold-bennett/"
+      }
+    },
+    {
+      "title": "Reminiscences of Captain Gronow",
+      "source": "librivox",
+      "authors": "Rees Howell Gronow",
+      "readers": null,
+      "genre": "Nonfiction",
+      "data": {
+        "siteUrl": "https://librivox.org/reminiscences-of-captain-gronow-by-captain-rees-howell-gronow/"
+      }
+    },
+    {
+      "title": "Self and Self-management: Essays about Existing",
+      "source": "librivox",
+      "authors": "Arnold Bennett",
+      "readers": null,
+      "genre": "Nonfiction",
+      "data": {
+        "siteUrl": "https://librivox.org/self-and-self-management-essays-about-existing-by-arnold-bennett/"
+      }
+    },
+    {
+      "title": "The Diary of a Dead Officer",
+      "source": "librivox",
+      "authors": "Arthur Graeme West",
+      "readers": null,
+      "genre": "Nonfiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-diary-of-a-dead-officer-by-arthur-graeme-west/"
+      }
+    },
+    {
+      "title": "The Feast of St. Friend",
+      "source": "librivox",
+      "authors": "Arnold Bennett",
+      "readers": null,
+      "genre": "Nonfiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-feast-of-st-friend-by-arnold-bennett/"
+      }
+    },
+    {
+      "title": "The History of London",
+      "source": "librivox",
+      "authors": "Walter Besant",
+      "readers": null,
+      "genre": "Nonfiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-history-of-london-by-walter-besant/"
+      }
+    },
+    {
+      "title": "The Human Machine",
+      "source": "librivox",
+      "authors": "Arnold Bennett",
+      "readers": null,
+      "genre": "Nonfiction",
+      "data": {
+        "siteUrl": "https://librivox.org/the-human-machine-by-arnold-bennett/"
+      }
+    },
+    {
+      "title": "What Dress Makes of Us",
+      "source": "librivox",
+      "authors": "Dorothy Quigley",
+      "readers": null,
+      "genre": "Nonfiction",
+      "data": {
+        "siteUrl": "https://librivox.org/what-dress-makes-of-us-by-dorothy-quigley/"
+      }
+    },
+    {
+      "title": "Eclogae (dramatic reading)",
+      "source": "librivox",
+      "authors": "Virgil",
+      "readers": null,
+      "genre": "Poetry",
+      "data": {
+        "siteUrl": "https://librivox.org/eclogae-by-publius-vergilius-maro/"
+      }
+    },
+    {
+      "title": "First World War Centenary Poetry Collection",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Poetry",
+      "data": {
+        "siteUrl": "https://librivox.org/ww1-poetry/"
+      }
+    },
+    {
+      "title": "Poems",
+      "source": "librivox",
+      "authors": "Wilfred Owen",
+      "readers": null,
+      "genre": "Poetry",
+      "data": {
+        "siteUrl": "https://librivox.org/poems-by-wilfred-owen/"
+      }
+    },
+    {
+      "title": "Selected Works: Poems",
+      "source": "librivox",
+      "authors": "Voltairine de Cleyre",
+      "readers": null,
+      "genre": "Poetry",
+      "data": {
+        "siteUrl": "https://librivox.org/selected-works-poems-by-voltairine-de-cleyre/"
+      }
+    },
+    {
+      "title": "The Collected Public Domain Poems of Wallace Stevens, Volume 2",
+      "source": "librivox",
+      "authors": "Wallace Stevens",
+      "readers": null,
+      "genre": "Poetry",
+      "data": {
+        "siteUrl": "https://librivox.org/collected-pdpoems-wallace-stevens2/"
+      }
+    },
+    {
+      "title": "The Eclogues",
+      "source": "librivox",
+      "authors": "Virgil",
+      "readers": null,
+      "genre": "Poetry",
+      "data": {
+        "siteUrl": "https://librivox.org/the-eclogues-by-publius-vergilius-maro/"
+      }
+    },
+    {
+      "title": "1966 And All That",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/radioarchive.cx"
+      }
+    },
+    {
+      "title": "1981 BBC Lord of the Rings",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/lord-of-the-rings-10"
+      }
+    },
+    {
+      "title": "Agatha Raisin",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/AgathaRaisinBBCr4"
+      }
+    },
+    {
+      "title": "Cabin Pressure - Series 01",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/cabinpressures01e05edinburgh"
+      }
+    },
+    {
+      "title": "Cabin Pressure - Series 02",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/cabinpressures02e01helsinki_201912"
+      }
+    },
+    {
+      "title": "Cabin Pressure - Series 03",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/cabinpressures03e01qikiqtarjuaq_201912"
+      }
+    },
+    {
+      "title": "Cabin Pressure - Series 04",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/cabinpressures04e02"
+      }
+    },
+    {
+      "title": "Cabin Pressure - Series 05",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/cabinpressures05e01zurich"
+      }
+    },
+    {
+      "title": "David Hare",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/DavidHareBBCr4"
+      }
+    },
+    {
+      "title": "Down the Line BBC Radio 4",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/DownTheLineBBCRadio4"
+      }
+    },
+    {
+      "title": "Ed Reardon's Week",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/edreardonweekend"
+      }
+    },
+    {
+      "title": "Falco",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/FalcoRomeBBCr4"
+      }
+    },
+    {
+      "title": "Gloomsbury",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/fromgorsemeretogloomsburythelit"
+      }
+    },
+    {
+      "title": "Good Omens - A full cast audio drama",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/GoodOmensBBCr4"
+      }
+    },
+    {
+      "title": "Good Omens by Terry Pratchett and Neil Gaiman",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/good-omens-ep-6"
+      }
+    },
+    {
+      "title": "Hercule Poirot's Finest Cases",
+      "source": "archive",
+      "authors": "Agatha Christie",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/Hut33BBCr4"
+      }
+    },
+    {
+      "title": "Heresy Series 1 - 12",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/HeresySeries10"
+      }
+    },
+    {
+      "title": "Hut 33",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/Hut33S02E06YankeeDiddle"
+      }
+    },
+    {
+      "title": "Jane Austen",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/JaneAustenBBCr4"
+      }
+    },
+    {
+      "title": "Josephine Tey",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/JTeyBBCr4"
+      }
+    },
+    {
+      "title": "Journey Into Space",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/JIS04TheReturnFromMars"
+      }
+    },
+    {
+      "title": "Lord Peter Wimsey Volume 1",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/LordPeterWimseyCollection1"
+      }
+    },
+    {
+      "title": "Lord Peter Wimsey Volume 2",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/LordPeterWimseyCollection2"
+      }
+    },
+    {
+      "title": "Lord Peter Wimsey Volume 3",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/LordPeterWimseyCollection3"
+      }
+    },
+    {
+      "title": "Lord Peter Wimsey Volume 4",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/TheHouseBBCr4"
+      }
+    },
+    {
+      "title": "Miss Marple Sleeping Murder",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/miss-marple-sleeping-murder"
+      }
+    },
+    {
+      "title": "Myths Reimagined",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/mythsreimaginedbbcr4"
+      }
+    },
+    {
+      "title": "Navy Lark - best quality",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/navy_lark_filtered"
+      }
+    },
+    {
+      "title": "P.D. James - BBC Radio Drama Collection",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/PDJamesBBCRadioDramas"
+      }
+    },
+    {
+      "title": "Paul Temple and Steve - BBC Classic Revival",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/paul-temple-and-steve"
+      }
+    },
+    {
+      "title": "Philip Marlowe - The BBC Dramas",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/BBCMarlowe"
+      }
+    },
+    {
+      "title": "Rebus",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/RebusCompleteBBCr4"
+      }
+    },
+    {
+      "title": "The Chief Inspector Dover Mysteries",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/ChiefInspDoverbbcR4"
+      }
+    },
+    {
+      "title": "The Complete Smiley",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/DotCompleteBBCr4"
+      }
+    },
+    {
+      "title": "The George Cragge Mysteries",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/GeorgeCragge"
+      }
+    },
+    {
+      "title": "The Hitchhikers Guide To The Galaxy Omnibus",
+      "source": "archive",
+      "authors": "Douglas Adams",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/s01e00hhgttgdouglasadamsbbcboo"
+      }
+    },
+    {
+      "title": "The Hobbit (BBC Radio Dramatization)",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/the-hobbit-bbc-radio-drama"
+      }
+    },
+    {
+      "title": "The Lord Of The Rings The Complete Trilogy (BBC Radio Dramatization)",
+      "source": "archive",
+      "authors": "J.R.R. Tolkien",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/the-lord-of-the-rings-bbc-radio-drama"
+      }
+    },
+    {
+      "title": "The Martin Beck Stories",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/TMBSR4"
+      }
+    },
+    {
+      "title": "The Pillow Book",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/PillowBookBBCr4"
+      }
+    },
+    {
+      "title": "The Shardlake Plays",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/BBCr4ShardlakePlays"
+      }
+    },
+    {
+      "title": "The Trials of War",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/TrialsofWarBBCr4"
+      }
+    },
+    {
+      "title": "Val McDermid",
+      "source": "archive",
+      "authors": "Internet Archive",
+      "readers": null,
+      "genre": "Radio Drama",
+      "data": {
+        "siteUrl": "https://archive.org/details/ValMcDermidBBCRadioDramaCollection"
+      }
+    },
+    {
+      "title": "Charles Dickens 200th Anniversary Collection Vol. 1",
+      "source": "librivox",
+      "authors": "Charles Dickens",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/charles-dickens-200th-anniversary-collection-vol-1-by-charles-dickens/"
+      }
+    },
+    {
+      "title": "Coffee Break Collection 001 - Humor",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/coffee-break-collection-vol-001/"
+      }
+    },
+    {
+      "title": "Coffee Break Collection 003 - Nature",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/coffee-break-collection-003-nature/"
+      }
+    },
+    {
+      "title": "Coffee Break Collection 007 - Travel",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/coffee-break-collection-007-by-various/"
+      }
+    },
+    {
+      "title": "Dubliners",
+      "source": "librivox",
+      "authors": "James Joyce",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/dubliners-by-james-joyce/"
+      }
+    },
+    {
+      "title": "International Short Stories Volume 3: French Stories",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/international-short-stories-volume-3-french-stories-by-francis-j-reynolds/"
+      }
+    },
+    {
+      "title": "Library of the World's Best Literature, Ancient and Modern, volume 02",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/library-of-the-worlds-best-literature-ancient-and-modern-volume-2-by-various/"
+      }
+    },
+    {
+      "title": "Library of the World's Best Literature, Ancient and Modern, volume 05",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/library-of-the-worlds-best-literature-ancient-and-modern-volume-5-by-charles-dudely-ed/"
+      }
+    },
+    {
+      "title": "Ruby Wedding Collection",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/ruby-wedding-collection/"
+      }
+    },
+    {
+      "title": "Short Stories",
+      "source": "librivox",
+      "authors": "Fyodor Dostoyevsky",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/short-stories-by-fyodor-dostoyevsky/"
+      }
+    },
+    {
+      "title": "Short Story Collection Vol. 027",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/short-story-collection-vol-027/"
+      }
+    },
+    {
+      "title": "Short Story Collection Vol. 037",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/librivox-short-story-collection-vol-37/"
+      }
+    },
+    {
+      "title": "Short Story Collection Vol. 055",
+      "source": "librivox",
+      "authors": "Various",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/short-story-collection-vol-055-by-various/"
+      }
+    },
+    {
+      "title": "Sketches by Boz: Illustrative of Every-Day Life and Every-Day People",
+      "source": "librivox",
+      "authors": "Charles Dickens",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/sketches-by-boz-by-charles-dickens/"
+      }
+    },
+    {
+      "title": "Tales From Dickens",
+      "source": "librivox",
+      "authors": "Hallie Erminie Rives",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/tales-from-dickens-by-hallie-erminie-rives/"
+      }
+    },
+    {
+      "title": "The Decameron",
+      "source": "librivox",
+      "authors": "Giovanni Boccaccio",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/the-decameron-by-giovanni-boccaccio/"
+      }
+    },
+    {
+      "title": "The Happy Prince and Other Tales (version 5)",
+      "source": "librivox",
+      "authors": "Oscar Wilde",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/the-happy-prince-and-other-tales-version-5-by-oscar-wilde/"
+      }
+    },
+    {
+      "title": "The Toys of Peace",
+      "source": "librivox",
+      "authors": "Saki",
+      "readers": null,
+      "genre": "Short Stories",
+      "data": {
+        "siteUrl": "https://librivox.org/the-toys-of-peace-by-saki/"
+      }
+    }
+  ]
+}
