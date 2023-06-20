@@ -74,7 +74,6 @@ class AppInfo extends StatelessWidget {
                             color: Theme.of(context).colorScheme.primary),
                       ),
                     ),
-                    // backgroundColor: Colors.white,
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),

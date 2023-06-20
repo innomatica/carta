@@ -1,7 +1,7 @@
 // app info
 const appId = 'com.innomatic.cartaapp';
 const appName = 'Carta';
-const appVersion = '2.2.0+33';
+const appVersion = '2.3.0+34';
 const emailDeveloper = 'nuntium.ubique@gmail.com';
 const urlGooglePlay = 'https://play.google.com/store/apps/details?id=$appId';
 const urlAppStore = null;

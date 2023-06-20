@@ -191,6 +191,8 @@ class BookTitle extends StatelessWidget {
           case TitleLayout.horizontal:
             return Text(
               '$bookTitle $sectionTitle',
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             );
@@ -203,7 +205,7 @@ class BookTitle extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 8.0),

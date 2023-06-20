@@ -1,20 +1,14 @@
 // urls for app
-const urlPrivacyPolicy =
-    'https://innomatica.github.io/cartadata/site/cartaapp/privacy/';
-const urlDisclaimer =
-    'https://innomatica.github.io/cartadata/site/cartaapp/disclaimer/';
-const urlInstruction =
-    'https://innomatica.github.io/cartadata/site/cartaapp/manual/';
+const urlPrivacyPolicy = 'https://innomatica.github.io/carta/privacy/';
+const urlDisclaimer = 'https://innomatica.github.io/carta/disclaimer/';
+const urlInstruction = 'https://innomatica.github.io/carta/manual/';
 const urlAppIconSource = 'https://www.flaticon.com/free-icon/open-book_1940795';
 const urlStoreImageSource = 'https://unsplash.com/@florenciaviadana';
 
-// sample books
-const urlSampleBookListYaml =
-    'https://raw.githubusercontent.com/innomatica/cartadata/master/data/'
-    'sample_books.yaml';
-const urlSampleBookListJson =
-    'https://raw.githubusercontent.com/innomatica/cartadata/master/data/'
-    'carta_samples.json';
+// selected books
+const urlSelectedBooksJson =
+    'https://raw.githubusercontent.com/innomatica/carta/master/extra/data/'
+    'selected_books.json';
 
 // hint texts
 const urlLibriVoxDoHyangNa =

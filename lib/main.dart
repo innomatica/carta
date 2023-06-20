@@ -1,4 +1,4 @@
-import 'package:cartaapp/shared/color_schemes.g.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,6 +10,7 @@ import 'model/cartaplayer.dart';
 import 'screens/catalog/catalog.dart';
 import 'screens/home/home.dart';
 import 'screens/booksite/booksite.dart';
+import 'shared/apptheme.dart';
 import 'shared/helpers.dart';
 import 'shared/notfound.dart';
 import 'shared/settings.dart';
@@ -58,44 +59,42 @@ class MyApp extends StatelessWidget {
             create: (context) => CartaPlayer(bloc: context.read<CartaBloc>()),
             dispose: (_, player) => player.dispose()),
       ],
-      child: MaterialApp(
-        title: "Carta",
-        initialRoute: '/',
-        onGenerateRoute: (settings) {
-          if (settings.name != null) {
-            final uri = Uri.parse(settings.name!);
-            debugPrint('path: ${uri.path}');
-            debugPrint('params: ${uri.queryParameters}');
+      child: DynamicColorBuilder(
+          builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+        return MaterialApp(
+          title: "Carta",
+          initialRoute: '/',
+          onGenerateRoute: (settings) {
+            if (settings.name != null) {
+              final uri = Uri.parse(settings.name!);
+              debugPrint('path: ${uri.path}');
+              debugPrint('params: ${uri.queryParameters}');
 
-            if (uri.path == '/') {
-              return MaterialPageRoute(builder: (context) => const HomePage());
-            } else if (uri.path == '/selected') {
-              return MaterialPageRoute(
-                builder: (context) => const CatalogPage(),
-              );
-            } else if (uri.path == '/newbook') {
-              // this is for the deeplink now broken in Android 12
-              final bookUrl = uri.queryParameters[0];
-              return MaterialPageRoute(
-                builder: (context) => BookSitePage(
-                  url: bookUrl,
-                ),
-              );
+              if (uri.path == '/') {
+                return MaterialPageRoute(
+                    builder: (context) => const HomePage());
+              } else if (uri.path == '/selected') {
+                return MaterialPageRoute(
+                  builder: (context) => const CatalogPage(),
+                );
+              } else if (uri.path == '/newbook') {
+                // this is for the deeplink now broken in Android 12
+                final bookUrl = uri.queryParameters[0];
+                return MaterialPageRoute(
+                  builder: (context) => BookSitePage(
+                    url: bookUrl,
+                  ),
+                );
+              }
             }
-          }
-          return MaterialPageRoute(builder: (context) => const NotFound());
-        },
-        theme: ThemeData(
-          colorScheme: lightColorScheme,
-          useMaterial3: true,
-        ),
-        darkTheme: ThemeData(
-          colorScheme: darkColorScheme,
-          useMaterial3: true,
-        ),
-        // home: const Home(),
-        debugShowCheckedModeBanner: false,
-      ),
+            return MaterialPageRoute(builder: (context) => const NotFound());
+          },
+          theme: AppTheme.lightTheme(lightDynamic),
+          darkTheme: AppTheme.darkTheme(darkDynamic),
+          // home: const Home(),
+          debugShowCheckedModeBanner: false,
+        );
+      }),
     );
   }
 }

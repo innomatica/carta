@@ -28,8 +28,14 @@ const urlLibriVoxSearchByLanguage =
 const urlLibriVoxDonate = 'https://librivox.org/pages/how-to-donate/';
 const urlLibriVoxForum = 'https://librivox.org/forum';
 
+// url legamus
+const urlLegamus = 'https://legamus.eu';
+const urlLegamusAbout = 'https://legamus.eu/blog/?page_id=33';
+const urlLegamusAllRecordings = 'https://legamus.eu/blog/?page_id=161';
+const urlLegamusForum = 'https://legamus.eu/forum/index.php';
+
 // web page brower menu
-enum BookSite { librivox, internetArchive }
+enum BookSite { librivox, internetArchive, legamus }
 
 // book site data
 const bookSiteData = {
@@ -79,6 +85,34 @@ const bookSiteData = {
         'url': null,
         'value': 'manual',
       },
+    ],
+  },
+  BookSite.legamus: {
+    'title': 'Legamus',
+    'initialUrl': urlLegamusAllRecordings,
+    'filterString':
+        "window.document.querySelector('meta[property=\"mediatype\"][content=\"audio\"]') != null;",
+    'menu': [
+      {
+        'title': 'Home Page',
+        'url': urlLegamus,
+        'value': 'home',
+      },
+      {
+        'title': 'All Recordings',
+        'url': urlLegamusAllRecordings,
+        'value': 'all',
+      },
+      {
+        'title': 'About',
+        'url': urlLegamusAbout,
+        'value': 'about',
+      },
+      {
+        'title': 'Forum',
+        'url': urlLegamusForum,
+        'value': 'forum',
+      }
     ],
   },
   BookSite.internetArchive: {

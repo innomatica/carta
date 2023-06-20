@@ -61,60 +61,61 @@ class _CatalogPageState extends State<CatalogPage> {
                 panelData[index]['isExpanded'] = !isExpanded;
               });
             },
-            children: panelData
-                .map((e) => ExpansionPanel(
-                      headerBuilder: (context, isExpanded) => ListTile(
+            children: panelData.map(
+              (e) {
+                return ExpansionPanel(
+                  // pane header
+                  headerBuilder: (context, isExpanded) => ListTile(
+                      title: Text(
+                    e['title'],
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  )),
+                  body: ListView.builder(
+                    physics: const ClampingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: e['cards'].length,
+                    itemBuilder: (context, index) {
+                      bool added = false;
+                      return StatefulBuilder(builder: (context, setState) {
+                        return ListTile(
+                          // dense: true,
+                          onTap: added
+                              ? null
+                              : () async {
+                                  final card = e['cards'][index];
+                                  final book =
+                                      await bloc.getAudioBookFromCard(card);
+                                  if (book != null) {
+                                    bloc.addAudioBook(book);
+                                    added = true;
+                                    setState(() {});
+                                    if (mounted) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text('book added'),
+                                      ));
+                                    }
+                                  }
+                                },
                           title: Text(
-                        e['title'],
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.tertiary,
-                        ),
-                      )),
-                      body: ListView.builder(
-                        physics: const ClampingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: e['cards'].length,
-                        itemBuilder: (context, index) {
-                          bool added = false;
-                          return StatefulBuilder(builder: (context, setState) {
-                            return ListTile(
-                              onTap: added
-                                  ? null
-                                  : () async {
-                                      final card = e['cards'][index];
-                                      final book =
-                                          await bloc.getAudioBookFromCard(card);
-                                      if (book != null) {
-                                        bloc.addAudioBook(book);
-                                        added = true;
-                                        setState(() {});
-                                        if (mounted) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text('book added'),
-                                          ));
-                                        }
-                                      }
-                                    },
-                              title: Text(
-                                e['cards'][index].title,
-                                style: TextStyle(
-                                  color: added ? Colors.grey : null,
-                                ),
-                              ),
-                              subtitle: Text(e['cards'][index].authors,
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                  )),
-                            );
-                          });
-                        },
-                      ),
-                      isExpanded: e['isExpanded'],
-                      canTapOnHeader: true,
-                    ))
-                .toList(),
+                            e['cards'][index].title,
+                            style: TextStyle(
+                              color: added ? Colors.grey : null,
+                            ),
+                          ),
+                          subtitle: Text(e['cards'][index].authors,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                              )),
+                        );
+                      });
+                    },
+                  ),
+                  isExpanded: e['isExpanded'],
+                  canTapOnHeader: true,
+                );
+              },
+            ).toList(),
           ),
         ),
       ),

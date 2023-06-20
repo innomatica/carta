@@ -68,10 +68,7 @@ class _BookSitePageState extends State<BookSitePage> {
     return menuData == null
         ? const SizedBox(width: 0, height: 0)
         : PopupMenuButton<String>(
-            icon: Icon(
-              Icons.more_vert_rounded,
-              color: Theme.of(context).colorScheme.error,
-            ),
+            icon: const Icon(Icons.more_vert_rounded),
             onSelected: (value) {
               final url = menuData
                   ?.firstWhere((element) => element['value'] == value)['url'];
@@ -185,8 +182,10 @@ class _BookSitePageState extends State<BookSitePage> {
             children: [
               IconButton(
                 onPressed: () => Navigator.of(context).pop(),
-                icon: Icon(Icons.keyboard_double_arrow_left_rounded,
-                    size: 32, color: Theme.of(context).colorScheme.primary),
+                icon: const Icon(
+                  Icons.keyboard_double_arrow_left_rounded,
+                  size: 32,
+                ),
               ),
               IconButton(
                 onPressed: () async {
@@ -196,8 +195,10 @@ class _BookSitePageState extends State<BookSitePage> {
                     Navigator.of(context).pop();
                   }
                 },
-                icon: Icon(Icons.keyboard_arrow_left_rounded,
-                    size: 32, color: Theme.of(context).colorScheme.tertiary),
+                icon: const Icon(
+                  Icons.keyboard_arrow_left_rounded,
+                  size: 32,
+                ),
               ),
             ],
           ),

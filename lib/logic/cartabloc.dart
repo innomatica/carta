@@ -165,7 +165,7 @@ class CartaBloc extends ChangeNotifier {
   //
   Future<List<CartaCard>> getSampleBookCards() async {
     final cards = <CartaCard>[];
-    final res = await http.get(Uri.parse(urlSampleBookListJson));
+    final res = await http.get(Uri.parse(urlSelectedBooksJson));
     if (res.statusCode == 200) {
       final jsonDoc = jsonDecode(res.body) as Map<String, dynamic>;
       if (jsonDoc.containsKey('data') && jsonDoc['data'] is List) {

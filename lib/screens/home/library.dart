@@ -75,10 +75,11 @@ class _LibraryState extends State<Library> {
     final player = context.read<CartaPlayer>();
     // debugPrint(book.toString());
     return AlertDialog(
+      // book title
       title: Text(
         book.title,
         style: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.tertiary,
           fontSize: 16.0,
           fontWeight: FontWeight.w700,
         ),
@@ -89,6 +90,7 @@ class _LibraryState extends State<Library> {
         child: StreamBuilder<int?>(
           stream: player.currentIndexStream,
           builder: (context, snapshot) {
+            // section list
             return ListView.builder(
               shrinkWrap: true,
               itemCount: book.sections?.length ?? 0,
@@ -104,12 +106,17 @@ class _LibraryState extends State<Library> {
                 // debugPrint(
                 //     'index:$index, isCurrentSection:$isCurrentSection, hasBookMark: $hasBookMark');
                 return Container(
+                  // decorator
                   decoration: BoxDecoration(
-                      color: isCurrentSection ? Colors.blueGrey.shade500 : null,
+                      color: isCurrentSection
+                          ? Theme.of(context).colorScheme.tertiaryContainer
+                          : null,
                       border: hasBookMark && !isCurrentBook
-                          ? Border.all(color: Colors.blueGrey.shade500)
+                          ? Border.all(
+                              color: Theme.of(context).colorScheme.outline)
                           : null,
                       borderRadius: BorderRadius.circular(5.0)),
+                  // section title and play time
                   child: TextButton(
                     onPressed: () {
                       // return with the selected section index
@@ -125,10 +132,10 @@ class _LibraryState extends State<Library> {
                             style: TextStyle(
                               // saved section indicator (book)
                               color: isCurrentSection
-                                  ? Colors.white
-                                  : !isCurrentBook && hasBookMark
-                                      ? Theme.of(context).colorScheme.tertiary
-                                      : Theme.of(context).colorScheme.secondary,
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .onTertiaryContainer
+                                  : null,
                             ),
                           ),
                         ),
@@ -139,8 +146,12 @@ class _LibraryState extends State<Library> {
                                         ?.toString()
                                         .split('.')[0] ??
                                     '',
-                                style: const TextStyle(
-                                  color: Colors.grey,
+                                style: TextStyle(
+                                  color: isCurrentSection
+                                      ? Theme.of(context)
+                                          .colorScheme
+                                          .onTertiaryContainer
+                                      : null,
                                   fontSize: 13.0,
                                 ),
                               )
@@ -162,7 +173,7 @@ class _LibraryState extends State<Library> {
   //
   Widget _buildBookCard(CartaBook book, bool isPlaying) {
     return Card(
-      elevation: isPlaying ? 12.0 : 0,
+      color: isPlaying ? Theme.of(context).colorScheme.primaryContainer : null,
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
         // Cover Image
@@ -181,7 +192,9 @@ class _LibraryState extends State<Library> {
           book.title,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            color: Theme.of(context).colorScheme.secondary,
+            color: isPlaying
+                ? Theme.of(context).colorScheme.onPrimaryContainer
+                : Theme.of(context).colorScheme.secondary,
           ),
         ),
         // Author

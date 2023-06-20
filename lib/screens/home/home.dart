@@ -39,7 +39,6 @@ class _HomePageState extends State<HomePage> {
     Icon btnIcon;
     const btnSize = 32.0;
     final btnColor = Theme.of(context).colorScheme.tertiary;
-    // final btnColor = Colors.redAccent;
     void Function() handler;
 
     if (screen.layout == ScreenLayout.library) {
@@ -227,7 +226,8 @@ class _HomePageState extends State<HomePage> {
             ? const SizedBox(
                 width: 0,
                 height: 0) // if player is not active, hide bottom sheet
-            : Padding(
+            : Container(
+                color: Theme.of(context).colorScheme.surfaceVariant,
                 padding: const EdgeInsets.only(
                   left: 8.0,
                   right: 8.0,
