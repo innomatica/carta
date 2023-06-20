@@ -42,15 +42,19 @@ class _BookSitePageState extends State<BookSitePage> {
       jsString =
           bookSiteData[BookSite.internetArchive]?['filterString'] as String;
       title = bookSiteData[BookSite.internetArchive]?['title'] as String;
+    } else if (widget.url!.contains('legamus.eu')) {
+      menuData = bookSiteData[BookSite.legamus]?['menu'] as List<Map>;
+      jsString = bookSiteData[BookSite.legamus]?['filterString'] as String;
+      title = bookSiteData[BookSite.legamus]?['title'] as String;
     }
 
     _delegate = NavigationDelegate(
       onPageFinished: (_) async {
         // debugPrint('delegate.onPageFinished:$jsString');
         if (jsString != null) {
-          final bookPage =
+          final isBookPage =
               await _controller.runJavaScriptReturningResult(jsString!);
-          _showFab = bookPage == true ? true : false;
+          _showFab = isBookPage == true ? true : false;
           setState(() {});
         }
       },

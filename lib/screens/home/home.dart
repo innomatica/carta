@@ -97,7 +97,12 @@ class _HomePageState extends State<HomePage> {
             builder: (context) =>
                 const BookSitePage(url: urlInternetArchiveAudio),
           ));
-        } else if (item == 'Book List') {
+        } else if (item == 'Legamus') {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                const BookSitePage(url: urlLegamusAllRecordings),
+          ));
+        } else if (item == 'Selected Books') {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => const CatalogPage(),
           ));
@@ -161,7 +166,20 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         PopupMenuItem<String>(
-          value: 'Book List',
+          value: 'Legamus',
+          child: Row(
+            children: [
+              CartaBook.getIconBySource(
+                CartaSource.legamus,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(width: 8.0),
+              const Text('Legamus'),
+            ],
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: 'Selected Books',
           child: Row(
             children: [
               Icon(Icons.list_alt_rounded,

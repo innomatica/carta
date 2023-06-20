@@ -87,34 +87,6 @@ const bookSiteData = {
       },
     ],
   },
-  BookSite.legamus: {
-    'title': 'Legamus',
-    'initialUrl': urlLegamusAllRecordings,
-    'filterString':
-        "window.document.querySelector('meta[property=\"mediatype\"][content=\"audio\"]') != null;",
-    'menu': [
-      {
-        'title': 'Home Page',
-        'url': urlLegamus,
-        'value': 'home',
-      },
-      {
-        'title': 'All Recordings',
-        'url': urlLegamusAllRecordings,
-        'value': 'all',
-      },
-      {
-        'title': 'About',
-        'url': urlLegamusAbout,
-        'value': 'about',
-      },
-      {
-        'title': 'Forum',
-        'url': urlLegamusForum,
-        'value': 'forum',
-      }
-    ],
-  },
   BookSite.internetArchive: {
     'title': 'Internet Archive',
     'initialUrl': urlInternetArchiveAudio,
@@ -156,6 +128,34 @@ const bookSiteData = {
         'url': null,
         'value': 'manual',
       },
+    ],
+  },
+  BookSite.legamus: {
+    'title': 'Legamus',
+    'initialUrl': urlLegamusAllRecordings,
+    'filterString':
+        "window.document.querySelector('a[href*=\"listen.legamus.eu\"]') !== null;",
+    'menu': [
+      {
+        'title': 'Home Page',
+        'url': urlLegamus,
+        'value': 'home',
+      },
+      {
+        'title': 'All Recordings',
+        'url': urlLegamusAllRecordings,
+        'value': 'all',
+      },
+      {
+        'title': 'About',
+        'url': urlLegamusAbout,
+        'value': 'about',
+      },
+      {
+        'title': 'Forum',
+        'url': urlLegamusForum,
+        'value': 'forum',
+      }
     ],
   }
 };

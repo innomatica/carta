@@ -18,6 +18,7 @@ enum CartaSource {
   cloud, // cloud source such as nextcloud
   archive, // internet archive
   carta, // carta repository
+  legamus, // legamus
   unknown,
 }
 
@@ -261,6 +262,8 @@ class CartaBook {
           return Icon(Icons.link_rounded, color: color, size: size);
         } else if (source == CartaSource.archive) {
           return Icon(Icons.account_balance_rounded, color: color, size: size);
+        } else if (source == CartaSource.legamus) {
+          return Icon(Icons.group, color: color, size: size);
         }
         return Icon(Icons.local_library_rounded, color: color, size: size);
     }
@@ -277,6 +280,8 @@ class CartaBook {
         return Icon(Icons.cloud_rounded, color: color, size: size);
       case CartaSource.archive:
         return Icon(Icons.account_balance_rounded, color: color, size: size);
+      case CartaSource.legamus:
+        return Icon(Icons.group, color: color, size: size);
       default:
         return Icon(Icons.local_library_rounded, color: color, size: size);
     }
