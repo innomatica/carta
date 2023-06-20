@@ -1,4 +1,0 @@
-site_name: Carta
-theme: readthedocs
-markdown_extensions:
-  - attr_list

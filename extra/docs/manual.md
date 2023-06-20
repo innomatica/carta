@@ -1,4 +1,4 @@
-# How To
+# Instruction
 
 * [Add Audiobooks from LibriVox](#add-audiobooks-from-librivox)
 * [Add Radio Shows from Internet Archive](#add-radio-shows-from-internet-archive)
@@ -84,7 +84,7 @@ at the top left corner
 ![](./res/actual_text_link.png){: style="width:400px"}
 
 
-Note that 
+Note that
 
 * Most smartphones are too small to read text
 * Materials from Internet Archive have no text

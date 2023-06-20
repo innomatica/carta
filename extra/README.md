@@ -1,1 +1,0 @@
-Run `mkdocs build`

@@ -49,4 +49,5 @@ with the lines below
 
 [Check this for details.](https://docs.flutter.dev/deployment/android#create-an-upload-keystore).
 
+# [Documentation](./extra/docs/index.md)
 

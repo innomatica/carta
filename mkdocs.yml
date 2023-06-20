@@ -1,0 +1,9 @@
+site_name: Carta
+theme: readthedocs
+markdown_extensions:
+  - attr_list
+
+repo_url: https://innomatica.github.io/carta/
+repo_name: GitHub
+docs_dir: extra/docs
+site_dir: docs
