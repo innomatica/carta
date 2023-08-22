@@ -106,11 +106,6 @@ class AppInfo extends StatelessWidget {
           onTap: () {
             launchUrl(Uri.parse(urlHomePage),
                 mode: LaunchMode.externalApplication);
-            // launchUrl(Uri(
-            //   scheme: 'mailto',
-            //   path: emailDeveloper,
-            //   queryParameters: {'subject': 'Inquiry:$appName'},
-            // ));
           },
         ),
       ],
