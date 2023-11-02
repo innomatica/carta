@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../shared/settings.dart';
 
 class Disclaimer extends StatelessWidget {
-  const Disclaimer({Key? key}) : super(key: key);
+  const Disclaimer({super.key});
 
   @override
   Widget build(BuildContext context) {

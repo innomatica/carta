@@ -45,7 +45,7 @@ dependencies:
   html_unescape: ^2.0.0
   just_audio: ^0.9.34
   provider: ^6.0.5
-  audio_video_progress_bar: ^1.0.1
+  audio_video_progress_bar: ^2.0.1
   rxdart: ^0.27.7
   just_audio_background: ^0.0.1-beta.10
   html: ^0.15.4
@@ -68,7 +68,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

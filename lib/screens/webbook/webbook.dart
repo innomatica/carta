@@ -7,7 +7,7 @@ import '../../model/cartabook.dart';
 
 class WebBookPage extends StatefulWidget {
   final CartaBook book;
-  const WebBookPage(this.book, {Key? key}) : super(key: key);
+  const WebBookPage(this.book, {super.key});
 
   @override
   State<WebBookPage> createState() => _WebBookPageState();

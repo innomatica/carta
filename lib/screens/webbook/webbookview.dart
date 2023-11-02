@@ -7,7 +7,7 @@ import '../../model/cartabook.dart';
 
 class WebBookView extends StatefulWidget {
   final CartaBook book;
-  const WebBookView(this.book, {Key? key}) : super(key: key);
+  const WebBookView(this.book, {super.key});
 
   @override
   State<WebBookView> createState() => _WebBookViewState();

@@ -6,7 +6,7 @@ import '../../shared/constants.dart';
 import '../../shared/settings.dart';
 
 class Instruction extends StatefulWidget {
-  const Instruction({Key? key}) : super(key: key);
+  const Instruction({super.key});
 
   @override
   State<Instruction> createState() => _InstructionState();

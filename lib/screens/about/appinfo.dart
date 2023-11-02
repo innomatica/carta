@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../shared/constants.dart';
 
 class AppInfo extends StatelessWidget {
-  const AppInfo({Key? key}) : super(key: key);
+  const AppInfo({super.key});
 
   String? _getStoreUrl() {
     if (Platform.isAndroid) {

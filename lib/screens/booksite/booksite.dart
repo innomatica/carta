@@ -11,10 +11,7 @@ import '../../shared/settings.dart';
 
 class BookSitePage extends StatefulWidget {
   final String? url;
-  const BookSitePage({
-    this.url,
-    Key? key,
-  }) : super(key: key);
+  const BookSitePage({this.url, super.key});
 
   @override
   State<BookSitePage> createState() => _BookSitePageState();

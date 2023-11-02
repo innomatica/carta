@@ -11,7 +11,7 @@ import 'sharebook.dart';
 // Page, parent for Book Panel in narrow screen device
 //
 class BookPage extends StatefulWidget {
-  const BookPage({Key? key}) : super(key: key);
+  const BookPage({super.key});
 
   @override
   State<BookPage> createState() => _BookPageState();
