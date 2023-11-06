@@ -2,7 +2,7 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../model/cartaplayer.dart';
+import '../../service/audiohandler.dart';
 import '../../shared/settings.dart';
 import 'widgets.dart';
 
@@ -40,7 +40,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   //
   // More Button
   //
-  Widget _buildMoreButton(CartaPlayer player) {
+  Widget _buildMoreButton(CartaAudioHandler handler) {
     return IconButton(
       icon: const Icon(Icons.more_horiz_rounded, size: 32.0),
       onPressed: () {
@@ -51,7 +51,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final player = context.read<CartaPlayer>();
+    final handler = context.read<CartaAudioHandler>();
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -66,40 +66,43 @@ class _PlayerScreenState extends State<PlayerScreen> {
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    BookCover(player, size: 60),
+                    BookCover(handler, size: 60),
                     const SizedBox(width: 48.0),
-                    BookTitle(player),
+                    BookTitle(handler),
                   ],
                 )
               : Column(
                   children: [
-                    BookTitle(player),
+                    BookTitle(handler),
                     const SizedBox(height: 8.0),
-                    BookCover(player),
+                    BookCover(handler),
                   ],
                 ),
           // progress bar
-          ProgressSlider(player),
+          // ProgressSlider(handler),
+          buildProgressBar(handler),
           // buttons
           Row(
             // mainAxisAlignment: MainAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: isScreenWide
                 ? <Widget>[
-                    PlaySpeedButton(player, size: 18),
-                    PreviousButton(player, size: 36),
-                    Rewind30Button(player, size: 36),
-                    PlayButton(player, size: 48),
-                    Forward30Button(player, size: 36),
-                    NextButton(player, size: 36),
-                    _buildMoreButton(player),
+                    // PlaySpeedButton(handler, size: 18),
+                    buildSpeedSelector(handler, size: 18),
+                    buildPreviousButton(handler, size: 36),
+                    buildRewindButton(handler, size: 36),
+                    buildPlayButton(handler, size: 48),
+                    buildForwardButton(handler, size: 36),
+                    buildNextButton(handler, size: 36),
+                    _buildMoreButton(handler),
                   ]
                 : <Widget>[
-                    PlaySpeedButton(player, size: 18),
-                    Rewind30Button(player, size: 36),
-                    PlayButton(player, size: 48),
-                    Forward30Button(player, size: 36),
-                    _buildMoreButton(player),
+                    // PlaySpeedButton(handler, size: 18),
+                    buildSpeedSelector(handler, size: 18),
+                    buildRewindButton(handler, size: 36),
+                    buildPlayButton(handler, size: 48),
+                    buildForwardButton(handler, size: 36),
+                    _buildMoreButton(handler),
                   ],
           ),
         ],

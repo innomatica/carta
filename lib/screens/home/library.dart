@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../logic/cartabloc.dart';
 import '../../logic/screenconfig.dart';
 import '../../model/cartabook.dart';
-import '../../model/cartaplayer.dart';
+import '../../service/audiohandler.dart';
 import '../../shared/settings.dart';
 import '../book/book.dart';
 import '../webbook/webbook.dart';
@@ -72,7 +72,7 @@ class _LibraryState extends State<Library> {
   // Section List Popup
   //
   Widget _buildBookSections(CartaBook book) {
-    final player = context.read<CartaPlayer>();
+    final handler = context.read<CartaAudioHandler>();
     // debugPrint(book.toString());
     return AlertDialog(
       // book title
@@ -88,7 +88,7 @@ class _LibraryState extends State<Library> {
       content: SizedBox(
         width: double.maxFinite,
         child: StreamBuilder<int?>(
-          stream: player.currentIndexStream,
+          stream: handler.playbackState.map((e) => e.queueIndex).distinct(),
           builder: (context, snapshot) {
             // section list
             return ListView.builder(
@@ -96,9 +96,9 @@ class _LibraryState extends State<Library> {
               itemCount: book.sections?.length ?? 0,
               itemBuilder: (context, index) {
                 final bool isCurrentBook =
-                    player.isCurrentBook(bookId: book.bookId);
+                    handler.isCurrentBook(bookId: book.bookId);
                 // player section
-                final bool isCurrentSection = player.isCurrentSection(
+                final bool isCurrentSection = handler.isCurrentSection(
                     bookId: book.bookId, sectionIdx: index);
                 // book mark
                 final bool hasBookMark = book.lastSection == index &&
@@ -202,7 +202,7 @@ class _LibraryState extends State<Library> {
         // Icon
         trailing: _buildTrailingWidget(book),
         onTap: () {
-          final player = context.read<CartaPlayer>();
+          final handler = context.read<CartaAudioHandler>();
 
           if (book.source == CartaSource.internet) {
             // WebPageBook => open webview : not supported now
@@ -217,10 +217,7 @@ class _LibraryState extends State<Library> {
             ).then((value) async {
               if (value != null) {
                 // directly play the section of the book
-                await player.playAudioBook(
-                  book: book,
-                  sectionIdx: value,
-                );
+                await handler.playAudioBook(book, sectionIdx: value);
                 // switch to the book info ?
                 // this is not a good idea given the widget structure
                 // for example, if you go to the other part of the book
@@ -237,7 +234,7 @@ class _LibraryState extends State<Library> {
   @override
   Widget build(BuildContext context) {
     final books = context.watch<CartaBloc>().books;
-    final player = context.read<CartaPlayer>();
+    final player = context.read<CartaAudioHandler>();
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -257,7 +254,7 @@ class _LibraryState extends State<Library> {
         },
         // needs to redraw whenever playing state changes
         child: StreamBuilder<bool>(
-          stream: player.playingStream,
+          stream: player.playbackState.map((e) => e.playing).distinct(),
           builder: (context, snapshot) {
             return ListView.builder(
               shrinkWrap: true,

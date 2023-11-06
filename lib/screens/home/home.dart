@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -7,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../logic/cartabloc.dart';
 import '../../logic/screenconfig.dart';
 import '../../model/cartabook.dart';
-import '../../model/cartaplayer.dart';
+import '../../service/audiohandler.dart';
 import '../../shared/booksites.dart';
 import '../../shared/constants.dart';
 import '../../shared/settings.dart';
@@ -83,7 +84,7 @@ class _HomePageState extends State<HomePage> {
   //
   // Scaffold Menu Button
   //
-  Widget _buildMenuButton(CartaPlayer player) {
+  Widget _buildMenuButton(CartaAudioHandler handler) {
     return PopupMenuButton<String>(
       icon: const Icon(Icons.menu_rounded),
       onSelected: (String item) {
@@ -116,7 +117,7 @@ class _HomePageState extends State<HomePage> {
             (timer) async {
               if (timer.tick == _sleepTimeout) {
                 // timeout
-                await player.stop();
+                await handler.stop();
                 _sleepTimer!.cancel();
                 // is this safe?
                 _sleepTimer = null;
@@ -233,59 +234,60 @@ class _HomePageState extends State<HomePage> {
   //
   // Scaffold.Bottomsheet
   //
-  Widget? _buildBottomSheet(CartaPlayer player) {
+  Widget? _buildBottomSheet(CartaAudioHandler handler) {
     // needs to redraw whenever the playing state changes
-    return StreamBuilder<bool>(
-      stream: player.playingStream,
+    return StreamBuilder<AudioProcessingState>(
+      stream: handler.playbackState.map((e) => e.processingState).distinct(),
       builder: (context, snapshot) {
-        return player.sequence == null ||
-                player.currentIndex == null ||
-                player.hasBook == false
-            ? const SizedBox(
-                width: 0,
-                height: 0) // if player is not active, hide bottom sheet
-            : Container(
-                color: Theme.of(context).colorScheme.surfaceVariant,
-                padding: const EdgeInsets.only(
-                  left: 8.0,
-                  right: 8.0,
+        if (snapshot.hasData &&
+            [
+              AudioProcessingState.loading,
+              AudioProcessingState.buffering,
+              AudioProcessingState.ready
+            ].contains(snapshot.data)) {
+          return Container(
+            color: Theme.of(context).colorScheme.surfaceVariant,
+            padding: const EdgeInsets.only(
+              left: 8.0,
+              right: 8.0,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (context) => const PlayerScreen(),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10.0),
+                            topRight: Radius.circular(10.0),
+                          ),
+                        ),
+                      ).then((value) => setState(() {}));
+                    },
+                    child: BookTitle(handler, layout: TitleLayout.horizontal),
+                  ),
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextButton(
-                        onPressed: () {
-                          showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
-                            builder: (context) => const PlayerScreen(),
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
-                              ),
-                            ),
-                          ).then((value) => setState(() {}));
-                        },
-                        child:
-                            BookTitle(player, layout: TitleLayout.horizontal),
-                      ),
-                    ),
-                    isScreenWide
-                        ? Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              PreviousButton(player),
-                              Rewind30Button(player),
-                              PlayButton(player),
-                              Forward30Button(player),
-                              NextButton(player),
-                            ],
-                          )
-                        : PlayButton(player),
-                  ],
-                ),
-              );
+                isScreenWide
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          buildPreviousButton(handler),
+                          buildRewindButton(handler),
+                          buildPlayButton(handler),
+                          buildForwardButton(handler),
+                          buildNextButton(handler),
+                        ],
+                      )
+                    : buildPlayButton(handler),
+              ],
+            ),
+          );
+        }
+        return const SizedBox(height: 0);
       },
     );
   }
@@ -327,7 +329,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final player = context.read<CartaPlayer>();
+    final handler = context.read<CartaAudioHandler>();
 
     return Scaffold(
       appBar: AppBar(
@@ -337,13 +339,13 @@ class _HomePageState extends State<HomePage> {
           _sleepTimer != null && _sleepTimer!.isActive
               ? _buildSleepTimerButton()
               : Container(),
-          _buildMenuButton(player),
+          _buildMenuButton(handler),
         ],
       ),
       body: _buildBody(),
       // https://github.com/flutter/flutter/issues/50314#issuecomment-1264861424
       // bottomSheet: _buildBottomSheet(player),
-      bottomNavigationBar: _buildBottomSheet(player),
+      bottomNavigationBar: _buildBottomSheet(handler),
     );
   }
 }

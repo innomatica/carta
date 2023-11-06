@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
-import 'package:just_audio_background/just_audio_background.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:mime/mime.dart';
 
 import '../shared/constants.dart';
@@ -149,21 +149,23 @@ class CartaBook {
     return toSqlite().toString();
   }
 
-  AudioSource? getAudioSource({int initIndex = 0}) {
+  List<IndexedAudioSource> getAudioSource({int initIndex = 0}) {
+    final sectionData = <IndexedAudioSource>[];
+
     if (sections != null && sections!.isNotEmpty) {
-      final audioData = <AudioSource>[];
       final bookDir = getBookDirectory();
       final headers = getAuthHeaders();
-
       // NOTE: sections must be in order
       for (final section in sections!) {
         if (section.index >= initIndex) {
+          // build tag
           final tag = MediaItem(
             id: bookId,
-            // book title as album
-            album: title,
             // section title as title
             title: section.title,
+            // book title as album
+            album: title,
+            duration: section.duration,
             artUri: imageUri != null ? Uri.parse(imageUri!) : null,
             artHeaders: headers,
             // extra for internal use
@@ -177,14 +179,15 @@ class CartaBook {
           // check if local data for the section exists
           final file = File('${bookDir.path}/${section.uri.split("/").last}');
           if (file.existsSync()) {
-            audioData.add(AudioSource.uri(
+            sectionData.add(AudioSource.uri(
               Uri.parse('file://${file.path}'),
               tag: tag,
             ));
             // debugPrint('file source: ${file.path}');
           } else {
+            // otherwise data from url
             // audioData.add(LockCachingAudioSource(uri, tag: tag));
-            audioData.add(ProgressiveAudioSource(
+            sectionData.add(ProgressiveAudioSource(
               Uri.parse(section.uri),
               headers: headers,
               tag: tag,
@@ -195,9 +198,8 @@ class CartaBook {
           // debugPrint('adding: ${section.title}');
         }
       }
-      return ConcatenatingAudioSource(children: audioData);
     }
-    return null;
+    return sectionData;
   }
 
   Map<String, String>? getAuthHeaders() {

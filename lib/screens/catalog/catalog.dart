@@ -41,8 +41,7 @@ class _CatalogPageState extends State<CatalogPage> {
         });
       }
     }
-    debugPrint('buildPanelData: $panelData');
-
+    // debugPrint('buildPanelData: $panelData');
     setState(() {});
   }
 
@@ -95,6 +94,14 @@ class _CatalogPageState extends State<CatalogPage> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
                                         content: Text('book added'),
+                                      ));
+                                    }
+                                  } else {
+                                    if (mounted) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text(
+                                            'Sorry, failed to find the book data.'),
                                       ));
                                     }
                                   }

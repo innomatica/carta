@@ -47,7 +47,6 @@ dependencies:
   provider: ^6.0.5
   audio_video_progress_bar: ^2.0.1
   rxdart: ^0.27.7
-  just_audio_background: ^0.0.1-beta.10
   html: ^0.15.4
   webview_flutter: ^4.2.2
   path: ^1.8.3
@@ -58,6 +57,7 @@ dependencies:
   mime: ^1.0.4
   share_plus: ^7.0.2
   dynamic_color: ^1.6.5
+  audio_service: ^0.18.12
 
 dev_dependencies:
   flutter_test:

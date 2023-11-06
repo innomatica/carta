@@ -3,187 +3,132 @@ import 'dart:io';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 
-import '../../model/cartaplayer.dart';
+import '../../service/audiohandler.dart';
 
-class ProgressSlider extends StatelessWidget {
-  final CartaPlayer player;
-  const ProgressSlider(this.player, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
-      child: StreamBuilder<DurationState>(
-        stream: player.durationStateStream,
-        builder: (context, snapshot) {
-          final durationState = snapshot.data;
-          return ProgressBar(
-            progress: durationState?.progress ?? Duration.zero,
-            buffered: durationState?.progress ?? Duration.zero,
-            total: durationState?.total ?? Duration.zero,
-            onSeek: (duration) {
-              player.seek(duration);
-            },
-          );
-        },
-      ),
-    );
-  }
+buildProgressBar(CartaAudioHandler handler) {
+  return StreamBuilder<Duration>(
+    stream: handler.positionStream.distinct(),
+    builder: (context, snapshot) {
+      final total = handler.duration;
+      final progress = snapshot.data ?? Duration.zero;
+      return ProgressBar(
+        progress: progress,
+        total: total,
+        onSeek: (duration) async => await handler.seek(duration),
+      );
+    },
+  );
 }
 
-class PlayButton extends StatelessWidget {
-  final CartaPlayer player;
-  final double? size;
-  final Color? color;
-  const PlayButton(this.player, {this.size, this.color, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<PlayingBookState?>(
-      stream: player.playingBookStateStream,
-      builder: (context, snapshot) {
-        final playingBookState = snapshot.data;
-        if (playingBookState != null) {
-          // currently playing => PAUSE button
-          return IconButton(
+//
+// Play Button
+//
+StreamBuilder<bool> buildPlayButton(CartaAudioHandler handler,
+    {double? size, Color? color}) {
+  return StreamBuilder<bool>(
+    stream: handler.playbackState.map((s) => s.playing).distinct(),
+    builder: (context, snapshot) => snapshot.hasData && snapshot.data == true
+        ? IconButton(
             icon: Icon(Icons.pause_rounded, size: size, color: color),
-            onPressed: () async {
-              await player.pause();
-            },
-          );
-        } else {
-          // currently not playing => PLAY button
-          return IconButton(
+            onPressed: () async => await handler.pause(),
+          )
+        : IconButton(
             icon: Icon(Icons.play_arrow_rounded, size: size, color: color),
-            onPressed: () async {
-              // resume
-              await player.resume();
-            },
-          );
-        }
-      },
-    );
-  }
+            onPressed: () async => await handler.play(),
+          ),
+  );
 }
 
-class Rewind30Button extends StatelessWidget {
-  final CartaPlayer player;
-  final double? size;
-  final Color? color;
-  const Rewind30Button(this.player, {this.size, this.color, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.replay_30_rounded, size: size, color: color),
-      onPressed: () {
-        player.rewind(const Duration(seconds: 30));
-      },
-    );
-  }
+//
+// Fast Forward 30sec Button
+//
+IconButton buildForwardButton(CartaAudioHandler handler,
+    {double? size, Color? color}) {
+  return IconButton(
+    icon: Icon(Icons.forward_30_rounded, size: size, color: color),
+    onPressed: () async => await handler.fastForward(),
+  );
 }
 
-class Forward30Button extends StatelessWidget {
-  final CartaPlayer player;
-  final double? size;
-  final Color? color;
-  const Forward30Button(this.player, {this.size, this.color, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.forward_30_rounded, size: size, color: color),
-      onPressed: () {
-        player.forward(const Duration(seconds: 30));
-      },
-    );
-  }
+//
+// Rewind 30sec Button
+//
+IconButton buildRewindButton(CartaAudioHandler handler,
+    {double? size, Color? color}) {
+  return IconButton(
+    icon: Icon(Icons.replay_30_rounded, size: size, color: color),
+    onPressed: () async => await handler.rewind(),
+  );
 }
 
-class NextButton extends StatelessWidget {
-  final CartaPlayer player;
-  final double? size;
-  final Color? color;
-  const NextButton(this.player, {this.size, this.color, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.skip_next_rounded, size: size, color: color),
-      onPressed: () {
-        player.seekToNext();
-      },
-    );
-  }
+//
+// Next Section Button
+//
+IconButton buildNextButton(CartaAudioHandler handler,
+    {double? size, Color? color}) {
+  return IconButton(
+    icon: Icon(Icons.skip_next_rounded, size: size, color: color),
+    onPressed: () async => await handler.skipToNext(),
+  );
 }
 
-class PreviousButton extends StatelessWidget {
-  final CartaPlayer player;
-  final double? size;
-  final Color? color;
-  const PreviousButton(this.player, {this.size, this.color, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.skip_previous_rounded, size: size, color: color),
-      onPressed: () {
-        player.seekToPrevious();
-      },
-    );
-  }
+//
+// Previous Section Button
+//
+IconButton buildPreviousButton(CartaAudioHandler handler,
+    {double? size, Color? color}) {
+  return IconButton(
+    icon: Icon(Icons.skip_previous_rounded, size: size, color: color),
+    onPressed: () async => await handler.skipToPrevious(),
+  );
 }
 
-class PlaySpeedButton extends StatefulWidget {
-  final CartaPlayer player;
-  final double? size;
-  final Color? color;
-  const PlaySpeedButton(this.player, {this.size, this.color, super.key});
+//
+// Speed Selection Button
+//
+const speeds = [0.75, 0.85, 1.0, 1.25, 1.5, 2.0];
 
-  @override
-  State<PlaySpeedButton> createState() => _PlaySpeedButtonState();
+StreamBuilder<double> buildSpeedSelector(CartaAudioHandler handler,
+    {double? size, Color? color}) {
+  return StreamBuilder<double>(
+    stream: handler.playbackState.map((e) => e.speed).distinct(),
+    builder: (context, snapshot) {
+      return DropdownButton<double>(
+        value: snapshot.data ?? 1.0,
+        iconSize: 0,
+        isDense: true,
+        onChanged: (double? value) {
+          handler.setSpeed(value ?? 1.0);
+        },
+        items: speeds
+            .map<DropdownMenuItem<double>>(
+              (double value) => DropdownMenuItem<double>(
+                value: value,
+                child: Text('$value x'),
+              ),
+            )
+            .toList(),
+      );
+    },
+  );
 }
 
-class _PlaySpeedButtonState extends State<PlaySpeedButton> {
-  final selection = [0.75, 0.85, 1.0, 1.25, 1.5, 2.0];
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton<double>(
-      itemBuilder: (context) => selection
-          .map((e) => PopupMenuItem<double>(
-                value: e,
-                child: Text(
-                  '${e}x',
-                  style: TextStyle(fontSize: widget.size, color: widget.color),
-                ),
-              ))
-          .toList(),
-      onSelected: (value) async {
-        // debugPrint('speed: $value');
-        await widget.player.setSpeed(value);
-        setState(() {});
-      },
-      child: Text(
-        '${widget.player.speed}x',
-        style: TextStyle(fontSize: widget.size, color: widget.color),
-      ),
-    );
-  }
-}
-
+//
+// Book Title Widget
+//
 enum TitleLayout { horizontal, vertical }
 
 class BookTitle extends StatelessWidget {
-  final CartaPlayer player;
+  final CartaAudioHandler handler;
   final TitleLayout? layout;
-  const BookTitle(this.player, {this.layout, super.key});
+  const BookTitle(this.handler, {this.layout, super.key});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: player.currentIndexStream,
+      stream: handler.playbackState.map((e) => e.queueIndex).distinct(),
       builder: (context, snapshot) {
-        final tag = player.getCurrentTag();
+        final tag = handler.getCurrentTag();
         final bookTitle = tag?.album ?? 'Unknown Title';
         final sectionTitle = tag?.title ?? '';
 
@@ -225,17 +170,20 @@ class BookTitle extends StatelessWidget {
   }
 }
 
+//
+// Book Cover Widget
+//
 class BookCover extends StatelessWidget {
-  final CartaPlayer player;
+  final CartaAudioHandler handler;
   final double? size;
-  const BookCover(this.player, {this.size, super.key});
+  const BookCover(this.handler, {this.size, super.key});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: player.currentIndexStream,
+      stream: handler.playbackState.map((e) => e.queueIndex).distinct(),
       builder: (context, snapshot) {
-        final tag = player.getCurrentTag();
+        final tag = handler.getCurrentTag();
         return ClipRRect(
           borderRadius: BorderRadius.circular(8.0),
           child: tag != null && tag.artUri != null
