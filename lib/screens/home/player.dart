@@ -79,7 +79,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   ],
                 ),
           // progress bar
-          // ProgressSlider(handler),
           buildProgressBar(handler),
           // buttons
           Row(
@@ -87,7 +86,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: isScreenWide
                 ? <Widget>[
-                    // PlaySpeedButton(handler, size: 18),
                     buildSpeedSelector(handler, size: 18),
                     buildPreviousButton(handler, size: 36),
                     buildRewindButton(handler, size: 36),
@@ -97,7 +95,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     _buildMoreButton(handler),
                   ]
                 : <Widget>[
-                    // PlaySpeedButton(handler, size: 18),
                     buildSpeedSelector(handler, size: 18),
                     buildRewindButton(handler, size: 36),
                     buildPlayButton(handler, size: 48),

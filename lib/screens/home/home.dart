@@ -243,7 +243,7 @@ class _HomePageState extends State<HomePage> {
             [
               AudioProcessingState.loading,
               AudioProcessingState.buffering,
-              AudioProcessingState.ready
+              AudioProcessingState.ready,
             ].contains(snapshot.data)) {
           return Container(
             color: Theme.of(context).colorScheme.surfaceVariant,

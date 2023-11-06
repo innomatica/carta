@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 
 import '../../service/audiohandler.dart';
 
-buildProgressBar(CartaAudioHandler handler) {
+//
+// Progress Bar
+//
+StreamBuilder<Duration> buildProgressBar(CartaAudioHandler handler) {
   return StreamBuilder<Duration>(
     stream: handler.positionStream.distinct(),
     builder: (context, snapshot) {
