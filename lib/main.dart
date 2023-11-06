@@ -34,20 +34,23 @@ void main() async {
   appDocDirPath = appDocDir.path;
 
   // start app
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider<ScreenConfig>(create: (context) => ScreenConfig()),
-      ChangeNotifierProvider<CartaBloc>(create: (context) => CartaBloc()),
-      Provider<CartaAudioHandler>(
-        create: (context) {
-          handler.setLogic(context.read<CartaBloc>());
-          return handler;
-        },
-        dispose: (context, value) => handler.dispose(),
-      ),
-    ],
-    child: const MyApp(),
-  ));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ScreenConfig>(
+            create: (context) => ScreenConfig()),
+        ChangeNotifierProvider<CartaBloc>(create: (context) => CartaBloc()),
+        Provider<CartaAudioHandler>(
+          create: (context) {
+            handler.setLogic(context.read<CartaBloc>());
+            return handler;
+          },
+          dispose: (context, value) => handler.dispose(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -63,8 +66,8 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: (settings) {
           if (settings.name != null) {
             final uri = Uri.parse(settings.name!);
-            debugPrint('path: ${uri.path}');
-            debugPrint('params: ${uri.queryParameters}');
+            // debugPrint('path: ${uri.path}');
+            // debugPrint('params: ${uri.queryParameters}');
 
             if (uri.path == '/') {
               return MaterialPageRoute(builder: (context) => const HomePage());
@@ -73,7 +76,7 @@ class MyApp extends StatelessWidget {
                 builder: (context) => const CatalogPage(),
               );
               // } else if (uri.path == '/newbook') {
-              //   // FIXME: this is for the deeplink now broken in Android 12
+              //   // this is for the deeplink now broken in Android 12
               //   final bookUrl = uri.queryParameters[0];
               //   return MaterialPageRoute(
               //     builder: (context) => BookSitePage(

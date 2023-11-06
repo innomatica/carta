@@ -234,7 +234,7 @@ class _LibraryState extends State<Library> {
   @override
   Widget build(BuildContext context) {
     final books = context.watch<CartaBloc>().books;
-    final player = context.read<CartaAudioHandler>();
+    final handler = context.read<CartaAudioHandler>();
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -254,7 +254,7 @@ class _LibraryState extends State<Library> {
         },
         // needs to redraw whenever playing state changes
         child: StreamBuilder<bool>(
-          stream: player.playbackState.map((e) => e.playing).distinct(),
+          stream: handler.playbackState.map((e) => e.playing).distinct(),
           builder: (context, snapshot) {
             return ListView.builder(
               shrinkWrap: true,
@@ -262,7 +262,7 @@ class _LibraryState extends State<Library> {
               itemExtent: 80.0,
               itemBuilder: (context, index) => _buildBookCard(
                 books[index],
-                player.isCurrentBook(bookId: books[index].bookId),
+                handler.isCurrentBook(bookId: books[index].bookId),
               ),
             );
           },

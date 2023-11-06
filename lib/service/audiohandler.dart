@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:cartaapp/logic/cartabloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../logic/cartabloc.dart';
 import '../model/cartabook.dart';
 import '../shared/helpers.dart';
 
