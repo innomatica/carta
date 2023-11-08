@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
 
-import 'appinfo.dart';
-import 'attribution.dart';
-import 'disclaimer.dart';
-import 'privacy.dart';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../shared/constants.dart';
+import '../../shared/settings.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
@@ -13,13 +14,113 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
-  final List<bool> _expandedFlag = [
-    false,
-    false,
-    false,
-    false,
-    false,
-  ];
+  String? _getStoreUrl() {
+    if (Platform.isAndroid) {
+      return urlGooglePlay;
+    } else if (Platform.isIOS) {
+      return urlAppStore;
+    }
+    return urlHomePage;
+  }
+
+  Widget _buildBody() {
+    final titleStyle = TextStyle(color: Theme.of(context).colorScheme.primary);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          // Version
+          ListTile(
+            title: Text('Version', style: titleStyle),
+            subtitle: const Text(appVersion),
+          ),
+          // Open Source
+          ListTile(
+            title: Text('Open Source', style: titleStyle),
+            subtitle: const Text('Visit source repository'),
+            onTap: () => launchUrl(Uri.parse(urlSourceRepo)),
+          ),
+          // Play Store
+          ListTile(
+            title: Text('Play Store', style: titleStyle),
+            subtitle: const Text('Review Apps, Report Bugs'),
+            onTap: () {
+              final url = _getStoreUrl();
+              if (url != null) {
+                launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+              }
+            },
+          ),
+          // QR Code
+          ListTile(
+            title: Text('Play Store QR Code', style: titleStyle),
+            subtitle: const Text('Recommand to Others'),
+            onTap: () {
+              final url = _getStoreUrl();
+              if (url != null) {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: Center(
+                        child: Text('Visit Our Store', style: titleStyle),
+                      ),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Image.asset(playStoreUrlQrCode),
+                        )
+                      ],
+                    );
+                  },
+                );
+              }
+            },
+          ),
+          // Carta Plus
+          ListTile(
+            title: Text('Communal Reading Experience', style: titleStyle),
+            subtitle: const Text('Check out Carta Plus'),
+            onTap: () => launchUrl(Uri.parse(plusGooglePlay)),
+          ),
+          // About
+          ListTile(
+            title: Text('About Us', style: titleStyle),
+            subtitle: const Text(urlHomePage),
+            onTap: () => launchUrl(Uri.parse(urlHomePage)),
+          ),
+          // App Icons
+          ListTile(
+            title: Text('App Icons', style: titleStyle),
+            subtitle: const Text("Book icons created by Freepik - Flaticon"),
+            onTap: () => launchUrl(Uri.parse(urlAppIconSource)),
+          ),
+          // Store Image
+          ListTile(
+            title: Text('Store Background Image', style: titleStyle),
+            subtitle: const Text("Photo by Florencia Viadana at unsplash.com"),
+            onTap: () => launchUrl(Uri.parse(urlStoreImageSource)),
+          ),
+          // Disclaimer
+          ListTile(
+            title: Text('Disclaimer', style: titleStyle),
+            subtitle: const Text(
+                'The Company assumes no responsibility for errors or omissions '
+                'in the contents of the Service. (tap to see the full text).'),
+            onTap: () => launchUrl(Uri.parse(urlDisclaimer)),
+          ),
+          // Privacy Policy
+          ListTile(
+            title: Text('Privacy Policy', style: titleStyle),
+            subtitle: const Text('We do not collect any Personal Data. '
+                'We do not collect any Usage Data (tap to see the full text).'),
+            onTap: () => launchUrl(Uri.parse(urlPrivacyPolicy)),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,59 +133,7 @@ class _AboutPageState extends State<AboutPage> {
         ),
         title: const Text('About'),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            vertical: 10.0,
-            horizontal: 10.0,
-          ),
-          child: ExpansionPanelList(
-            expansionCallback: (int index, bool isExpanded) {
-              setState(() {
-                _expandedFlag[index] = !isExpanded;
-              });
-            },
-            children: [
-              // app information
-              ExpansionPanel(
-                headerBuilder: (context, isExpanded) {
-                  return const ListTile(title: Text('App Information'));
-                },
-                body: const AppInfo(),
-                isExpanded: _expandedFlag[0],
-                canTapOnHeader: true,
-              ),
-              // attribution
-              ExpansionPanel(
-                headerBuilder: (context, isExpanded) {
-                  return const ListTile(title: Text('Attributions'));
-                },
-                body: const Attribution(),
-                isExpanded: _expandedFlag[1],
-                canTapOnHeader: true,
-              ),
-              // disclamer
-              ExpansionPanel(
-                headerBuilder: (context, isExpanded) {
-                  return const ListTile(title: Text('Disclaimer'));
-                },
-                body: const Disclaimer(),
-                isExpanded: _expandedFlag[2],
-                canTapOnHeader: true,
-              ),
-              // policy
-              ExpansionPanel(
-                headerBuilder: (context, isExpanded) {
-                  return const ListTile(title: Text('Privacy Policy'));
-                },
-                body: const Privacy(),
-                isExpanded: _expandedFlag[3],
-                canTapOnHeader: true,
-              ),
-            ],
-          ),
-        ),
-      ),
+      body: _buildBody(),
     );
   }
 }

@@ -1,4 +1,5 @@
 // urls for app
+const urlSourceRepo = 'https://github.com/innomatica/carta';
 const urlPrivacyPolicy = 'https://innomatica.github.io/carta/privacy/';
 const urlDisclaimer = 'https://innomatica.github.io/carta/disclaimer/';
 const urlInstruction = 'https://innomatica.github.io/carta/manual/';
