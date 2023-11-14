@@ -94,6 +94,7 @@ class _CatalogPageState extends State<CatalogPage> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
                                         content: Text('book added'),
+                                        duration: Duration(seconds: 1),
                                       ));
                                     }
                                   } else {

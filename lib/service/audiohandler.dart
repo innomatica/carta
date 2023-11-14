@@ -32,6 +32,7 @@ class CartaAudioHandler extends BaseAudioHandler
   late final CartaBloc _logic;
   StreamSubscription? _subPlayerState;
   StreamSubscription? _subCurrentIndex;
+  StreamSubscription? _subPlaybackEvent;
 
   CartaAudioHandler() {
     _player.playbackEventStream.map(_transformEvent).pipe(playbackState);
@@ -70,6 +71,17 @@ class CartaAudioHandler extends BaseAudioHandler
         }
       }
     });
+    // listen to playbackEventStream
+    _subPlaybackEvent = _player.playbackEventStream.listen((event) {},
+        onError: (Object e, StackTrace st) {
+      if (e is PlayerException) {
+        log('PlayerException code: ${e.code}');
+        log('PlayerException message: ${e.message}');
+      } else {
+        log('PlaybackEvent error: $e');
+      }
+      // do not stop here
+    });
   }
 
   void setLogic(CartaBloc logic) {
@@ -79,6 +91,7 @@ class CartaAudioHandler extends BaseAudioHandler
   Future<void> dispose() async {
     await _subPlayerState?.cancel();
     await _subCurrentIndex?.cancel();
+    await _subPlaybackEvent?.cancel();
     await _player.dispose();
   }
 
@@ -204,7 +217,7 @@ class CartaAudioHandler extends BaseAudioHandler
   }
 
   Future<void> playAudioBook(CartaBook book, {int sectionIdx = 0}) async {
-    log('handler.playAudioBook');
+    // log('handler.playAudioBook.book: $book');
     if (isCurrentSection(bookId: book.bookId, sectionIdx: sectionIdx)) {
       // same book, same section => toogle playing
       if (_player.playing) {
@@ -223,17 +236,30 @@ class CartaAudioHandler extends BaseAudioHandler
                 : Duration.zero;
         // it is required to stop before setAudioSource call
         await stop();
-        await _player.setAudioSource(
-          ConcatenatingAudioSource(children: audioSource),
-          preload: false,
-          initialIndex: sectionIdx,
-          initialPosition: initPosition,
-        );
-        // hasBook = true;
-        // ready to play new source
-        log('start a new book/section: ${book.title}, $sectionIdx');
-        queue.add(audioSource.map((e) => e.tag as MediaItem).toList());
-        await play();
+        try {
+          // https://pub.dev/packages/just_audio#working-with-caches
+          // Better to clear cache regardless of the source type
+          // if (audioSource[0] is LockCachingAudioSource) {
+          try {
+            await AudioPlayer.clearAssetCache();
+          } catch (e) {
+            log(e.toString());
+          }
+          // }
+          await _player.setAudioSource(
+            ConcatenatingAudioSource(children: audioSource),
+            preload: false,
+            initialIndex: sectionIdx,
+            initialPosition: initPosition,
+          );
+          // hasBook = true;
+          // ready to play new source
+          log('start a new book/section: ${book.title}, $sectionIdx');
+          queue.add(audioSource.map((e) => e.tag as MediaItem).toList());
+          await play();
+        } catch (e) {
+          log(e.toString());
+        }
       }
     }
   }

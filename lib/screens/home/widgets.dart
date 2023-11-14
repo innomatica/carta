@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../logic/cartabloc.dart';
 import '../../service/audiohandler.dart';
+import '../../shared/constants.dart';
 
 //
 // Progress Bar
@@ -142,7 +145,6 @@ class BookTitle extends StatelessWidget {
               style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant),
               overflow: TextOverflow.ellipsis,
-              maxLines: 1,
             );
           default:
             return Column(
@@ -153,6 +155,7 @@ class BookTitle extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.w500,
+                    overflow: TextOverflow.ellipsis,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
@@ -162,6 +165,7 @@ class BookTitle extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 15.0,
                     fontWeight: FontWeight.w400,
+                    overflow: TextOverflow.ellipsis,
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
@@ -194,10 +198,45 @@ class BookCover extends StatelessWidget {
                   ? Image.file(File(tag.artUri!.toFilePath()),
                       height: size ?? 200, width: size ?? 200)
                   : Image.network(tag.artUri!.toString(),
-                      height: size ?? 200, width: size ?? 200)
+                      headers: tag.artHeaders,
+                      height: size ?? 200,
+                      width: size ?? 200)
               : Container(),
         );
       },
+    );
+  }
+}
+
+class FirstLogin extends StatelessWidget {
+  const FirstLogin({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final logic = context.watch<CartaBloc>();
+    final filter = logic.currentFilter;
+    const textStyle = TextStyle(fontWeight: FontWeight.w600);
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: filter == 'all'
+            ? [
+                const Text('Welcome to $appName', style: textStyle),
+                const SizedBox(height: 16.0),
+                const SizedBox(
+                  width: 80,
+                  child: Image(image: AssetImage(defaultAlbumImage)),
+                ),
+                const SizedBox(height: 16.0),
+                const Text('Add books and start listening', style: textStyle),
+              ]
+            : [
+                Icon(logic.filterIcon, size: 80, color: Colors.blueGrey),
+                const SizedBox(height: 16.0),
+                Text('Add $filter books', style: textStyle),
+              ],
+      ),
     );
   }
 }

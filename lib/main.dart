@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'logic/cartabloc.dart';
 import 'logic/screenconfig.dart';
+import 'screens/auth/settings.dart';
 import 'screens/catalog/catalog.dart';
 import 'screens/home/home.dart';
 import 'service/audiohandler.dart';
@@ -45,7 +46,7 @@ void main() async {
             handler.setLogic(context.read<CartaBloc>());
             return handler;
           },
-          dispose: (context, value) => handler.dispose(),
+          dispose: (_, __) => handler.dispose(),
         ),
       ],
       child: const MyApp(),
@@ -68,21 +69,16 @@ class MyApp extends StatelessWidget {
             final uri = Uri.parse(settings.name!);
             // debugPrint('path: ${uri.path}');
             // debugPrint('params: ${uri.queryParameters}');
-
             if (uri.path == '/') {
               return MaterialPageRoute(builder: (context) => const HomePage());
             } else if (uri.path == '/selected') {
               return MaterialPageRoute(
                 builder: (context) => const CatalogPage(),
               );
-              // } else if (uri.path == '/newbook') {
-              //   // this is for the deeplink now broken in Android 12
-              //   final bookUrl = uri.queryParameters[0];
-              //   return MaterialPageRoute(
-              //     builder: (context) => BookSitePage(
-              //       url: bookUrl,
-              //     ),
-              //   );
+            } else if (uri.path == '/settings') {
+              return MaterialPageRoute(
+                builder: (context) => const SettingsPage(),
+              );
             }
           }
           return MaterialPageRoute(builder: (context) => const NotFound());

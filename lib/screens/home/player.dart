@@ -74,11 +74,12 @@ class _PlayerScreenState extends State<PlayerScreen> {
               : Column(
                   children: [
                     BookTitle(handler),
-                    const SizedBox(height: 8.0),
+                    const SizedBox(height: 16.0),
                     BookCover(handler),
                   ],
                 ),
           // progress bar
+          const SizedBox(height: 16.0),
           buildProgressBar(handler),
           // buttons
           Row(

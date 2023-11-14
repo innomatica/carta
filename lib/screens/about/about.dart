@@ -55,7 +55,7 @@ class _AboutPageState extends State<AboutPage> {
           // QR Code
           ListTile(
             title: Text('Play Store QR Code', style: titleStyle),
-            subtitle: const Text('Recommand to Others'),
+            subtitle: const Text('Recommend to Others'),
             onTap: () {
               final url = _getStoreUrl();
               if (url != null) {
@@ -105,16 +105,16 @@ class _AboutPageState extends State<AboutPage> {
           // Disclaimer
           ListTile(
             title: Text('Disclaimer', style: titleStyle),
-            subtitle: const Text(
-                'The Company assumes no responsibility for errors or omissions '
+            subtitle: const Text('We assumes no responsibility for errors '
                 'in the contents of the Service. (tap to see the full text).'),
             onTap: () => launchUrl(Uri.parse(urlDisclaimer)),
           ),
-          // Privacy Policy
+          // Privacy
           ListTile(
             title: Text('Privacy Policy', style: titleStyle),
-            subtitle: const Text('We do not collect any Personal Data. '
-                'We do not collect any Usage Data (tap to see the full text).'),
+            subtitle: const Text('We only collect data essential for the '
+                'service and do not share it with any third parties '
+                '(tap to see the full text).'),
             onTap: () => launchUrl(Uri.parse(urlPrivacyPolicy)),
           ),
         ],

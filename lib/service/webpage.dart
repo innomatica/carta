@@ -299,9 +299,7 @@ class WebPageParser {
         duration: duration,
         source: CartaSource.legamus,
         sections: sections,
-        info: {
-          'siteUrl': url,
-        },
+        info: {'siteUrl': url},
       );
     }
     // debugPrint('book:$book');

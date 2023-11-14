@@ -194,6 +194,19 @@ class SqliteRepo {
     return settings.map<CartaServer>((e) => CartaServer.fromSqlite(e)).toList();
   }
 
+  Future<CartaServer?> getBookServerById(String serverId) async {
+    final db = await getDatabase();
+    final res = await db.query(
+      tableBookServers,
+      where: 'where',
+      whereArgs: [serverId],
+    );
+    if (res.isNotEmpty) {
+      return CartaServer.fromSqlite(res[0]);
+    }
+    return null;
+  }
+
   Future<int> addBookServer(CartaServer server) async {
     final db = await getDatabase();
     final result = db.insert(

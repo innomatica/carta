@@ -82,11 +82,12 @@ class _LibraryState extends State<Library> {
           color: Theme.of(context).colorScheme.tertiary,
           fontSize: 16.0,
           fontWeight: FontWeight.w700,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
       backgroundColor: Theme.of(context).dialogBackgroundColor.withOpacity(0.9),
       content: SizedBox(
-        width: double.maxFinite,
+        width: isScreenWide ? 600 : double.maxFinite,
         child: StreamBuilder<int?>(
           stream: handler.playbackState.map((e) => e.queueIndex).distinct(),
           builder: (context, snapshot) {
@@ -146,6 +147,7 @@ class _LibraryState extends State<Library> {
                                         ?.toString()
                                         .split('.')[0] ??
                                     '',
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: isCurrentSection
                                       ? Theme.of(context)
@@ -155,7 +157,7 @@ class _LibraryState extends State<Library> {
                                   fontSize: 13.0,
                                 ),
                               )
-                            : Container(),
+                            : const SizedBox(width: 0, height: 0),
                       ],
                     ),
                   ),
@@ -198,7 +200,10 @@ class _LibraryState extends State<Library> {
           ),
         ),
         // Author
-        subtitle: Text(book.authors ?? ''),
+        subtitle: Text(
+          book.authors ?? '',
+          overflow: TextOverflow.ellipsis,
+        ),
         // Icon
         trailing: _buildTrailingWidget(book),
         onTap: () {

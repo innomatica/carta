@@ -2,25 +2,44 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
 
 import '../model/cartabook.dart';
 import '../model/cartacard.dart';
+import '../model/cartaserver.dart';
 import '../repo/sqlite.dart';
 import '../service/webpage.dart';
 import '../shared/settings.dart';
 
+const sortOptions = ['title', 'authors'];
+const filterOptions = ['all', 'librivox', 'archive', 'cloud'];
+const sortIcons = [Icons.album_rounded, Icons.account_circle_rounded];
+const filterIcons = [
+  Icons.import_contacts_rounded,
+  Icons.local_library_rounded,
+  Icons.account_balance_rounded,
+  Icons.cloud_rounded,
+];
+
 class CartaBloc extends ChangeNotifier {
-  List<CartaBook> _books = <CartaBook>[];
-  final Set<String> _cancelRequests = <String>{};
-  final Set<String> _isDownloading = <String>{};
+  bool hasPlus = false;
+  int sortIndex = 0;
+  int filterIndex = 0;
+
+  final _books = <CartaBook>[];
+  final _cancelRequests = <String>{};
+  final _isDownloading = <String>{};
 
   final _db = SqliteRepo();
+  // NOTE: book server data stored in the local database
+  List<CartaServer> _servers = <CartaServer>[];
 
   CartaBloc() {
-    refreshAudioBooks();
+    // update book server list when start
+    refreshBookServers();
+    refreshBooks();
   }
 
   @override
@@ -29,19 +48,33 @@ class CartaBloc extends ChangeNotifier {
     super.dispose();
   }
 
-  List<CartaBook> get books {
-    return _books;
-  }
+  String get currentSort => sortOptions[sortIndex];
+  String get currentFilter => filterOptions[filterIndex];
+  IconData get sortIcon => sortIcons[sortIndex];
+  IconData get filterIcon => filterIcons[filterIndex];
 
-  Future refreshAudioBooks() async {
-    _books = await _db.getAudioBooks();
-    notifyListeners();
+  List<CartaBook> get books {
+    final filterOption = filterOptions[filterIndex];
+    // debugPrint('filterOption: $filterOption');
+    if (filterOption == 'librivox') {
+      return _books
+          .where((b) =>
+              b.source == CartaSource.librivox ||
+              b.source == CartaSource.legamus)
+          .toList();
+    } else if (filterOption == 'archive') {
+      return _books.where((b) => b.source == CartaSource.archive).toList();
+    } else if (filterOption == 'cloud') {
+      return _books.where((b) => b.source == CartaSource.cloud).toList();
+    } else {
+      return _books;
+    }
   }
 
   Future<bool> addAudioBook(CartaBook book) async {
     // add book to database
     await _db.addAudioBook(book);
-    refreshAudioBooks();
+    refreshBooks();
     return true;
   }
 
@@ -55,12 +88,12 @@ class CartaBloc extends ChangeNotifier {
 
     // remove database entry
     await _db.deleteAudioBook(book);
-    refreshAudioBooks();
+    refreshBooks();
   }
 
   Future updateAudioBook(CartaBook book) async {
     await _db.updateAudioBook(book);
-    refreshAudioBooks();
+    refreshBooks();
   }
 
   // update fields of the book
@@ -70,7 +103,7 @@ class CartaBloc extends ChangeNotifier {
   //
   Future updateBookData(String bookId, Map<String, Object?> data) async {
     await _db.updateDataByBookId(bookId, data);
-    refreshAudioBooks();
+    refreshBooks();
   }
 
   //
@@ -160,6 +193,33 @@ class CartaBloc extends ChangeNotifier {
     notifyListeners();
   }
 
+  void rotateFilterBy() {
+    filterIndex = (filterIndex + 1) % filterOptions.length;
+    notifyListeners();
+  }
+
+  void rotateSortBy() {
+    sortIndex = (sortIndex + 1) % sortOptions.length;
+    _sortBooks();
+    notifyListeners();
+  }
+
+  _sortBooks() {
+    final sortOption = sortOptions[sortIndex];
+    // debugPrint('sortOption: $sortOption');
+    if (sortOption == 'title') {
+      _books.sort((a, b) => a.title.compareTo(b.title));
+    } else if (sortOption == 'authors') {
+      _books.sort((a, b) => (a.authors ?? '').compareTo(b.authors ?? ''));
+    }
+  }
+
+  Future<void> refreshBooks() async {
+    _books.clear();
+    _books.addAll(await _db.getAudioBooks());
+    notifyListeners();
+  }
+
   //
   // CartaCard
   //
@@ -187,5 +247,30 @@ class CartaBloc extends ChangeNotifier {
       book = await WebPageParser.getBookFromUrl(card.data['siteUrl']);
     }
     return book;
+  }
+
+  //
+  //  Book Server
+  //
+  List<CartaServer> get servers => _servers;
+
+  Future refreshBookServers() async {
+    _servers = await _db.getBookServers();
+    notifyListeners();
+  }
+
+  Future addBookServer(CartaServer server) async {
+    await _db.addBookServer(server);
+    refreshBookServers();
+  }
+
+  Future updateBookServer(CartaServer server) async {
+    await _db.updateBookServer(server);
+    refreshBookServers();
+  }
+
+  Future deleteBookServer(CartaServer server) async {
+    await _db.deleteBookServer(server);
+    refreshBookServers();
   }
 }

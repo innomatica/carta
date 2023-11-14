@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-enum ServerType { nextcloud, gdrive }
+enum ServerType { nextcloud, webdav, gdrive }
 
 class CartaServer {
   String serverId;

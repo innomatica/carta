@@ -8,15 +8,16 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../logic/cartabloc.dart';
 import '../../logic/screenconfig.dart';
 import '../../model/cartabook.dart';
+import '../../screens/cloud/webdav_navigator.dart';
 import '../../service/audiohandler.dart';
 import '../../shared/booksites.dart';
 import '../../shared/constants.dart';
 import '../../shared/settings.dart';
 import '../about/about.dart';
+import '../auth/settings.dart';
 import '../book/bookpanel.dart';
 import '../catalog/catalog.dart';
 import '../booksite/booksite.dart';
-import 'instruction.dart';
 import 'library.dart';
 import 'player.dart';
 import 'widgets.dart';
@@ -35,10 +36,10 @@ class _HomePageState extends State<HomePage> {
   //
   // Screen Layout Select
   //
-  Widget? _buildScreenSelect() {
+  Widget _buildScreenSelect() {
     final screen = context.read<ScreenConfig>();
     Icon btnIcon;
-    const btnSize = 32.0;
+    const btnSize = 28.0;
     final btnColor = Theme.of(context).colorScheme.tertiary;
     void Function() handler;
 
@@ -56,13 +57,69 @@ class _HomePageState extends State<HomePage> {
       // instead back to split from book view
       handler = () => screen.setLayout(ScreenLayout.split);
     }
+    return IconButton(icon: btnIcon, onPressed: handler);
+  }
 
+  //
+  // Sort Button
+  //
+  Widget _buildSortButton() {
+    final logic = context.read<CartaBloc>();
+    return IconButton(
+      icon: Icon(
+        logic.sortIcon,
+        size: 30.0,
+        color: Theme.of(context).colorScheme.tertiary,
+      ),
+      onPressed: () => logic.rotateSortBy(),
+    );
+  }
+
+  //
+  // Filter Button
+  //
+  Widget _buildFilterButton() {
+    final logic = context.read<CartaBloc>();
+    return IconButton(
+      icon: Icon(
+        logic.filterIcon,
+        size: 26.0,
+        color: Theme.of(context).colorScheme.tertiary,
+      ),
+      onPressed: () => logic.rotateFilterBy(),
+    );
+  }
+
+  Widget? _buildTitleWidgets() {
     return isScreenWide
-        ? IconButton(
-            icon: btnIcon,
-            onPressed: handler,
-          )
-        : null;
+        ? Row(children: [
+            _buildScreenSelect(),
+            const SizedBox(width: 16.0),
+            const Text(appName),
+            const SizedBox(width: 16.0),
+            _buildSortButton(),
+            _buildFilterButton(),
+          ])
+        : const Text(appName);
+  }
+
+  List<Widget> _buildActionWidgets() {
+    final handler = context.read<CartaAudioHandler>();
+    return isScreenWide
+        ? [
+            _sleepTimer != null && _sleepTimer!.isActive
+                ? _buildSleepTimerButton()
+                : const SizedBox(width: 0, height: 0),
+            _buildMenuButton(handler),
+          ]
+        : [
+            _buildSortButton(),
+            _buildFilterButton(),
+            _sleepTimer != null && _sleepTimer!.isActive
+                ? _buildSleepTimerButton()
+                : const SizedBox(width: 0, height: 0),
+            _buildMenuButton(handler),
+          ];
   }
 
   //
@@ -88,26 +145,7 @@ class _HomePageState extends State<HomePage> {
     return PopupMenuButton<String>(
       icon: const Icon(Icons.menu_rounded),
       onSelected: (String item) {
-        if (item == 'LibriVox') {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                const BookSitePage(url: urlLibriVoxSearchByAuthor),
-          ));
-        } else if (item == 'Internet Archive') {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                const BookSitePage(url: urlInternetArchiveAudio),
-          ));
-        } else if (item == 'Legamus') {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                const BookSitePage(url: urlLegamusAllRecordings),
-          ));
-        } else if (item == 'Selected Books') {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const CatalogPage(),
-          ));
-        } else if (item == 'Set Sleep Timer') {
+        if (item == 'Set Sleep Timer') {
           if (_sleepTimer != null) {
             _sleepTimer!.cancel();
             _sleepTimer = null;
@@ -134,62 +172,15 @@ class _HomePageState extends State<HomePage> {
           setState(() {});
         } else if (item == 'How To') {
           launchUrl(Uri.parse(urlInstruction));
+        } else if (item == 'Settings') {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const SettingsPage()));
         } else if (item == 'About') {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => const AboutPage()));
         }
       },
       itemBuilder: (context) => [
-        PopupMenuItem<String>(
-          value: 'LibriVox',
-          child: Row(
-            children: [
-              CartaBook.getIconBySource(
-                CartaSource.librivox,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              const SizedBox(width: 8.0),
-              const Text('LibriVox'),
-            ],
-          ),
-        ),
-        PopupMenuItem<String>(
-          value: 'Internet Archive',
-          child: Row(
-            children: [
-              CartaBook.getIconBySource(
-                CartaSource.archive,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              const SizedBox(width: 8.0),
-              const Text('Internet Archive'),
-            ],
-          ),
-        ),
-        PopupMenuItem<String>(
-          value: 'Legamus',
-          child: Row(
-            children: [
-              CartaBook.getIconBySource(
-                CartaSource.legamus,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              const SizedBox(width: 8.0),
-              const Text('Legamus'),
-            ],
-          ),
-        ),
-        PopupMenuItem<String>(
-          value: 'Selected Books',
-          child: Row(
-            children: [
-              Icon(Icons.list_alt_rounded,
-                  color: Theme.of(context).colorScheme.primary),
-              const SizedBox(width: 8.0),
-              const Text('Selected Books'),
-            ],
-          ),
-        ),
         PopupMenuItem(
           value: _sleepTimer != null && _sleepTimer!.isActive
               ? "Cancel Sleep Timer"
@@ -217,6 +208,17 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         PopupMenuItem<String>(
+          value: 'Settings',
+          child: Row(
+            children: [
+              Icon(Icons.settings_rounded,
+                  color: Theme.of(context).colorScheme.primary),
+              const SizedBox(width: 8.0),
+              const Text('Settings'),
+            ],
+          ),
+        ),
+        PopupMenuItem<String>(
           value: 'About',
           child: Row(
             children: [
@@ -234,7 +236,8 @@ class _HomePageState extends State<HomePage> {
   //
   // Scaffold.Bottomsheet
   //
-  Widget? _buildBottomSheet(CartaAudioHandler handler) {
+  Widget? _buildBottomSheet() {
+    final handler = context.read<CartaAudioHandler>();
     // needs to redraw whenever the playing state changes
     return StreamBuilder<AudioProcessingState>(
       stream: handler.playbackState.map((e) => e.processingState).distinct(),
@@ -300,10 +303,9 @@ class _HomePageState extends State<HomePage> {
     final screen = context.watch<ScreenConfig>();
     // debugPrint('home.body screen.layout: ${screen.layout}');
     // debugPrint('home.body isWide: ${screen.isWide}');
-
     if (books.isEmpty) {
       // no books
-      return const Instruction();
+      return const FirstLogin();
     } else if (isScreenWide) {
       // wide screen
       if (screen.layout == ScreenLayout.split) {
@@ -327,25 +329,131 @@ class _HomePageState extends State<HomePage> {
     return const Library();
   }
 
+  //
+  // Floating Action Buttton
+  //
+  FloatingActionButton _buildFloatingActionButton() {
+    final iconColor = Theme.of(context).colorScheme.tertiary;
+    final logic = context.watch<CartaBloc>();
+
+    return FloatingActionButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // LibriVox
+                TextButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          const BookSitePage(url: urlLibriVoxSearchByAuthor),
+                    ));
+                  },
+                  icon: CartaBook.getIconBySource(
+                    CartaSource.librivox,
+                    color: iconColor,
+                  ),
+                  label: const Text('LibriVox'),
+                ),
+                // Internet Archive
+                TextButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          const BookSitePage(url: urlInternetArchiveAudio),
+                    ));
+                  },
+                  icon: CartaBook.getIconBySource(
+                    CartaSource.archive,
+                    color: iconColor,
+                  ),
+                  label: const Text('Internet Archive'),
+                ),
+                // Legamus
+                TextButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          const BookSitePage(url: urlLegamusAllRecordings),
+                    ));
+                  },
+                  icon: CartaBook.getIconBySource(
+                    CartaSource.legamus,
+                    color: iconColor,
+                  ),
+                  label: const Text('Legamus'),
+                ),
+                for (final server in logic.servers)
+                  TextButton.icon(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => WebDavNavigator(server: server),
+                      ));
+                    },
+                    icon: CartaBook.getIconBySource(
+                      CartaSource.cloud,
+                      color: iconColor,
+                    ),
+                    label: Text(server.title),
+                  ),
+                logic.servers.isEmpty
+                    ? TextButton.icon(
+                        onPressed: () =>
+                            Navigator.of(context).popAndPushNamed('/settings'),
+                        icon: CartaBook.getIconBySource(
+                          CartaSource.cloud,
+                          color: iconColor,
+                        ),
+                        label: const Text('Register WebDAV server'),
+                      )
+                    : const SizedBox(width: 0, height: 0),
+                TextButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const CatalogPage(),
+                    ));
+                  },
+                  icon: Icon(
+                    Icons.list_alt_rounded,
+                    color: iconColor,
+                  ),
+                  label: const Text('Carta Selected Books'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      backgroundColor:
+          Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.8),
+      child: const Icon(Icons.add),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final handler = context.read<CartaAudioHandler>();
-
     return Scaffold(
       appBar: AppBar(
-        leading: _buildScreenSelect(),
-        title: const Text(appName),
-        actions: [
-          _sleepTimer != null && _sleepTimer!.isActive
-              ? _buildSleepTimerButton()
-              : Container(),
-          _buildMenuButton(handler),
-        ],
+        title: _buildTitleWidgets(),
+        actions: _buildActionWidgets(),
       ),
       body: _buildBody(),
       // https://github.com/flutter/flutter/issues/50314#issuecomment-1264861424
       // bottomSheet: _buildBottomSheet(player),
-      bottomNavigationBar: _buildBottomSheet(handler),
+      bottomNavigationBar: _buildBottomSheet(),
+      floatingActionButton: _buildFloatingActionButton(),
+      floatingActionButtonLocation: isScreenWide
+          ? FloatingActionButtonLocation.startFloat
+          : FloatingActionButtonLocation.centerFloat,
     );
   }
 }
