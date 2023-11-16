@@ -7,18 +7,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../logic/cartabloc.dart';
 import '../../logic/screenconfig.dart';
-import '../../model/cartabook.dart';
-import '../../screens/cloud/webdav_navigator.dart';
 import '../../service/audiohandler.dart';
-import '../../shared/booksites.dart';
 import '../../shared/constants.dart';
 import '../../shared/settings.dart';
 import '../about/about.dart';
 import '../settings/settings.dart';
 import '../book/bookpanel.dart';
-import '../catalog/catalog.dart';
-import '../booksite/booksite.dart';
 import 'bookshelf.dart';
+import 'fab.dart';
 import 'player.dart';
 import 'widgets.dart';
 
@@ -333,104 +329,11 @@ class _HomePageState extends State<HomePage> {
   // Floating Action Buttton
   //
   FloatingActionButton _buildFloatingActionButton() {
-    final iconColor = Theme.of(context).colorScheme.tertiary;
-    final logic = context.watch<CartaBloc>();
-
     return FloatingActionButton(
       onPressed: () {
         showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // LibriVox
-                TextButton.icon(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          const BookSitePage(url: urlLibriVoxSearchByAuthor),
-                    ));
-                  },
-                  icon: CartaBook.getIconBySource(
-                    CartaSource.librivox,
-                    color: iconColor,
-                  ),
-                  label: const Text('LibriVox'),
-                ),
-                // Internet Archive
-                TextButton.icon(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          const BookSitePage(url: urlInternetArchiveAudio),
-                    ));
-                  },
-                  icon: CartaBook.getIconBySource(
-                    CartaSource.archive,
-                    color: iconColor,
-                  ),
-                  label: const Text('Internet Archive'),
-                ),
-                // Legamus
-                TextButton.icon(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          const BookSitePage(url: urlLegamusAllRecordings),
-                    ));
-                  },
-                  icon: CartaBook.getIconBySource(
-                    CartaSource.legamus,
-                    color: iconColor,
-                  ),
-                  label: const Text('Legamus'),
-                ),
-                for (final server in logic.servers)
-                  TextButton.icon(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => WebDavNavigator(server: server),
-                      ));
-                    },
-                    icon: CartaBook.getIconBySource(
-                      CartaSource.cloud,
-                      color: iconColor,
-                    ),
-                    label: Text(server.title),
-                  ),
-                logic.servers.isEmpty
-                    ? TextButton.icon(
-                        onPressed: () =>
-                            Navigator.of(context).popAndPushNamed('/settings'),
-                        icon: CartaBook.getIconBySource(
-                          CartaSource.cloud,
-                          color: iconColor,
-                        ),
-                        label: const Text('Register WebDAV server'),
-                      )
-                    : const SizedBox(width: 0, height: 0),
-                TextButton.icon(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const CatalogPage(),
-                    ));
-                  },
-                  icon: Icon(
-                    Icons.list_alt_rounded,
-                    color: iconColor,
-                  ),
-                  label: const Text('Carta Selected Books'),
-                ),
-              ],
-            ),
-          ),
+          builder: (context) => buildFabDialog(context),
         );
       },
       backgroundColor:
