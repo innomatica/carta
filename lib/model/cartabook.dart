@@ -284,7 +284,7 @@ class CartaBook {
         } else if (source == CartaSource.archive) {
           return Icon(Icons.account_balance_rounded, color: color, size: size);
         } else if (source == CartaSource.legamus) {
-          return Icon(Icons.group, color: color, size: size);
+          return Icon(Icons.auto_stories_rounded, color: color, size: size);
         }
         return Icon(Icons.local_library_rounded, color: color, size: size);
     }
@@ -302,7 +302,7 @@ class CartaBook {
       case CartaSource.archive:
         return Icon(Icons.account_balance_rounded, color: color, size: size);
       case CartaSource.legamus:
-        return Icon(Icons.group, color: color, size: size);
+        return Icon(Icons.auto_stories_rounded, color: color, size: size);
       default:
         return Icon(Icons.local_library_rounded, color: color, size: size);
     }

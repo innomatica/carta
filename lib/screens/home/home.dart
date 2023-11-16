@@ -14,11 +14,11 @@ import '../../shared/booksites.dart';
 import '../../shared/constants.dart';
 import '../../shared/settings.dart';
 import '../about/about.dart';
-import '../auth/settings.dart';
+import '../settings/settings.dart';
 import '../book/bookpanel.dart';
 import '../catalog/catalog.dart';
 import '../booksite/booksite.dart';
-import 'library.dart';
+import 'bookshelf.dart';
 import 'player.dart';
 import 'widgets.dart';
 
@@ -315,7 +315,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             SizedBox(
               width: 300,
-              child: Library(),
+              child: BookShelf(),
             ),
             Expanded(child: BookPanel()),
           ],
@@ -326,7 +326,7 @@ class _HomePageState extends State<HomePage> {
       }
     }
     // library view
-    return const Library();
+    return const BookShelf();
   }
 
   //

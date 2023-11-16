@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../logic/cartabloc.dart';
-import '../cloud/webdav_settings.dart';
+import 'webdav.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});

@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'logic/cartabloc.dart';
 import 'logic/screenconfig.dart';
-import 'screens/auth/settings.dart';
+import 'screens/settings/settings.dart';
 import 'screens/catalog/catalog.dart';
 import 'screens/home/home.dart';
 import 'service/audiohandler.dart';

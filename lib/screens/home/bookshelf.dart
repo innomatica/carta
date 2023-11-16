@@ -10,14 +10,14 @@ import '../book/book.dart';
 import '../webbook/webbook.dart';
 import '../webbook/webbookview.dart';
 
-class Library extends StatefulWidget {
-  const Library({super.key});
+class BookShelf extends StatefulWidget {
+  const BookShelf({super.key});
 
   @override
-  State<Library> createState() => _LibraryState();
+  State<BookShelf> createState() => _BookShelfState();
 }
 
-class _LibraryState extends State<Library> {
+class _BookShelfState extends State<BookShelf> {
   //
   // Book View Button
   //
