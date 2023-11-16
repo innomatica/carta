@@ -117,7 +117,7 @@ class _BookInfoViewState extends State<BookInfoView> {
             controller: controller,
           ),
           actions: [
-            TextButton(
+            FilledButton.tonal(
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -224,24 +224,29 @@ class _BookInfoViewState extends State<BookInfoView> {
           // author (editable)
           //
           ListTile(
-            title: Text('Author(s)', style: titleStyle),
-            subtitle: Text(widget.book.authors ?? ''),
-            trailing: IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () async {
-                final res =
-                    await _editField('Edit Author(s)', widget.book.authors);
-                if (res?.isNotEmpty == true) {
-                  final flag = await logic
-                      .updateBookData(widget.book.bookId, {'authors': res});
-                  // update currnt view without rebuiling parent tree
-                  if (flag) {
-                    widget.book.authors = res;
-                    setState(() {});
-                  }
-                }
-              },
+            title: Row(
+              children: [
+                Text('Author(s)', style: titleStyle),
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  visualDensity: VisualDensity.compact,
+                  onPressed: () async {
+                    final res =
+                        await _editField('Edit Author(s)', widget.book.authors);
+                    if (res?.isNotEmpty == true) {
+                      final flag = await logic
+                          .updateBookData(widget.book.bookId, {'authors': res});
+                      // update currnt view without rebuiling parent tree
+                      if (flag) {
+                        widget.book.authors = res;
+                        setState(() {});
+                      }
+                    }
+                  },
+                ),
+              ],
             ),
+            subtitle: Text(widget.book.authors ?? ''),
             onTap: () async {
               if (widget.book.authors?.isNotEmpty == true &&
                   widget.book.authors != 'Various' &&
@@ -256,24 +261,29 @@ class _BookInfoViewState extends State<BookInfoView> {
           // image URL (editable)
           //
           ListTile(
-            title: Text('Cover Image URL', style: titleStyle),
-            subtitle: Text(widget.book.imageUri ?? '(empty)'),
-            trailing: IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () async {
-                final res = await _editField(
-                    'Edit Cover Image URL', widget.book.imageUri);
-                if (res?.isNotEmpty == true) {
-                  final flag = await logic
-                      .updateBookData(widget.book.bookId, {'imageUri': res});
-                  // update currnt view without rebuiling parent tree
-                  if (flag) {
-                    widget.book.imageUri = res;
-                    setState(() {});
-                  }
-                }
-              },
+            title: Row(
+              children: [
+                Text('Cover Image URL', style: titleStyle),
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  visualDensity: VisualDensity.compact,
+                  onPressed: () async {
+                    final res = await _editField(
+                        'Edit Cover Image URL', widget.book.imageUri);
+                    if (res?.isNotEmpty == true) {
+                      final flag = await logic.updateBookData(
+                          widget.book.bookId, {'imageUri': res});
+                      // update currnt view without rebuiling parent tree
+                      if (flag) {
+                        widget.book.imageUri = res;
+                        setState(() {});
+                      }
+                    }
+                  },
+                ),
+              ],
             ),
+            subtitle: Text(widget.book.imageUri ?? '(empty)'),
           ),
           //
           // source
@@ -295,34 +305,39 @@ class _BookInfoViewState extends State<BookInfoView> {
           // text source
           //
           ListTile(
-            title: Text('Text', style: titleStyle),
+            title: Text('Book Text', style: titleStyle),
             subtitle: _buildTextSourceButton(),
           ),
           //
           // description (editable)
           //
           ListTile(
-            title: Text('Description', style: titleStyle),
-            subtitle: Text(unescape.convert(widget.book.description ?? '')),
-            trailing: IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () async {
-                final res = await _editField(
-                  'Edit Book Description',
-                  unescape.convert(widget.book.description ?? ''),
-                  maxLines: 10,
-                );
-                if (res?.isNotEmpty == true) {
-                  final flag = await logic
-                      .updateBookData(widget.book.bookId, {'description': res});
-                  // update currnt view without rebuiling parent tree
-                  if (flag) {
-                    widget.book.description = res;
-                    setState(() {});
-                  }
-                }
-              },
+            title: Row(
+              children: [
+                Text('Description', style: titleStyle),
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  visualDensity: VisualDensity.compact,
+                  onPressed: () async {
+                    final res = await _editField(
+                      'Edit Book Description',
+                      unescape.convert(widget.book.description ?? ''),
+                      maxLines: 10,
+                    );
+                    if (res?.isNotEmpty == true) {
+                      final flag = await logic.updateBookData(
+                          widget.book.bookId, {'description': res});
+                      // update currnt view without rebuiling parent tree
+                      if (flag) {
+                        widget.book.description = res;
+                        setState(() {});
+                      }
+                    }
+                  },
+                ),
+              ],
             ),
+            subtitle: Text(unescape.convert(widget.book.description ?? '')),
           ),
           // bottom padding
           // https://github.com/flutter/flutter/issues/50314

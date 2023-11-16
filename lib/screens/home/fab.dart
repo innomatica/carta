@@ -16,7 +16,9 @@ Widget buildFabDialog(BuildContext context) {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        //
         // LibriVox
+        //
         TextButton.icon(
           onPressed: () {
             Navigator.pop(context);
@@ -31,7 +33,9 @@ Widget buildFabDialog(BuildContext context) {
           ),
           label: const Text('LibriVox'),
         ),
+        //
         // Internet Archive
+        //
         TextButton.icon(
           onPressed: () {
             Navigator.pop(context);
@@ -46,7 +50,9 @@ Widget buildFabDialog(BuildContext context) {
           ),
           label: const Text('Internet Archive'),
         ),
+        //
         // Legamus
+        //
         TextButton.icon(
           onPressed: () {
             Navigator.pop(context);
@@ -75,15 +81,14 @@ Widget buildFabDialog(BuildContext context) {
             ),
             label: Text(server.title),
           ),
+        // in case of having no registered servers
         logic.servers.isEmpty
             ? TextButton.icon(
                 onPressed: () =>
                     Navigator.of(context).popAndPushNamed('/settings'),
-                icon: CartaBook.getIconBySource(
-                  CartaSource.cloud,
-                  color: iconColor,
-                ),
-                label: const Text('Register WebDAV server'),
+                icon: CartaBook.getIconBySource(CartaSource.cloud,
+                    color: iconColor),
+                label: const Text('Cloud WebDAV server'),
               )
             : const SizedBox(width: 0, height: 0),
         TextButton.icon(
@@ -94,10 +99,10 @@ Widget buildFabDialog(BuildContext context) {
             ));
           },
           icon: Icon(
-            Icons.list_alt_rounded,
+            Icons.favorite_border_rounded,
             color: iconColor,
           ),
-          label: const Text('Carta Selected Books'),
+          label: const Text('Carta Favorite Books'),
         ),
       ],
     ),

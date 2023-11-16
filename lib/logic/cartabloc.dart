@@ -24,17 +24,17 @@ const filterIcons = [
 ];
 
 class CartaBloc extends ChangeNotifier {
-  bool hasPlus = false;
   int sortIndex = 0;
   int filterIndex = 0;
 
   final _books = <CartaBook>[];
+  // download related variables
   final _cancelRequests = <String>{};
   final _isDownloading = <String>{};
-
+  // databases
   final _db = SqliteRepo();
-  // NOTE: book server data stored in the local database
-  List<CartaServer> _servers = <CartaServer>[];
+  // book server data stored in the local database
+  final List<CartaServer> _servers = <CartaServer>[];
 
   CartaBloc() {
     // update book server list when start
@@ -53,6 +53,7 @@ class CartaBloc extends ChangeNotifier {
   IconData get sortIcon => sortIcons[sortIndex];
   IconData get filterIcon => filterIcons[filterIndex];
 
+  // Return list of books filtered
   List<CartaBook> get books {
     final filterOption = filterOptions[filterIndex];
     // debugPrint('filterOption: $filterOption');
@@ -71,6 +72,18 @@ class CartaBloc extends ChangeNotifier {
     }
   }
 
+  //
+  // BOOK
+  //
+
+  // Refresh list of books
+  Future<void> refreshBooks() async {
+    _books.clear();
+    _books.addAll(await _db.getAudioBooks());
+    notifyListeners();
+  }
+
+  // Create
   Future<bool> addAudioBook(CartaBook book) async {
     // add book to database
     await _db.addAudioBook(book);
@@ -78,14 +91,15 @@ class CartaBloc extends ChangeNotifier {
     return true;
   }
 
+  // Read by Id
   Future<CartaBook?> getAudioBookByBookId(String bookId) async {
     return _db.getAudioBookByBookId(bookId);
   }
 
+  // Delete
   Future deleteAudioBook(CartaBook book) async {
     // remove stored data regardless of book.source
     await book.deleteBookDirectory();
-
     // remove database entry
     await _db.deleteAudioBook(book);
     refreshBooks();
@@ -96,14 +110,36 @@ class CartaBloc extends ChangeNotifier {
     refreshBooks();
   }
 
-  // update fields of the book
   //
-  // it is the callers responsibility to do the conversion depending on the
-  // field and the database
+  // Update only certain fields of the book
+  // It is the callers responsibility to do the conversion of the field
   //
   Future updateBookData(String bookId, Map<String, Object?> data) async {
     await _db.updateDataByBookId(bookId, data);
     refreshBooks();
+  }
+
+  // Book filter
+  void rotateFilterBy() {
+    filterIndex = (filterIndex + 1) % filterOptions.length;
+    notifyListeners();
+  }
+
+  // Book sort
+  void rotateSortBy() {
+    sortIndex = (sortIndex + 1) % sortOptions.length;
+    _sortBooks();
+    notifyListeners();
+  }
+
+  _sortBooks() {
+    final sortOption = sortOptions[sortIndex];
+    // debugPrint('sortOption: $sortOption');
+    if (sortOption == 'title') {
+      _books.sort((a, b) => a.title.compareTo(b.title));
+    } else if (sortOption == 'authors') {
+      _books.sort((a, b) => (a.authors ?? '').compareTo(b.authors ?? ''));
+    }
   }
 
   //
@@ -156,7 +192,7 @@ class CartaBloc extends ChangeNotifier {
         break;
       }
 
-      // otherwise go head
+      // otherwise go ahead
       final res = await http.get(
         Uri.parse(section.uri),
         headers: book.getAuthHeaders(),
@@ -180,7 +216,7 @@ class CartaBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  // delete audio data
+  // Delete audio data
   Future deleteMediaData(CartaBook book) async {
     final bookDir = book.getBookDirectory();
     for (final entry in bookDir.listSync()) {
@@ -193,36 +229,10 @@ class CartaBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  void rotateFilterBy() {
-    filterIndex = (filterIndex + 1) % filterOptions.length;
-    notifyListeners();
-  }
-
-  void rotateSortBy() {
-    sortIndex = (sortIndex + 1) % sortOptions.length;
-    _sortBooks();
-    notifyListeners();
-  }
-
-  _sortBooks() {
-    final sortOption = sortOptions[sortIndex];
-    // debugPrint('sortOption: $sortOption');
-    if (sortOption == 'title') {
-      _books.sort((a, b) => a.title.compareTo(b.title));
-    } else if (sortOption == 'authors') {
-      _books.sort((a, b) => (a.authors ?? '').compareTo(b.authors ?? ''));
-    }
-  }
-
-  Future<void> refreshBooks() async {
-    _books.clear();
-    _books.addAll(await _db.getAudioBooks());
-    notifyListeners();
-  }
-
   //
   // CartaCard
   //
+  // Get Sample Cards
   Future<List<CartaCard>> getSampleBookCards() async {
     final cards = <CartaCard>[];
     final res = await http.get(Uri.parse(urlSelectedBooksJson));
@@ -238,6 +248,7 @@ class CartaBloc extends ChangeNotifier {
     return cards;
   }
 
+  // Get Book from the card
   Future<CartaBook?> getAudioBookFromCard(CartaCard card) async {
     CartaBook? book;
     if (card.source == CartaSource.carta) {
@@ -254,21 +265,26 @@ class CartaBloc extends ChangeNotifier {
   //
   List<CartaServer> get servers => _servers;
 
+  // Refresh server list
   Future refreshBookServers() async {
-    _servers = await _db.getBookServers();
+    _servers.clear();
+    _servers.addAll(await _db.getBookServers());
     notifyListeners();
   }
 
+  // Create
   Future addBookServer(CartaServer server) async {
     await _db.addBookServer(server);
     refreshBookServers();
   }
 
+  // Update
   Future updateBookServer(CartaServer server) async {
     await _db.updateBookServer(server);
     refreshBookServers();
   }
 
+  // Delete
   Future deleteBookServer(CartaServer server) async {
     await _db.deleteBookServer(server);
     refreshBookServers();

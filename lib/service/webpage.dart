@@ -76,8 +76,8 @@ class WebPageParser {
           sections.add(
             CartaSection(
               index: sections.length,
-              title: title,
-              uri: uri,
+              title: title.trim(),
+              uri: uri.trim(),
               duration: duration,
               info: {},
             ),
@@ -202,8 +202,8 @@ class WebPageParser {
 
             sections.add(CartaSection(
               index: index,
-              title: title,
-              uri: uri,
+              title: title.trim(),
+              uri: uri.trim(),
               duration: duration,
               info: info,
             ));
@@ -216,16 +216,16 @@ class WebPageParser {
           title: title,
           authors: author,
           description: description,
-          imageUri: imageUrl,
+          imageUri: imageUrl?.trim(),
           duration: duration,
           source: CartaSource.librivox,
           sections: sections,
           info: {
             'num_sections': sections.length,
             'bookId': librivoxId,
-            'urlRss': urlRss,
+            'urlRss': urlRss?.trim(),
             'siteUrl': url,
-            'textUrl': textUrl,
+            'textUrl': textUrl?.trim(),
           },
         );
       }
@@ -250,7 +250,7 @@ class WebPageParser {
       String? imageUrl =
           document.querySelector('.entry-content img')?.attributes['src'];
       if (imageUrl != null && !imageUrl.startsWith('http')) {
-        imageUrl = 'https://legamus.eu$imageUrl';
+        imageUrl = 'https://legamus.eu${imageUrl.trim()}';
       }
 
       Duration? duration;
@@ -281,7 +281,7 @@ class WebPageParser {
               sections.add(CartaSection(
                   index: index,
                   title: title,
-                  uri: '$audioUrl/$uri',
+                  uri: '${audioUrl.trim()}/${uri.trim()}',
                   duration: duration,
                   info: {}));
               index = index + 1;
@@ -295,7 +295,7 @@ class WebPageParser {
         title: title,
         authors: author,
         description: description,
-        imageUri: imageUrl,
+        imageUri: imageUrl?.trim(),
         duration: duration,
         source: CartaSource.legamus,
         sections: sections,

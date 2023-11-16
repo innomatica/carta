@@ -23,7 +23,7 @@ class _BookPageState extends State<BookPage> {
     final book = context.read<ScreenConfig>().book;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Book Details'),
+        title: const Text('Details'),
         actions: [
           // SHARE
           book != null &&

@@ -12,9 +12,11 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  static const tilePadding = EdgeInsets.symmetric(horizontal: 16.0);
   Widget _buildBody() {
     final logic = context.watch<CartaBloc>();
     final servers = logic.servers;
+    final titleStyle = TextStyle(color: Theme.of(context).colorScheme.tertiary);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView(
@@ -22,16 +24,17 @@ class _SettingsPageState extends State<SettingsPage> {
           // WebDav Servers
           for (final server in servers)
             ExpansionTile(
-              tilePadding: const EdgeInsets.symmetric(horizontal: 16.0),
-              childrenPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+              tilePadding: tilePadding,
+              childrenPadding: tilePadding,
               title: Text(server.title),
               children: [WebDavSettings(server: server)],
             ),
-          const ExpansionTile(
-            tilePadding: EdgeInsets.symmetric(horizontal: 16.0),
-            childrenPadding: EdgeInsets.symmetric(horizontal: 16.0),
-            title: Text('Add a new WebDav server'),
-            children: [WebDavSettings()],
+          // add a WebDav server
+          ExpansionTile(
+            tilePadding: tilePadding,
+            childrenPadding: tilePadding,
+            title: Text('Register WebDAV Server', style: titleStyle),
+            children: const [WebDavSettings()],
           ),
         ],
       ),

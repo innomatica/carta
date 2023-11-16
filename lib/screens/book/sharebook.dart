@@ -9,9 +9,8 @@ class ShareBook extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton.icon(
+    return IconButton(
       icon: const Icon(Icons.share_rounded),
-      label: const Text('share'),
       onPressed: () {
         Share.share('Check out this book ${book.info['siteUrl']}',
             subject: 'A Book worth to read');
