@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+import 'dart:developer';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -47,7 +48,7 @@ class SqliteRepo {
   Future open() async {
     final dbPath = await getDatabasesPath();
     String path = join(dbPath, databaseName);
-    debugPrint('database: $path');
+    log('database: $path');
 
     _db = await openDatabase(
       databaseName,
@@ -59,7 +60,7 @@ class SqliteRepo {
         // populate sample data here
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        debugPrint('version upgrade from $oldVersion to $newVersion');
+        log('version upgrade from $oldVersion to $newVersion');
         if (oldVersion < 3) {
           for (final sql in sqlDropTables) {
             await db.execute(sql);
@@ -84,8 +85,32 @@ class SqliteRepo {
   }
 
   //
-  // Audiobook
+  // CartaBook
   //
+  // Create
+  Future<int> addAudioBook(CartaBook book) async {
+    // log('addAudioBook: ${book.toString()}');
+    final db = await getDatabase();
+    final result = db.insert(
+      tableAudioBooks,
+      book.toSqlite(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    return result;
+  }
+
+  // Read
+  Future<CartaBook?> getAudioBookByBookId(String bookId) async {
+    final db = await getDatabase();
+    final records =
+        await db.query(tableAudioBooks, where: 'bookId=?', whereArgs: [bookId]);
+    if (records.isNotEmpty) {
+      return CartaBook.fromSqlite(records.first);
+    }
+    return null;
+  }
+
+  // Read Collection
   Future<List<CartaBook>> getAudioBooks({Map<String, dynamic>? query}) async {
     final db = await getDatabase();
     final records = await db.query(
@@ -103,29 +128,9 @@ class SqliteRepo {
     return records.map<CartaBook>((e) => CartaBook.fromSqlite(e)).toList();
   }
 
-  Future<CartaBook?> getAudioBookByBookId(String bookId) async {
-    final db = await getDatabase();
-    final records =
-        await db.query(tableAudioBooks, where: 'bookId=?', whereArgs: [bookId]);
-    if (records.isNotEmpty) {
-      return CartaBook.fromSqlite(records.first);
-    }
-    return null;
-  }
-
-  Future<int> addAudioBook(CartaBook book) async {
-    // debugPrint('addAudioBook: ${book.toString()}');
-    final db = await getDatabase();
-    final result = db.insert(
-      tableAudioBooks,
-      book.toSqlite(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    return result;
-  }
-
+  // Update
   Future<int> updateAudioBook(CartaBook book) async {
-    // debugPrint('updateAudioBook: ${book.toString()}');
+    // log('updateAudioBook: ${book.toString()}');
     // if (book.id == null) {
     //   return 0;
     // }
@@ -140,8 +145,8 @@ class SqliteRepo {
     return result;
   }
 
-  Future<int> updateDataByBookId(
-      String bookId, Map<String, Object?> data) async {
+  // Update Data
+  Future<int> updateBookData(String bookId, Map<String, Object?> data) async {
     final db = await getDatabase();
     final result = db.update(
       tableAudioBooks,
@@ -153,6 +158,7 @@ class SqliteRepo {
     return result;
   }
 
+  // Delete
   Future<int> deleteAudioBook(CartaBook book) async {
     final db = await getDatabase();
     final result = await db.delete(
@@ -163,6 +169,7 @@ class SqliteRepo {
     return result;
   }
 
+  // Delete by Id
   Future<int> deleteAudioBookByBookId(String bookId) async {
     final db = await getDatabase();
     final count = await db.delete(
@@ -174,8 +181,34 @@ class SqliteRepo {
   }
 
   //
-  // Book Server
+  // CartaServer
   //
+  // Create
+  Future<int> addBookServer(CartaServer server) async {
+    final db = await getDatabase();
+    final result = db.insert(
+      tableBookServers,
+      server.toSqlite(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    return result;
+  }
+
+  // Read
+  Future<CartaServer?> getBookServerById(String serverId) async {
+    final db = await getDatabase();
+    final res = await db.query(
+      tableBookServers,
+      where: 'where',
+      whereArgs: [serverId],
+    );
+    if (res.isNotEmpty) {
+      return CartaServer.fromSqlite(res[0]);
+    }
+    return null;
+  }
+
+  // Read Collection
   Future<List<CartaServer>> getBookServers(
       {Map<String, dynamic>? query}) async {
     final db = await getDatabase();
@@ -194,29 +227,7 @@ class SqliteRepo {
     return settings.map<CartaServer>((e) => CartaServer.fromSqlite(e)).toList();
   }
 
-  Future<CartaServer?> getBookServerById(String serverId) async {
-    final db = await getDatabase();
-    final res = await db.query(
-      tableBookServers,
-      where: 'where',
-      whereArgs: [serverId],
-    );
-    if (res.isNotEmpty) {
-      return CartaServer.fromSqlite(res[0]);
-    }
-    return null;
-  }
-
-  Future<int> addBookServer(CartaServer server) async {
-    final db = await getDatabase();
-    final result = db.insert(
-      tableBookServers,
-      server.toSqlite(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    return result;
-  }
-
+  // Update
   Future<int> updateBookServer(CartaServer server) async {
     final db = await getDatabase();
     final result = db.update(
@@ -229,6 +240,7 @@ class SqliteRepo {
     return result;
   }
 
+  // Delete
   Future<int> deleteBookServer(CartaServer server) async {
     final db = await getDatabase();
     final result = await db.delete(

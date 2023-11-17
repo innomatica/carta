@@ -31,7 +31,7 @@ class CartaBloc extends ChangeNotifier {
   // download related variables
   final _cancelRequests = <String>{};
   final _isDownloading = <String>{};
-  // databases
+  // database
   final _db = SqliteRepo();
   // book server data stored in the local database
   final List<CartaServer> _servers = <CartaServer>[];
@@ -75,11 +75,11 @@ class CartaBloc extends ChangeNotifier {
   //
   // BOOK
   //
-
   // Refresh list of books
   Future<void> refreshBooks() async {
     _books.clear();
     _books.addAll(await _db.getAudioBooks());
+    _sortBooks();
     notifyListeners();
   }
 
@@ -101,22 +101,23 @@ class CartaBloc extends ChangeNotifier {
     // remove stored data regardless of book.source
     await book.deleteBookDirectory();
     // remove database entry
-    await _db.deleteAudioBook(book);
-    refreshBooks();
+    if (await _db.deleteAudioBook(book) > 0) {
+      refreshBooks();
+    }
   }
 
+  // Update
   Future updateAudioBook(CartaBook book) async {
-    await _db.updateAudioBook(book);
-    refreshBooks();
+    if (await _db.updateAudioBook(book) > 0) {
+      refreshBooks();
+    }
   }
 
-  //
-  // Update only certain fields of the book
-  // It is the callers responsibility to do the conversion of the field
-  //
+  // Update only certain fields of the book: the caller has to
+  //  1. do the conversion of the field
+  //  2. refresh screen contents when it returns true
   Future updateBookData(String bookId, Map<String, Object?> data) async {
-    await _db.updateDataByBookId(bookId, data);
-    refreshBooks();
+    await _db.updateBookData(bookId, data);
   }
 
   // Book filter
@@ -147,9 +148,6 @@ class CartaBloc extends ChangeNotifier {
   //
   bool isDownloading(String bookId) {
     return _isDownloading.contains(bookId);
-    // return _downloadState.isDownloading && _downloadState.bookId == bookId
-    //     ? true
-    //     : false;
   }
 
   void cancelDownload(String bookId) {
@@ -166,45 +164,39 @@ class CartaBloc extends ChangeNotifier {
     if (book.sections == null || _isDownloading.contains(book.bookId)) {
       return;
     }
-
     // reset cancel flag first
     _cancelRequests.remove(book.bookId);
-
     // get book directory
     final bookDir = book.getBookDirectory();
     // if not exists, create one
     if (!bookDir.existsSync()) {
       await bookDir.create();
     }
-
     // download cover image: no longer necessary
     // book.downloadCoverImage();
-
     _isDownloading.add(book.bookId);
     // download each section data
     for (final section in book.sections!) {
       // debugPrint('downloading:${section.index}');
       notifyListeners();
-
       // break if cancelled
       if (_cancelRequests.contains(book.bookId)) {
         debugPrint('download canceled: ${book.title}');
         break;
       }
-
       // otherwise go ahead
       final res = await http.get(
         Uri.parse(section.uri),
         headers: book.getAuthHeaders(),
       );
-
+      // check statusCode
       if (res.statusCode == 200) {
         final file = File('${bookDir.path}/${section.uri.split('/').last}');
         // store audio data
         await file.writeAsBytes(res.bodyBytes);
       }
     }
-
+    // cancel requested
     if (_cancelRequests.contains(book.bookId)) {
       // delete media data in the directory
       deleteMediaData(book);
@@ -212,7 +204,7 @@ class CartaBloc extends ChangeNotifier {
     }
     // notify the end of download
     _isDownloading.remove(book.bookId);
-    debugPrint('download done: ${book.title}');
+    // debugPrint('download done: ${book.title}');
     notifyListeners();
   }
 
@@ -225,7 +217,6 @@ class CartaBloc extends ChangeNotifier {
         entry.deleteSync();
       }
     }
-    // debugPrint('deleteMediaData.notifyListeners');
     notifyListeners();
   }
 
@@ -241,7 +232,6 @@ class CartaBloc extends ChangeNotifier {
       if (jsonDoc.containsKey('data') && jsonDoc['data'] is List) {
         for (final item in jsonDoc['data']) {
           cards.add(CartaCard.fromJsonDoc(item));
-          // debugPrint('card: ${CartaCard.fromJsonDoc(item)}');
         }
       }
     }
@@ -261,7 +251,7 @@ class CartaBloc extends ChangeNotifier {
   }
 
   //
-  //  Book Server
+  //  CartaServer
   //
   List<CartaServer> get servers => _servers;
 
@@ -274,19 +264,22 @@ class CartaBloc extends ChangeNotifier {
 
   // Create
   Future addBookServer(CartaServer server) async {
-    await _db.addBookServer(server);
-    refreshBookServers();
+    if (await _db.addBookServer(server) > 0) {
+      refreshBookServers();
+    }
   }
 
   // Update
   Future updateBookServer(CartaServer server) async {
-    await _db.updateBookServer(server);
-    refreshBookServers();
+    if (await _db.updateBookServer(server) > 0) {
+      refreshBookServers();
+    }
   }
 
   // Delete
   Future deleteBookServer(CartaServer server) async {
-    await _db.deleteBookServer(server);
-    refreshBookServers();
+    if (await _db.deleteBookServer(server) > 0) {
+      refreshBookServers();
+    }
   }
 }

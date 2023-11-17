@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 enum ServerType { nextcloud, webdav, gdrive }
 
@@ -18,13 +19,18 @@ class CartaServer {
   });
 
   factory CartaServer.fromSqlite(Map<String, dynamic> data) {
-    return CartaServer(
-      serverId: data['serverId'],
-      title: data['title'],
-      type: ServerType.values[data['type'] ?? 0],
-      url: data['url'],
-      settings: jsonDecode(data['settings']),
-    );
+    try {
+      return CartaServer(
+        serverId: data['serverId'],
+        title: data['title'],
+        type: ServerType.values[data['type'] ?? 0],
+        url: data['url'],
+        settings: jsonDecode(data['settings']),
+      );
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
   }
 
   Map<String, dynamic> toSqlite() {
