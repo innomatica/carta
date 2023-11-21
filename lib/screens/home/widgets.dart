@@ -52,11 +52,7 @@ IconButton buildForwardButton(CartaAudioHandler handler,
     {double? size, Color? color}) {
   return IconButton(
     icon: Icon(Icons.forward_30_rounded, size: size, color: color),
-    // seek function does not work if duration is null or zero
-    onPressed: handler.getCurrentTag()?.duration == null ||
-            handler.getCurrentTag()?.duration == Duration.zero
-        ? null
-        : () async => await handler.fastForward(),
+    onPressed: () async => await handler.fastForward(),
   );
 }
 
@@ -67,11 +63,7 @@ IconButton buildRewindButton(CartaAudioHandler handler,
     {double? size, Color? color}) {
   return IconButton(
     icon: Icon(Icons.replay_30_rounded, size: size, color: color),
-    // seek function does not work if duration is null or zero
-    onPressed: handler.getCurrentTag()?.duration == null ||
-            handler.getCurrentTag()?.duration == Duration.zero
-        ? null
-        : () async => await handler.rewind(),
+    onPressed: () async => await handler.rewind(),
   );
 }
 

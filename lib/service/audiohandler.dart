@@ -139,6 +139,13 @@ class CartaAudioHandler extends BaseAudioHandler
   // SeekHandler implements fastForward, rewind, seekForward, seekBackward
   @override
   Future<void> seek(Duration position) => _player.seek(position);
+  // override fastForward additionally to handle zero (or null) duration media
+  @override
+  Future<void> fastForward() =>
+      _player.seek(_player.position + fastForwardInterval);
+  // override rewind additionally to handle zero (or null) duration media
+  @override
+  Future<void> rewind() => _player.seek(_player.position - rewindInterval);
 
   @override
   Future<void> setSpeed(double speed) => _player.setSpeed(speed);
