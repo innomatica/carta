@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  httpd:
+    build: .
+    image: "${IMAGE_NAME}"
+    container_name: "${CONTAINER_NAME}"
+    ports:
+      - "${PORT_NO}:80"
+    restart: unless-stopped
+    volumes:
+      - ${TARGET_DIR}:/usr/local/apache2/webdav
+
