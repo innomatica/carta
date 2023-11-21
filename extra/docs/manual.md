@@ -2,6 +2,7 @@
 
 * [Add Audiobooks from LibriVox](#add-audiobooks-from-librivox)
 * [Add Radio Shows from Internet Archive](#add-radio-shows-from-internet-archive)
+* [Add Audiobooks from Private WebDAV Server](#add-audiobooks-from-private-webdav-server)
 * [Share Books, Delete Books](#share-books-delete-books)
 * [Use Wide Screen Devices (Tablets and Chromebooks)](#use-wide-screen-devices-tablets-chromebooks)
 * [Read Book Text](#read-book-text)
@@ -46,6 +47,16 @@ select ***Internet Archive***
 * Find ***+ Add to my bookshelf*** button at the bottom and tap it
 
 ![](./res/archive_item_add.png){: style="width:400px"}
+
+## Add Audiobooks from Private WebDAV Server
+
+* Go to Settings page and enter your WebDAV parameters
+
+![](./res/webdav_settings.png){: style="width:400px"}
+
+* You should be able to navigate your server from the Add button
+
+![](./res/webdav_menu_item.png){: style="width:400px"}
 
 ## Share Books, Delete Books
 
