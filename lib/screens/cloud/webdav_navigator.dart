@@ -41,7 +41,7 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
   //
   // parse files and returns CartaBook
   //
-  CartaBook? _parseFiles(List<WebDavResource> files) {
+  CartaBook? _bookFromDav(List<WebDavResource> files) {
     final sections = <CartaSection>[];
     int index = 0;
     final path = currentPath.split('/').reversed;
@@ -96,55 +96,55 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
     }
   }
 
-  //
-  // book details dialog
-  //
-  Widget _buildBookDetailsDialog(CartaBook book) {
-    String? title = book.title;
-    String? author = book.authors;
-    String? description;
-    return AlertDialog(
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextFormField(
-            initialValue: title,
-            decoration: const InputDecoration(label: Text('title')),
-            onChanged: (value) => title = value,
-          ),
-          TextFormField(
-            initialValue: author,
-            decoration: const InputDecoration(label: Text('author(s)')),
-            onChanged: (value) => author = value,
-          ),
-          TextFormField(
-            maxLines: 5,
-            decoration: const InputDecoration(label: Text('description')),
-            onChanged: (value) => description = value,
-          ),
-        ],
-      ),
-      actions: [
-        ElevatedButton(
-          onPressed: () async {
-            if (title != null && title!.isNotEmpty) {
-              book.title = title!;
-            }
-            if (author != null && author!.isNotEmpty) {
-              book.authors = author;
-            }
-            if (description != null && description!.isNotEmpty) {
-              book.description = description!;
-            }
-            await bloc.addAudioBook(book);
-            if (!mounted) return;
-            Navigator.of(context).pop(true);
-          },
-          child: const Text('Add to bookshelf'),
-        )
-      ],
-    );
-  }
+  // //
+  // // book details dialog
+  // //
+  // Widget _buildBookDetailsDialog(CartaBook book) {
+  //   String? title = book.title;
+  //   String? author = book.authors;
+  //   String? description;
+  //   return AlertDialog(
+  //     content: Column(
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: [
+  //         TextFormField(
+  //           initialValue: title,
+  //           decoration: const InputDecoration(label: Text('title')),
+  //           onChanged: (value) => title = value,
+  //         ),
+  //         TextFormField(
+  //           initialValue: author,
+  //           decoration: const InputDecoration(label: Text('author(s)')),
+  //           onChanged: (value) => author = value,
+  //         ),
+  //         TextFormField(
+  //           maxLines: 5,
+  //           decoration: const InputDecoration(label: Text('description')),
+  //           onChanged: (value) => description = value,
+  //         ),
+  //       ],
+  //     ),
+  //     actions: [
+  //       ElevatedButton(
+  //         onPressed: () async {
+  //           if (title != null && title!.isNotEmpty) {
+  //             book.title = title!;
+  //           }
+  //           if (author != null && author!.isNotEmpty) {
+  //             book.authors = author;
+  //           }
+  //           if (description != null && description!.isNotEmpty) {
+  //             book.description = description!;
+  //           }
+  //           await bloc.addAudioBook(book);
+  //           if (!mounted) return;
+  //           Navigator.of(context).pop(true);
+  //         },
+  //         child: const Text('Add to bookshelf'),
+  //       )
+  //     ],
+  //   );
+  // }
 
   AppBar _buildAppBar() {
     return AppBar(
@@ -214,6 +214,9 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
             // results
             return Stack(
               children: [
+                //
+                // WebDAV items
+                //
                 ListView.builder(
                   itemCount: files.length,
                   itemBuilder: ((context, index) {
@@ -256,7 +259,9 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
                           );
                   }),
                 ),
+                //
                 // Add to Bookshelf Button
+                //
                 foundAudioFiles
                     ? Positioned(
                         bottom: 10,
@@ -264,24 +269,33 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
                         child: FloatingActionButton.extended(
                           icon: const Icon(Icons.add_rounded),
                           label: const Text('Add to my bookshelf'),
-                          onPressed: () {
-                            final book = _parseFiles(files);
+                          onPressed: () async {
+                            final book = _bookFromDav(files);
                             // debugPrint('book: ${book.toString()}');
                             if (book != null) {
-                              showDialog(
-                                context: context,
-                                builder: ((context) =>
-                                    _buildBookDetailsDialog(book)),
-                              ).then((flag) {
-                                if (flag == true) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Book is in the bookshelf'),
-                                      duration: Duration(seconds: 1),
-                                    ),
-                                  );
-                                }
-                              });
+                              // showDialog(
+                              //   context: context,
+                              //   builder: ((context) =>
+                              //       _buildBookDetailsDialog(book)),
+                              // ).then((flag) {
+                              //   if (flag == true) {
+                              //     ScaffoldMessenger.of(context).showSnackBar(
+                              //       const SnackBar(
+                              //         content: Text('Book is in the bookshelf'),
+                              //         duration: Duration(seconds: 1),
+                              //       ),
+                              //     );
+                              //   }
+                              // });
+                              await bloc.addAudioBook(book);
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Book is in the bookshelf'),
+                                    duration: Duration(seconds: 1),
+                                  ),
+                                );
+                              }
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

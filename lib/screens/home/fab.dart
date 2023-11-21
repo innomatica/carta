@@ -68,7 +68,7 @@ Widget buildFabDialog(BuildContext context) {
           label: const Text('Legamus'),
         ),
         //
-        // Libraries
+        // Servers
         //
         for (final server in logic.servers)
           TextButton.icon(
