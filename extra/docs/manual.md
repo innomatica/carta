@@ -3,6 +3,7 @@
 * [Add Audiobooks from LibriVox](#add-audiobooks-from-librivox)
 * [Add Radio Shows from Internet Archive](#add-radio-shows-from-internet-archive)
 * [Add Audiobooks from Private WebDAV Server](#add-audiobooks-from-private-webdav-server)
+* [Set Up Private WebDAV Server](#set-up-private-webdav-server)
 * [Share Books, Delete Books](#share-books-delete-books)
 * [Use Wide Screen Devices (Tablets and Chromebooks)](#use-wide-screen-devices-tablets-chromebooks)
 * [Read Book Text](#read-book-text)
@@ -58,9 +59,13 @@ select ***Internet Archive***
 
 ![](./res/nextcloud_settings.png){: style="width:400px"}
 
-* You should be able to navigate your server from the Add button
+* You should be able to navigate your server add books from your server
 
 ![](./res/webdav_menu_item.png){: style="width:400px"}
+
+## Set Up Private WebDAV Server
+
+If you are new to WebDAV, visit [this page for easy setup](https://github.com/innomatica/carta/tree/master/extra/webdav)
 
 ## Share Books, Delete Books
 

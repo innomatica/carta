@@ -11,7 +11,7 @@ to run the server.
 ## `apache2`
 
 Based on Apache2 httpd docker image, its memory footprint is small and runs
-fast. Thus it should work well on smaller embedded machines like Raspberry Pis.
+fast. It should work well on smaller embedded machines like Raspberry Pis.
 
 ## `nextcloud`
 Based on Nextcloud community docker image. It requires better hardware.
