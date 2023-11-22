@@ -39,13 +39,20 @@ class CartaAudioHandler extends BaseAudioHandler
     // listen to playerStateStream
     _subPlayerState =
         _player.playerStateStream.listen((PlayerState state) async {
-      log('playerState: ${state.playing}  ${state.processingState}');
+      // log('playerState: ${state.playing}  ${state.processingState}');
       if (state.processingState == ProcessingState.loading && state.playing) {
-        log('start of the book');
+        // log('initial loading of the book');
         // broadcast initial mediaItem
-        mediaItem.add(_player.sequence?[_player.currentIndex ?? 0].tag);
+        // MediaItem? tag = _player.sequence?[_player.currentIndex ?? 0].tag;
+        // mediaItem.add(tag?.copyWith(duration: _player.duration));
       } else if (state.processingState == ProcessingState.ready &&
           _player.playing) {
+        // start playing INITIAL chapter
+        // broadcast initial mediaItem
+        final tag = _player.sequence?[_player.currentIndex ?? 0].tag;
+        log('start playing');
+        // with updated duration
+        mediaItem.add(tag?.copyWith(duration: _player.duration));
         // _updateBookmark();
       } else if (state.processingState == ProcessingState.completed &&
           state.playing == true) {
@@ -59,16 +66,19 @@ class CartaAudioHandler extends BaseAudioHandler
       // detecting change of media
       if (index != null &&
           index > 0 &&
-          _player.processingState != ProcessingState.idle &&
-          _player.processingState != ProcessingState.completed) {
-        // broadcast subsequent mediaItems
+          _player.processingState != ProcessingState.ready) {
+        // _player.processingState != ProcessingState.idle &&
+        // _player.processingState != ProcessingState.completed) {
+        // start playing SUBSEQUENT chapters
         log('new section loaded:$index, state:${_player.processingState}');
-        // broadcast mediaItem
-        mediaItem.add(_player.sequence?[index].tag);
         // broadcast queue
         if (_player.sequence?.isNotEmpty == true) {
           queue.add(_player.sequence!.map((s) => s.tag as MediaItem).toList());
         }
+        // broadcast current mediaItem
+        final tag = _player.sequence?[index].tag;
+        // with updated duration
+        mediaItem.add(tag?.copyWith(duration: _player.duration));
       }
     });
     // listen to playbackEventStream
@@ -236,6 +246,7 @@ class CartaAudioHandler extends BaseAudioHandler
       // different book or different section of the book
       await _updateBookmark();
       final audioSource = book.getAudioSource();
+      log('playAudioBook:${audioSource[0].tag.artHeaders}');
       if (audioSource.isNotEmpty) {
         Duration initPosition =
             sectionIdx == (book.lastSection ?? 0) && book.lastPosition != null
