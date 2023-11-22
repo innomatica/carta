@@ -54,6 +54,10 @@ select ***Internet Archive***
 
 ![](./res/webdav_settings.png){: style="width:400px"}
 
+* In case of Nextcloud, check this [document for the directory](https://docs.nextcloud.com/server/latest/user_manual/en/files/access_webdav.html#third-party-webdav-clients)
+
+![](./res/nextcloud_settings.png){: style="width:400px"}
+
 * You should be able to navigate your server from the Add button
 
 ![](./res/webdav_menu_item.png){: style="width:400px"}
@@ -94,9 +98,8 @@ at the top left corner
 
 ![](./res/actual_text_link.png){: style="width:400px"}
 
-
 Note that
 
 * Most smartphones are too small to read text
 * Materials from Internet Archive have no text
-* Some audio books from LibriVox have no accompanying text
+* Some audio books from LibriVox have no text
