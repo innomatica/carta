@@ -48,9 +48,9 @@ class CartaAudioHandler extends BaseAudioHandler
       } else if (state.processingState == ProcessingState.ready &&
           _player.playing) {
         // start playing INITIAL chapter
+        log('start playing');
         // broadcast initial mediaItem
         final tag = _player.sequence?[_player.currentIndex ?? 0].tag;
-        log('start playing');
         // with updated duration
         mediaItem.add(tag?.copyWith(duration: _player.duration));
         // _updateBookmark();
@@ -246,7 +246,6 @@ class CartaAudioHandler extends BaseAudioHandler
       // different book or different section of the book
       await _updateBookmark();
       final audioSource = book.getAudioSource();
-      log('playAudioBook:${audioSource[0].tag.artHeaders}');
       if (audioSource.isNotEmpty) {
         Duration initPosition =
             sectionIdx == (book.lastSection ?? 0) && book.lastPosition != null
