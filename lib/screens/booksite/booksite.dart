@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -52,7 +50,7 @@ class _BookSitePageState extends State<BookSitePage> {
           final isBookPage =
               await _controller.runJavaScriptReturningResult(jsString!);
           _showFab = isBookPage == true ? true : false;
-          setState(() {});
+          if (mounted) setState(() {});
         }
       },
     );
@@ -167,13 +165,11 @@ class _BookSitePageState extends State<BookSitePage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (_) async {
         if (await _controller.canGoBack()) {
           _controller.goBack();
-          return Future.value(false);
-        } else {
-          return Future.value(true);
         }
       },
       child: Scaffold(

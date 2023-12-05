@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/cartabook.dart';
 import '../model/cartacard.dart';
@@ -24,8 +25,9 @@ const filterIcons = [
 ];
 
 class CartaBloc extends ChangeNotifier {
-  int sortIndex = 0;
-  int filterIndex = 0;
+  int _sortIndex = 0;
+  int _filterIndex = 0;
+  late final SharedPreferences _prefs;
 
   final _books = <CartaBook>[];
   // download related variables
@@ -38,6 +40,7 @@ class CartaBloc extends ChangeNotifier {
 
   CartaBloc() {
     // update book server list when start
+    init();
     refreshBookServers();
     refreshBooks();
   }
@@ -48,14 +51,20 @@ class CartaBloc extends ChangeNotifier {
     super.dispose();
   }
 
-  String get currentSort => sortOptions[sortIndex];
-  String get currentFilter => filterOptions[filterIndex];
-  IconData get sortIcon => sortIcons[sortIndex];
-  IconData get filterIcon => filterIcons[filterIndex];
+  void init() async {
+    _prefs = await SharedPreferences.getInstance();
+    _sortIndex = _prefs.getInt('sortIndex') ?? 0;
+    _filterIndex = _prefs.getInt('filterIndex') ?? 0;
+  }
+
+  String get currentSort => sortOptions[_sortIndex];
+  String get currentFilter => filterOptions[_filterIndex];
+  IconData get sortIcon => sortIcons[_sortIndex];
+  IconData get filterIcon => filterIcons[_filterIndex];
 
   // Return list of books filtered
   List<CartaBook> get books {
-    final filterOption = filterOptions[filterIndex];
+    final filterOption = filterOptions[_filterIndex];
     // debugPrint('filterOption: $filterOption');
     if (filterOption == 'librivox') {
       return _books
@@ -122,19 +131,21 @@ class CartaBloc extends ChangeNotifier {
 
   // Book filter
   void rotateFilterBy() {
-    filterIndex = (filterIndex + 1) % filterOptions.length;
+    _filterIndex = (_filterIndex + 1) % filterOptions.length;
+    _prefs.setInt('filterIndex', _filterIndex);
     notifyListeners();
   }
 
   // Book sort
   void rotateSortBy() {
-    sortIndex = (sortIndex + 1) % sortOptions.length;
+    _sortIndex = (_sortIndex + 1) % sortOptions.length;
+    _prefs.setInt('sortIndex', _sortIndex);
     _sortBooks();
     notifyListeners();
   }
 
   _sortBooks() {
-    final sortOption = sortOptions[sortIndex];
+    final sortOption = sortOptions[_sortIndex];
     // debugPrint('sortOption: $sortOption');
     if (sortOption == 'title') {
       _books.sort((a, b) => a.title.compareTo(b.title));

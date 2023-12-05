@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -27,19 +25,15 @@ class _WebBookViewState extends State<WebBookView> {
       ..loadRequest(Uri.parse(widget.book.info['siteUrl']));
   }
 
-  Future<bool> _onWillPop(BuildContext context) async {
-    if (await _controller.canGoBack()) {
-      _controller.goBack();
-      return Future.value(false);
-    } else {
-      return Future.value(true);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () => _onWillPop(context),
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (_) async {
+        if (await _controller.canGoBack()) {
+          _controller.goBack();
+        }
+      },
       child: Scaffold(
         appBar: AppBar(
           title: Text(
