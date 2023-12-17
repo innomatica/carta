@@ -19,6 +19,7 @@ Future<CartaAudioHandler> createAudioHandler() async {
       androidNotificationChannelId: 'com.innomatic.carta.channel.audio',
       androidNotificationChannelName: 'Carta playback',
       androidNotificationOngoing: true,
+      androidStopForegroundOnPause: true,
       androidNotificationIcon: 'drawable/app_icon',
       fastForwardInterval: fastForwardInterval,
       rewindInterval: rewindInterval,

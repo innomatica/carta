@@ -173,10 +173,12 @@ class CartaBook {
             // section title as title
             title: section.title,
             // book title as album
-            album: title,
+            album: title == section.title ? authors : title,
             duration: section.duration,
-            artUri: imageUri != null ? Uri.parse(imageUri!) : null,
-            artHeaders: headers,
+            // artHeaders are not recognized by the background process
+            // artUri: imageUri != null ? Uri.parse(imageUri!) : null,
+            // artHeaders: headers,
+            artUri: getArtUri(),
             // extra for internal use
             extras: {
               'bookId': bookId,
@@ -352,6 +354,7 @@ class CartaBook {
           return FileImage(file);
         }
         // debugPrint('albumImage:NetworkImage');
+        // NOTE: do not use AWAIT here
         downloadCoverImage();
         // this will download the image twice but for the first time only
         return NetworkImage(imageUri!, headers: getAuthHeaders());
@@ -386,5 +389,18 @@ class CartaBook {
       }
     }
     return false;
+  }
+
+  Uri? getArtUri() {
+    final bookDir = getBookDirectory();
+    if (imageUri != null) {
+      final file = File('${bookDir.path}/${imageUri!.split('/').last}');
+      if (file.existsSync()) {
+        return Uri.file('${bookDir.path}/${imageUri!.split('/').last}');
+      } else {
+        return Uri.tryParse(imageUri!);
+      }
+    }
+    return null;
   }
 }

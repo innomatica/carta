@@ -8,6 +8,7 @@
         android:label="Carta"
         android:name="${applicationName}"
         android:usesCleartextTraffic="true"
+        android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher">
         <!-- audio service -->
         <activity
