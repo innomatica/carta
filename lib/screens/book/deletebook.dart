@@ -46,7 +46,7 @@ class _DeleteBookState extends State<DeleteBook> {
         await bloc.deleteAudioBook(widget.book);
         screen.setBook(null);
         // if narrow screen, needs to pop out the page
-        if (mounted && !isScreenWide) {
+        if (context.mounted && !isScreenWide) {
           Navigator.of(context).pop();
         }
       },

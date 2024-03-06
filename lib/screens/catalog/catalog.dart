@@ -90,7 +90,7 @@ class _CatalogPageState extends State<CatalogPage> {
                                     bloc.addAudioBook(book);
                                     added = true;
                                     setState(() {});
-                                    if (mounted) {
+                                    if (context.mounted) {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
                                         content: Text('book added'),
@@ -98,7 +98,7 @@ class _CatalogPageState extends State<CatalogPage> {
                                       ));
                                     }
                                   } else {
-                                    if (mounted) {
+                                    if (context.mounted) {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
                                         content: Text(

@@ -59,7 +59,7 @@ class _WebBookPageState extends State<WebBookPage> {
                 child: const Text('Remove link from the bookshelf'),
                 onPressed: () async {
                   await bloc.deleteAudioBook(widget.book);
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   Navigator.of(context).pop();
                 },
               ),
