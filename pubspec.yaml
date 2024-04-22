@@ -54,7 +54,7 @@ dependencies:
   xml: ^6.3.0
   crypto: ^3.0.3
   mime: ^1.0.4
-  share_plus: ^7.0.2
+  share_plus: ^8.0.3
   dynamic_color: ^1.6.5
   audio_service: ^0.18.12
   encrypt: ^5.0.3
