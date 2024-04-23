@@ -6,7 +6,9 @@ class CartaSection {
   int index;
   String title;
   String uri;
-  Duration? duration;
+  // Duration? duration;
+  int? duration;
+  int? seekPos;
   Map<String, dynamic> info;
 
   CartaSection({
@@ -14,6 +16,7 @@ class CartaSection {
     required this.title,
     required this.uri,
     this.duration,
+    this.seekPos,
     required this.info,
   });
 
@@ -22,7 +25,8 @@ class CartaSection {
       index: data['index'],
       title: data['title'] ?? 'Unknown',
       uri: data['uri'],
-      duration: fromDurationString(data['duration']),
+      duration: timeStringToSeconds(data['duration']),
+      seekPos: data['seekPos'] ?? 0,
       info: jsonDecode(data['info']),
     );
   }
@@ -32,7 +36,8 @@ class CartaSection {
       'index': index,
       'title': title,
       'uri': uri,
-      'duration': toDurationString(duration),
+      'duration': secondsToTimeString(duration),
+      'seekPos': seekPos ?? 0,
       'info': jsonEncode(info),
     };
   }

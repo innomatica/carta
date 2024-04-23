@@ -33,24 +33,30 @@ String getIdFromUrl(String url) {
   return sha1.convert(utf8.encode(url)).toString().substring(0, 20);
 }
 
-Duration? fromDurationString(String? time) {
+int? timeStringToSeconds(String? time) {
   if (time != null) {
+    // expect hh:mm:ss.ms
     final hms = time.split('.')[0].split(':');
     if (hms.length < 3) {
-      return Duration.zero;
+      // invalid time string
+      // return Duration.zero;
+      return 0;
     }
-    return Duration(
-      hours: int.tryParse(hms[0]) ?? 0,
-      minutes: int.tryParse(hms[1]) ?? 0,
-      seconds: int.tryParse(hms[2]) ?? 0,
-    );
+    // return Duration(
+    //   hours: int.tryParse(hms[0]) ?? 0,
+    //   minutes: int.tryParse(hms[1]) ?? 0,
+    //   seconds: int.tryParse(hms[2]) ?? 0,
+    // );
+    return (int.tryParse(hms[0]) ?? 0) * 3600 +
+        (int.tryParse(hms[1]) ?? 0) * 60 +
+        (int.tryParse(hms[2]) ?? 0);
   }
   return null;
 }
 
-String? toDurationString(Duration? duration) {
-  if (duration != null) {
-    return duration.toString().split('.')[0];
+String? secondsToTimeString(int? seconds) {
+  if (seconds != null) {
+    return '${seconds ~/ 3600}:${seconds ~/ 60}:${seconds % 60}';
   }
   return null;
 }

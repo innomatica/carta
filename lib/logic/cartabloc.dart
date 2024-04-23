@@ -2,15 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/cartabook.dart';
 import '../model/cartacard.dart';
 import '../model/cartaserver.dart';
 import '../repo/sqlite.dart';
+import '../service/audiohandler.dart';
 import '../service/webpage.dart';
 import '../shared/settings.dart';
 
@@ -28,6 +31,10 @@ class CartaBloc extends ChangeNotifier {
   int _sortIndex = 0;
   int _filterIndex = 0;
   late final SharedPreferences _prefs;
+  late final CartaAudioHandler _handler;
+
+  StreamSubscription? _subPlayState;
+  StreamSubscription? _subMediaItem;
 
   final _books = <CartaBook>[];
   // download related variables
@@ -38,9 +45,10 @@ class CartaBloc extends ChangeNotifier {
   // book server data stored in the local database
   final List<CartaServer> _servers = <CartaServer>[];
 
-  CartaBloc() {
-    // update book server list when start
+  CartaBloc(CartaAudioHandler handler) {
+    _handler = handler;
     init();
+    // update book server list when start
     refreshBookServers();
     refreshBooks();
   }
@@ -48,6 +56,9 @@ class CartaBloc extends ChangeNotifier {
   @override
   dispose() {
     _db.close();
+    _subPlayState?.cancel();
+    _subMediaItem?.cancel();
+    _handler.dispose();
     super.dispose();
   }
 
@@ -55,12 +66,122 @@ class CartaBloc extends ChangeNotifier {
     _prefs = await SharedPreferences.getInstance();
     _sortIndex = _prefs.getInt('sortIndex') ?? 0;
     _filterIndex = _prefs.getInt('filterIndex') ?? 0;
+    _handlePlayStateChange();
+    _handleMediaItemChange();
   }
 
+  // getters
   String get currentSort => sortOptions[_sortIndex];
   String get currentFilter => filterOptions[_filterIndex];
   IconData get sortIcon => sortIcons[_sortIndex];
   IconData get filterIcon => filterIcons[_filterIndex];
+
+  // from handler
+  Duration get position => _handler.position;
+  Duration get duration => _handler.duration;
+  BehaviorSubject<PlaybackState> get playbackState => _handler.playbackState;
+  MediaItem? get currentTag => _handler.mediaItem.value;
+  String? get currentBookId => currentTag?.extras?['bookId'];
+  int? get currentSectionIdx => currentTag?.extras?['sectionIdx'];
+
+  void _handlePlayStateChange() {
+    _subPlayState = _handler.playbackState
+        .map((e) => e.queueIndex)
+        .distinct()
+        .listen((int? index) {
+      // currentIndex of the queue changed
+      debugPrint(
+          '\n====> handler.playbackState.index: $index $currentBookId $currentSectionIdx <====\n');
+      // TODO update book.lastSection
+      notifyListeners();
+    });
+  }
+
+  //
+  // MediaItemChange handler: called when
+  //
+  // - new episode is loaded => mediaItem duration updated
+  // - pause detected (player.playing = false, processingState = ready)
+  //
+  void _handleMediaItemChange() {
+    _subMediaItem = _handler.mediaItem.listen((MediaItem? item) {
+      // TODO: update book.lastPosition
+      notifyListeners();
+    });
+  }
+
+  //
+  // AudioHandler proxies
+  //
+  Future<void> stop() => _handler.stop();
+  Future<void> pause() => _handler.pause();
+  Future<void> rewind() => _handler.rewind();
+  Future<void> fastForward() => _handler.fastForward();
+  Future<void> seek(Duration posiiton) => _handler.seek(position);
+  Future<void> setSpeed(double speed) => _handler.setSpeed(speed);
+  Future<void> skipToNext() => _handler.skipToNext();
+  Future<void> skipToPrevious() => _handler.skipToPrevious();
+
+  Future<void> resume() async {
+    if (_handler.queue.value.isNotEmpty) {
+      _handler.play();
+    }
+  }
+
+  Future<void> play(CartaBook? book, {int sectionIdx = 0}) async {
+    // log('handler.playAudioBook.book: $book');
+    //
+    if (book == null) {
+      // resume paused book
+      resume();
+    } else if (currentBookId == book.bookId &&
+        currentSectionIdx == sectionIdx) {
+      // same book, same section => toogle playing
+      _handler.playing ? pause() : resume();
+    } else {
+      // different book or different section of the book
+      final audioSource = book.getAudioSource();
+      final mediaItems = audioSource.map((s) => s.tag as MediaItem).toList();
+      _handler.setQueue(mediaItems);
+
+/*
+      if (audioSource.isNotEmpty) {
+        Duration initPosition =
+            sectionIdx == (book.lastSection ?? 0) && book.lastPosition != null
+                ? book.lastPosition!
+                : Duration.zero;
+        // it is required to stop before setAudioSource call
+        await _handler.stop();
+        try {
+          // https://pub.dev/packages/just_audio#working-with-caches
+          // Better to clear cache regardless of the source type
+          // if (audioSource[0] is LockCachingAudioSource) {
+
+          // FIXME: bring this block to handler and call
+          try {
+            await AudioPlayer.clearAssetCache();
+          } catch (e) {
+            debugPrint(e.toString());
+          }
+          // }
+          await _player.setAudioSource(
+            ConcatenatingAudioSource(children: audioSource),
+            preload: false,
+            initialIndex: sectionIdx,
+            initialPosition: initPosition,
+          );
+          // hasBook = true;
+          // ready to play new source
+          debugPrint('start a new book/section: ${book.title}, $sectionIdx');
+          queue.add(audioSource.map((e) => e.tag as MediaItem).toList());
+          await _handler.play();
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+      }
+*/
+    }
+  }
 
   // Return list of books filtered
   List<CartaBook> get books {
@@ -107,6 +228,12 @@ class CartaBloc extends ChangeNotifier {
 
   // Delete
   Future deleteAudioBook(CartaBook book) async {
+    if (book.bookId == currentBookId) {
+      if (_handler.playing) {
+        await _handler.stop();
+      }
+      _handler.clearQueue();
+    }
     // remove stored data regardless of book.source
     await book.deleteBookDirectory();
     // remove database entry
@@ -116,18 +243,40 @@ class CartaBloc extends ChangeNotifier {
   }
 
   // Update
+  // FIXME: this is actually saveAudioBook
   Future updateAudioBook(CartaBook book) async {
     if (await _db.updateAudioBook(book) > 0) {
       refreshBooks();
     }
   }
 
+  // FIXME: this is real updateAudioBook
   // Update only certain fields of the book: the caller has to
   //  1. do the conversion of the field
   //  2. refresh screen contents when it returns true
   Future updateBookData(String bookId, Map<String, Object?> data) async {
     await _db.updateBookData(bookId, data);
   }
+
+  // Update book.lastSection and book.lastPosition
+  // Future<bool> _updateBookmark() async {
+  //   debugPrint('logic._updateBookmark');
+  //   final tag = currentTag;
+  //   if (tag != null && tag.extras != null) {
+  //     if (tag.extras!.containsKey('bookId') &&
+  //         tag.extras!.containsKey('sectionIdx')) {
+  //       // debugPrint('*********** updating bookmark ${tag.extras!['bookId']}');
+  //       await updateBookData(
+  //         tag.extras!['bookId'],
+  //         {
+  //           'lastSection': tag.extras!['sectionIdx'],
+  //           'lastPosition': secondsToTimeString(position),
+  //         },
+  //       );
+  //     }
+  //   }
+  //   return false;
+  // }
 
   // Book filter
   void rotateFilterBy() {

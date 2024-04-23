@@ -5,22 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../logic/cartabloc.dart';
-import '../../service/audiohandler.dart';
+// import '../../service/audiohandler.dart';
 import '../../shared/constants.dart';
 
 //
 // Progress Bar
 //
-StreamBuilder<Duration> buildProgressBar(CartaAudioHandler handler) {
+StreamBuilder<Duration> buildProgressBar(CartaBloc logic) {
   return StreamBuilder<Duration>(
-    stream: handler.positionStream.distinct(),
+    // stream: logic.positionStream.distinct(),
+    stream: logic.playbackState.map((e) => e.position).distinct(),
     builder: (context, snapshot) {
-      final total = handler.duration;
+      final total = logic.duration;
       final progress = snapshot.data ?? Duration.zero;
       return ProgressBar(
         progress: progress,
         total: total,
-        onSeek: (duration) async => await handler.seek(duration),
+        onSeek: (duration) async => await logic.seek(duration),
       );
     },
   );
@@ -29,18 +30,18 @@ StreamBuilder<Duration> buildProgressBar(CartaAudioHandler handler) {
 //
 // Play Button
 //
-StreamBuilder<bool> buildPlayButton(CartaAudioHandler handler,
+StreamBuilder<bool> buildPlayButton(CartaBloc logic,
     {double? size, Color? color}) {
   return StreamBuilder<bool>(
-    stream: handler.playbackState.map((s) => s.playing).distinct(),
+    stream: logic.playbackState.map((s) => s.playing).distinct(),
     builder: (context, snapshot) => snapshot.hasData && snapshot.data == true
         ? IconButton(
             icon: Icon(Icons.pause_rounded, size: size, color: color),
-            onPressed: () async => await handler.pause(),
+            onPressed: () async => await logic.pause(),
           )
         : IconButton(
             icon: Icon(Icons.play_arrow_rounded, size: size, color: color),
-            onPressed: () async => await handler.play(),
+            onPressed: () async => await logic.play(null),
           ),
   );
 }
@@ -48,44 +49,40 @@ StreamBuilder<bool> buildPlayButton(CartaAudioHandler handler,
 //
 // Fast Forward 30sec Button
 //
-IconButton buildForwardButton(CartaAudioHandler handler,
-    {double? size, Color? color}) {
+IconButton buildForwardButton(CartaBloc logic, {double? size, Color? color}) {
   return IconButton(
     icon: Icon(Icons.forward_30_rounded, size: size, color: color),
-    onPressed: () async => await handler.fastForward(),
+    onPressed: () async => await logic.fastForward(),
   );
 }
 
 //
 // Rewind 30sec Button
 //
-IconButton buildRewindButton(CartaAudioHandler handler,
-    {double? size, Color? color}) {
+IconButton buildRewindButton(CartaBloc logic, {double? size, Color? color}) {
   return IconButton(
     icon: Icon(Icons.replay_30_rounded, size: size, color: color),
-    onPressed: () async => await handler.rewind(),
+    onPressed: () async => await logic.rewind(),
   );
 }
 
 //
 // Next Section Button
 //
-IconButton buildNextButton(CartaAudioHandler handler,
-    {double? size, Color? color}) {
+IconButton buildNextButton(CartaBloc logic, {double? size, Color? color}) {
   return IconButton(
     icon: Icon(Icons.skip_next_rounded, size: size, color: color),
-    onPressed: () async => await handler.skipToNext(),
+    onPressed: () async => await logic.skipToNext(),
   );
 }
 
 //
 // Previous Section Button
 //
-IconButton buildPreviousButton(CartaAudioHandler handler,
-    {double? size, Color? color}) {
+IconButton buildPreviousButton(CartaBloc logic, {double? size, Color? color}) {
   return IconButton(
     icon: Icon(Icons.skip_previous_rounded, size: size, color: color),
-    onPressed: () async => await handler.skipToPrevious(),
+    onPressed: () async => await logic.skipToPrevious(),
   );
 }
 
@@ -94,17 +91,17 @@ IconButton buildPreviousButton(CartaAudioHandler handler,
 //
 const speeds = [0.75, 0.85, 1.0, 1.25, 1.5, 2.0];
 
-StreamBuilder<double> buildSpeedSelector(CartaAudioHandler handler,
+StreamBuilder<double> buildSpeedSelector(CartaBloc logic,
     {double? size, Color? color}) {
   return StreamBuilder<double>(
-    stream: handler.playbackState.map((e) => e.speed).distinct(),
+    stream: logic.playbackState.map((e) => e.speed).distinct(),
     builder: (context, snapshot) {
       return DropdownButton<double>(
         value: snapshot.data ?? 1.0,
         iconSize: 0,
         isDense: true,
         onChanged: (double? value) {
-          handler.setSpeed(value ?? 1.0);
+          logic.setSpeed(value ?? 1.0);
         },
         items: speeds
             .map<DropdownMenuItem<double>>(
@@ -125,16 +122,16 @@ StreamBuilder<double> buildSpeedSelector(CartaAudioHandler handler,
 enum TitleLayout { horizontal, vertical }
 
 class BookTitle extends StatelessWidget {
-  final CartaAudioHandler handler;
+  final CartaBloc logic;
   final TitleLayout? layout;
-  const BookTitle(this.handler, {this.layout, super.key});
+  const BookTitle(this.logic, {this.layout, super.key});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: handler.playbackState.map((e) => e.queueIndex).distinct(),
+      stream: logic.playbackState.map((e) => e.queueIndex).distinct(),
       builder: (context, snapshot) {
-        final tag = handler.getCurrentTag();
+        final tag = logic.currentTag;
         final bookTitle = tag?.album ?? 'Unknown Title';
         final sectionTitle = tag?.title ?? '';
 
@@ -181,16 +178,16 @@ class BookTitle extends StatelessWidget {
 // Book Cover Widget
 //
 class BookCover extends StatelessWidget {
-  final CartaAudioHandler handler;
+  final CartaBloc logic;
   final double? size;
-  const BookCover(this.handler, {this.size, super.key});
+  const BookCover(this.logic, {this.size, super.key});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: handler.playbackState.map((e) => e.queueIndex).distinct(),
+      stream: logic.playbackState.map((e) => e.queueIndex).distinct(),
       builder: (context, snapshot) {
-        final tag = handler.getCurrentTag();
+        final tag = logic.currentTag;
         return ClipRRect(
           borderRadius: BorderRadius.circular(8.0),
           child: tag != null && tag.artUri != null

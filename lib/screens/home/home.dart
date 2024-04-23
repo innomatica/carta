@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../logic/cartabloc.dart';
 import '../../logic/screenconfig.dart';
-import '../../service/audiohandler.dart';
+// import '../../service/audiohandler.dart';
 import '../../shared/constants.dart';
 import '../../shared/settings.dart';
 import '../about/about.dart';
@@ -100,13 +100,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> _buildActionWidgets() {
-    final handler = context.read<CartaAudioHandler>();
+    // FIXME: replace with logic
+    final logic = context.read<CartaBloc>();
     return isScreenWide
         ? [
             _sleepTimer != null && _sleepTimer!.isActive
                 ? _buildSleepTimerButton()
                 : const SizedBox(width: 0, height: 0),
-            _buildMenuButton(handler),
+            _buildMenuButton(logic),
           ]
         : [
             _buildSortButton(),
@@ -114,7 +115,7 @@ class _HomePageState extends State<HomePage> {
             _sleepTimer != null && _sleepTimer!.isActive
                 ? _buildSleepTimerButton()
                 : const SizedBox(width: 0, height: 0),
-            _buildMenuButton(handler),
+            _buildMenuButton(logic),
           ];
   }
 
@@ -137,7 +138,7 @@ class _HomePageState extends State<HomePage> {
   //
   // Scaffold Menu Button
   //
-  Widget _buildMenuButton(CartaAudioHandler handler) {
+  Widget _buildMenuButton(CartaBloc logic) {
     return PopupMenuButton<String>(
       icon: const Icon(Icons.menu_rounded),
       onSelected: (String item) {
@@ -151,7 +152,7 @@ class _HomePageState extends State<HomePage> {
             (timer) async {
               if (timer.tick == _sleepTimeout) {
                 // timeout
-                await handler.stop();
+                await logic.stop();
                 _sleepTimer!.cancel();
                 // is this safe?
                 _sleepTimer = null;
@@ -233,10 +234,11 @@ class _HomePageState extends State<HomePage> {
   // Scaffold.Bottomsheet
   //
   Widget? _buildBottomSheet() {
-    final handler = context.read<CartaAudioHandler>();
+    // FIXME: replace with logic
+    final logic = context.read<CartaBloc>();
     // needs to redraw whenever the playing state changes
     return StreamBuilder<AudioProcessingState>(
-      stream: handler.playbackState.map((e) => e.processingState).distinct(),
+      stream: logic.playbackState.map((e) => e.processingState).distinct(),
       builder: (context, snapshot) {
         if (snapshot.hasData &&
             [
@@ -267,21 +269,21 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ).then((value) => setState(() {}));
                     },
-                    child: BookTitle(handler, layout: TitleLayout.horizontal),
+                    child: BookTitle(logic, layout: TitleLayout.horizontal),
                   ),
                 ),
                 isScreenWide
                     ? Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          buildPreviousButton(handler),
-                          buildRewindButton(handler),
-                          buildPlayButton(handler),
-                          buildForwardButton(handler),
-                          buildNextButton(handler),
+                          buildPreviousButton(logic),
+                          buildRewindButton(logic),
+                          buildPlayButton(logic),
+                          buildForwardButton(logic),
+                          buildNextButton(logic),
                         ],
                       )
-                    : buildPlayButton(handler),
+                    : buildPlayButton(logic),
               ],
             ),
           );

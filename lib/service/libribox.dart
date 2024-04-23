@@ -98,7 +98,7 @@ class LibriVoxService {
             // uri: item.enclosure?.url ?? '',
             // duration: item.itunes?.duration,
             uri: item.media?[0].url ?? '',
-            duration: Duration(seconds: item.media?[0].duration ?? 0),
+            duration: item.media?[0].duration ?? 0,
             info: {},
           );
           // debugPrint(section.toString());

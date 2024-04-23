@@ -9,6 +9,8 @@ import '../model/cartabook.dart';
 import '../model/cartasection.dart';
 import '../shared/helpers.dart';
 
+// TODO: confirm duration values in all cases
+
 class WebPageParser {
   static Future<CartaBook?> getBookFromHtml(
       {required String html, required String url}) async {
@@ -59,16 +61,16 @@ class WebPageParser {
             } else if (child.attributes['itemprop'] == 'duration') {
               // duration
               durString = child.attributes['content']?.trim();
-              if (durString != null && durString.length > 5) {
-                final totalSecs = int.tryParse(
-                        durString.substring(4, durString.length - 1)) ??
-                    0;
-                duration = Duration(
-                  hours: totalSecs ~/ 3600,
-                  minutes: (totalSecs % 3600) ~/ 60,
-                  seconds: (totalSecs % 60),
-                );
-              }
+              // if (durString != null && durString.length > 5) {
+              //   final totalSecs = int.tryParse(
+              //           durString.substring(4, durString.length - 1)) ??
+              //       0;
+              //   duration = Duration(
+              //     hours: totalSecs ~/ 3600,
+              //     minutes: (totalSecs % 3600) ~/ 60,
+              //     seconds: (totalSecs % 60),
+              //   );
+              // }
             }
           }
         }
@@ -78,7 +80,9 @@ class WebPageParser {
               index: sections.length,
               title: title.trim(),
               uri: uri.trim(),
-              duration: duration,
+              duration: int.tryParse(
+                      durString?.substring(4, durString.length - 1) ?? '0') ??
+                  0,
               info: {},
             ),
           );
@@ -105,7 +109,7 @@ class WebPageParser {
       //
       String? urlRss;
       String? librivoxId;
-      Duration? duration;
+      int? duration;
       String? textUrl;
       final sections = <CartaSection>[];
 
@@ -151,7 +155,7 @@ class WebPageParser {
             } else if (dt.text.contains('Running Time')) {
               // running time
               final dd = dt.nextElementSibling;
-              duration = getDurationFromString(dd?.text);
+              duration = durationToSeconds(dd?.text);
             }
           }
           // get all p a tags
@@ -170,7 +174,7 @@ class WebPageParser {
           int index = 0;
           String title = 'Unknown';
           String uri = '';
-          Duration? duration;
+          int? duration;
 
           for (final tr in trs) {
             duration = null;
@@ -184,7 +188,7 @@ class WebPageParser {
               if (atag == null) {
                 // duration (comes first) or language
                 // debugPrint('duation: ${td.text}');
-                duration ??= getDurationFromString(td.text);
+                duration ??= durationToSeconds(td.text);
               } else if (atag.className == 'play-btn') {
                 // uri first candidate
                 uri = atag.attributes['href'] ?? '';
@@ -253,7 +257,7 @@ class WebPageParser {
         imageUrl = 'https://legamus.eu${imageUrl.trim()}';
       }
 
-      Duration? duration;
+      int? duration;
       final sections = <CartaSection>[];
 
       // audio page url
@@ -275,7 +279,7 @@ class WebPageParser {
                   row.querySelector('.downloadlinks a')?.attributes['href'] ??
                       "";
               final title = titleRow.split('(')[0].trim();
-              final duration = getDurationFromString(
+              final duration = durationToSeconds(
                   RegExp(r'\(([^)]+)\)').firstMatch(titleRow)?.group(1));
 
               sections.add(CartaSection(
@@ -320,6 +324,7 @@ class WebPageParser {
     return null;
   }
 
+/*
   static Duration? getDurationFromString(String? durationStr) {
     if (durationStr != null && durationStr.isNotEmpty) {
       final times = durationStr.split(':');
@@ -334,6 +339,22 @@ class WebPageParser {
           minutes: int.tryParse(times[0]) ?? 0,
           seconds: int.tryParse(times[1]) ?? 0,
         );
+      }
+    }
+    return null;
+  }
+  */
+
+  static int? durationToSeconds(String? durationStr) {
+    if (durationStr != null && durationStr.isNotEmpty) {
+      final times = durationStr.split(':');
+      if (times.length == 3) {
+        return (int.tryParse(times[0]) ?? 0) * 3600 +
+            (int.tryParse(times[1]) ?? 0) * 60 +
+            (int.tryParse(times[2]) ?? 0);
+      } else if (times.length == 2) {
+        return (int.tryParse(times[1]) ?? 0) * 60 +
+            (int.tryParse(times[2]) ?? 0);
       }
     }
     return null;

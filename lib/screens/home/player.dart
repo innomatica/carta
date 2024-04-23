@@ -2,7 +2,8 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../service/audiohandler.dart';
+// import '../../service/audiohandler.dart';
+import '../../logic/cartabloc.dart';
 import '../../shared/settings.dart';
 import 'widgets.dart';
 
@@ -40,7 +41,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   //
   // More Button
   //
-  Widget _buildMoreButton(CartaAudioHandler handler) {
+  Widget _buildMoreButton(CartaBloc logic) {
     return IconButton(
       icon: const Icon(Icons.more_horiz_rounded, size: 32.0),
       onPressed: () {
@@ -51,7 +52,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final handler = context.read<CartaAudioHandler>();
+    final logic = context.read<CartaBloc>();
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -66,41 +67,41 @@ class _PlayerScreenState extends State<PlayerScreen> {
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    BookCover(handler, size: 60),
+                    BookCover(logic, size: 60),
                     const SizedBox(width: 48.0),
-                    BookTitle(handler),
+                    BookTitle(logic),
                   ],
                 )
               : Column(
                   children: [
-                    BookTitle(handler),
+                    BookTitle(logic),
                     const SizedBox(height: 16.0),
-                    BookCover(handler),
+                    BookCover(logic),
                   ],
                 ),
           // progress bar
           const SizedBox(height: 16.0),
-          buildProgressBar(handler),
+          buildProgressBar(logic),
           // buttons
           Row(
             // mainAxisAlignment: MainAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: isScreenWide
                 ? <Widget>[
-                    buildSpeedSelector(handler, size: 18),
-                    buildPreviousButton(handler, size: 36),
-                    buildRewindButton(handler, size: 36),
-                    buildPlayButton(handler, size: 48),
-                    buildForwardButton(handler, size: 36),
-                    buildNextButton(handler, size: 36),
-                    _buildMoreButton(handler),
+                    buildSpeedSelector(logic, size: 18),
+                    buildPreviousButton(logic, size: 36),
+                    buildRewindButton(logic, size: 36),
+                    buildPlayButton(logic, size: 48),
+                    buildForwardButton(logic, size: 36),
+                    buildNextButton(logic, size: 36),
+                    _buildMoreButton(logic),
                   ]
                 : <Widget>[
-                    buildSpeedSelector(handler, size: 18),
-                    buildRewindButton(handler, size: 36),
-                    buildPlayButton(handler, size: 48),
-                    buildForwardButton(handler, size: 36),
-                    _buildMoreButton(handler),
+                    buildSpeedSelector(logic, size: 18),
+                    buildRewindButton(logic, size: 36),
+                    buildPlayButton(logic, size: 48),
+                    buildForwardButton(logic, size: 36),
+                    _buildMoreButton(logic),
                   ],
           ),
         ],

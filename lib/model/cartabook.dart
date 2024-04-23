@@ -40,9 +40,11 @@ class CartaBook {
   String? description;
   String? language;
   String? imageUri;
-  Duration? duration;
+  // Duration? duration;
+  int? duration;
   int? lastSection;
-  Duration? lastPosition;
+  // Duration? lastPosition;
+  int? lastPosition;
   CartaSource source;
   Map<String, dynamic> info;
   List<CartaSection>? sections;
@@ -72,9 +74,10 @@ class CartaBook {
       authors: result['authors'].join(','),
       description: result['description'],
       language: result['language'],
-      duration: fromDurationString(result['totaltime']),
+      duration: timeStringToSeconds(result['totaltime']),
       lastSection: 0,
-      lastPosition: Duration.zero,
+      // lastPosition: Duration.zero,
+      lastPosition: 0,
       source: CartaSource.librivox,
       info: {
         'id': result['id'],
@@ -101,9 +104,9 @@ class CartaBook {
         description: data['description'],
         language: data['language'],
         imageUri: data['imageUri'],
-        duration: fromDurationString(data['duration']),
+        duration: timeStringToSeconds(data['duration']),
         lastSection: data['lastSection'],
-        lastPosition: fromDurationString(data['lastPosition']),
+        lastPosition: timeStringToSeconds(data['lastPosition']),
         source: CartaSource.values[data['source']],
         info: jsonDecode(data['info']),
         sections: jsonDecode(data['sections'])
@@ -144,9 +147,9 @@ class CartaBook {
       'description': description,
       'language': language,
       'imageUri': imageUri,
-      'duration': toDurationString(duration),
+      'duration': secondsToTimeString(duration),
       'lastSection': lastSection,
-      'lastPosition': toDurationString(lastPosition),
+      'lastPosition': secondsToTimeString(lastPosition),
       'source': source.index,
       'info': jsonEncode(info),
       'sections': jsonEncode(sections?.map((e) => e.toDatabase()).toList()),
@@ -174,7 +177,9 @@ class CartaBook {
             title: section.title,
             // book title as album
             album: title == section.title ? authors : title,
-            duration: section.duration,
+            duration: section.duration != null
+                ? Duration(seconds: section.duration!)
+                : Duration.zero,
             // artHeaders are not recognized by the background process
             // artUri: imageUri != null ? Uri.parse(imageUri!) : null,
             // artHeaders: headers,
@@ -185,6 +190,7 @@ class CartaBook {
               'bookTitle': title,
               'sectionIdx': section.index,
               'sectionTitle': section.title,
+              'seekPos': section.seekPos,
             },
           );
           // check if local data for the section exists

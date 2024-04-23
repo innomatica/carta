@@ -40,14 +40,14 @@ void main() async {
       providers: [
         ChangeNotifierProvider<ScreenConfig>(
             create: (context) => ScreenConfig()),
-        ChangeNotifierProvider<CartaBloc>(create: (context) => CartaBloc()),
-        Provider<CartaAudioHandler>(
-          create: (context) {
-            handler.setLogic(context.read<CartaBloc>());
-            return handler;
-          },
-          dispose: (_, __) => handler.dispose(),
-        ),
+        ChangeNotifierProvider<CartaBloc>(create: (_) => CartaBloc(handler)),
+        // Provider<CartaAudioHandler>(
+        //   create: (context) {
+        //     handler.setLogic(context.read<CartaBloc>());
+        //     return handler;
+        //   },
+        //   dispose: (_, __) => handler.dispose(),
+        // ),
       ],
       child: const MyApp(),
     ),

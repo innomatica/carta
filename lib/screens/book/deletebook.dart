@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../logic/cartabloc.dart';
 import '../../logic/screenconfig.dart';
 import '../../model/cartabook.dart';
-import '../../service/audiohandler.dart';
 import '../../shared/settings.dart';
 
 class DeleteBook extends StatefulWidget {
@@ -16,12 +15,9 @@ class DeleteBook extends StatefulWidget {
 }
 
 class _DeleteBookState extends State<DeleteBook> {
-  late final CartaAudioHandler _handler;
-
   @override
   void initState() {
     super.initState();
-    _handler = context.read<CartaAudioHandler>();
   }
 
   @override
@@ -40,9 +36,6 @@ class _DeleteBookState extends State<DeleteBook> {
       onPressed: () async {
         final screen = context.read<ScreenConfig>();
         final bloc = context.read<CartaBloc>();
-        if (_handler.isCurrentBook(bookId: widget.book.bookId)) {
-          await _handler.stop();
-        }
         await bloc.deleteAudioBook(widget.book);
         screen.setBook(null);
         // if narrow screen, needs to pop out the page
