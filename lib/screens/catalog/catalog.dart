@@ -41,7 +41,7 @@ class _CatalogPageState extends State<CatalogPage> {
         });
       }
     }
-    // debugPrint('buildPanelData: $panelData');
+    // logDebug('buildPanelData: $panelData');
     setState(() {});
   }
 

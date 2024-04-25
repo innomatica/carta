@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-// import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class WikipediaService {
@@ -25,9 +24,9 @@ class WikipediaService {
     );
     final res = await http.get(url);
     final data = jsonDecode(res.body);
-    // debugPrint('url:$url');
-    // debugPrint('res: $res');
-    // debugPrint('data: ${data.toString()}');
+    // logDebug('url:$url');
+    // logDebug('res: $res');
+    // logDebug('data: ${data.toString()}');
     return data[3].isEmpty ? urlMobile : data[3][0];
   }
 }

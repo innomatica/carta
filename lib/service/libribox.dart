@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:feed_parser/feed_parser.dart';
-import 'package:flutter/foundation.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:http/http.dart' as http;
 
 import '../model/cartabook.dart';
 import '../model/cartasection.dart';
+import '../shared/helpers.dart';
 
 const urlLibriVox = 'https://librivox.org/';
 const urlLibriVoxBooks = 'https://librivox.org/api/feed/audiobooks';
@@ -52,12 +52,12 @@ class LibriVoxService {
       }
     }
 
-    debugPrint('searchBooks.url:${Uri.parse(url)}');
+    logDebug('searchBooks.url:${Uri.parse(url)}');
     final res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {
       final books = jsonDecode(res.body)['books'];
       // for (final book in books) {
-      //   debugPrint('searchBooks.book: $book');
+      //   logDebug('searchBooks.book: $book');
       // }
       return books.map<CartaBook>((e) => CartaBook.fromLibriVoxApi(e)).toList();
     }
@@ -74,7 +74,7 @@ class LibriVoxService {
       String url = book.info['urlRss'];
       http.Response res = await http.get(Uri.parse(url));
       if (res.statusCode != 200) {
-        debugPrint('getSupplmentaryData: cannot find RSS page:$url');
+        logError('getSupplmentaryData: cannot find RSS page:$url');
         return false;
       }
       // parse the feed
@@ -82,7 +82,7 @@ class LibriVoxService {
         final feedData = FeedData.parse(res.body);
         if (feedData.items == null) {
           // section information is mandatory
-          debugPrint('getSupplmentaryData: failed to parse RSS data');
+          logError('getSupplmentaryData: failed to parse RSS data');
           return false;
         }
         //
@@ -101,7 +101,7 @@ class LibriVoxService {
             duration: item.media?[0].duration ?? 0,
             info: {},
           );
-          // debugPrint(section.toString());
+          // logDebug(section.toString());
           book.sections!.add(section);
           index = index + 1;
         }
@@ -112,7 +112,7 @@ class LibriVoxService {
         url = book.info['siteUrl'];
         res = await http.get(Uri.parse(url));
         if (res.statusCode == 200) {
-          // debugPrint('urlSource: $url');
+          // logDebug('urlSource: $url');
           final document = parse(res.body);
           // get image tags
           final images = document.getElementsByTagName('img');
@@ -122,7 +122,7 @@ class LibriVoxService {
                 img.attributes['src'] != null &&
                 img.attributes['src']!.contains('archive.org')) {
               book.imageUri = img.attributes['src']?.trim();
-              // debugPrint('book.imageUri: ${book.imageUri}');
+              // logDebug('book.imageUri: ${book.imageUri}');
               break;
             }
           }
@@ -130,7 +130,7 @@ class LibriVoxService {
           return true;
         }
       } catch (e) {
-        debugPrint('getSupplmentaryData.exception: ${e.toString()}');
+        logError('getSupplmentaryData.exception: ${e.toString()}');
         return false;
       }
     }

@@ -100,7 +100,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> _buildActionWidgets() {
-    // FIXME: replace with logic
     final logic = context.read<CartaBloc>();
     return isScreenWide
         ? [
@@ -234,7 +233,6 @@ class _HomePageState extends State<HomePage> {
   // Scaffold.Bottomsheet
   //
   Widget? _buildBottomSheet() {
-    // FIXME: replace with logic
     final logic = context.read<CartaBloc>();
     // needs to redraw whenever the playing state changes
     return StreamBuilder<AudioProcessingState>(
@@ -299,8 +297,8 @@ class _HomePageState extends State<HomePage> {
   Widget _buildBody() {
     final books = context.watch<CartaBloc>().books;
     final screen = context.watch<ScreenConfig>();
-    // debugPrint('home.body screen.layout: ${screen.layout}');
-    // debugPrint('home.body isWide: ${screen.isWide}');
+    // logDebug('home.body screen.layout: ${screen.layout}');
+    // logDebug('home.body isWide: ${screen.isWide}');
     if (books.isEmpty) {
       // no books
       return const FirstLogin();

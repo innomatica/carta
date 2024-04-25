@@ -14,7 +14,7 @@ import '../../shared/constants.dart';
 StreamBuilder<Duration> buildProgressBar(CartaBloc logic) {
   return StreamBuilder<Duration>(
     // stream: logic.positionStream.distinct(),
-    stream: logic.playbackState.map((e) => e.position).distinct(),
+    stream: logic.positionStream,
     builder: (context, snapshot) {
       final total = logic.duration;
       final progress = snapshot.data ?? Duration.zero;
@@ -129,10 +129,11 @@ class BookTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: logic.playbackState.map((e) => e.queueIndex).distinct(),
+      stream: logic.mediaItem,
       builder: (context, snapshot) {
-        final tag = logic.currentTag;
-        final bookTitle = tag?.album ?? 'Unknown Title';
+        // final tag = logic.currentTag;
+        final tag = snapshot.data;
+        final bookTitle = tag?.album ?? '... media is loading ...';
         final sectionTitle = tag?.title ?? '';
 
         switch (layout) {
@@ -185,9 +186,9 @@ class BookCover extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: logic.playbackState.map((e) => e.queueIndex).distinct(),
+      stream: logic.mediaItem,
       builder: (context, snapshot) {
-        final tag = logic.currentTag;
+        final tag = snapshot.data;
         return ClipRRect(
           borderRadius: BorderRadius.circular(8.0),
           child: tag != null && tag.artUri != null

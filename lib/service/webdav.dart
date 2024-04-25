@@ -1,12 +1,11 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
-// import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
 
 import '../model/webdav.dart';
+import '../shared/helpers.dart';
 
 class WebDavService {
   static Future<List<WebDavResource>?> propFind(
@@ -22,7 +21,7 @@ class WebDavService {
     // final url = '$host/$libDir';
     // apache2 webdav redirection
     final url = '$host/$libDir/';
-    // log('davPropfind.url.user.pass:$url, $user, $pass');
+    // logDebug('davPropfind.url.user.pass:$url, $user, $pass');
 
     final client = http.Client();
     final request = http.Request('PROPFIND', Uri.parse(url));
@@ -42,24 +41,24 @@ class WebDavService {
     try {
       res = await client.send(request);
       body = await res.stream.transform(utf8.decoder).join();
-      // log('body:$body');
+      // logDebug('body:$body');
       client.close();
     } catch (e) {
-      log(e.toString());
+      logError(e.toString());
       client.close();
       return null;
     }
     // accept only with status codes 200 and 207
     if (res.statusCode != 200 && res.statusCode != 207) {
-      log('statusCode: ${res.statusCode}');
-      // log('res: $res');
-      // log('body: $body');
+      logDebug('statusCode: ${res.statusCode}');
+      // logDebug('res: $res');
+      // logDebug('body: $body');
       return null;
     }
     // decode XML
     try {
       final xmlDoc = XmlDocument.parse(body);
-      // log('xmlDoc: $xmlDoc');
+      // logDebug('xmlDoc: $xmlDoc');
       // iterate over all response elements
       for (final response
           in xmlDoc.rootElement.findElements('response', namespace: '*')) {
@@ -88,15 +87,15 @@ class WebDavService {
               } else if (subItem.name.local == 'prop') {
                 // D:prop
                 for (final subSubItem in subItem.childElements) {
-                  // log('prop item:$subSubItem');
+                  // logDebug('prop item:$subSubItem');
                   switch (subSubItem.name.local) {
                     case 'creationdate':
                       try {
                         creationDate = HttpDate.parse(subSubItem.innerText);
                       } catch (e) {
-                        // log(subSubItem.innerText);
+                        // logDebug(subSubItem.innerText);
                         // probably ISO format(2023-10-09T01:27:53Z)
-                        // log(e.toString());
+                        // logDebug(e.toString());
                         creationDate = DateTime.tryParse(subSubItem.innerText);
                       }
                       break;
@@ -124,7 +123,7 @@ class WebDavService {
                       try {
                         lastModified = HttpDate.parse(subSubItem.innerText);
                       } catch (e) {
-                        // log(e.toString());
+                        // logDebug(e.toString());
                         creationDate = DateTime.tryParse(subSubItem.innerText);
                       }
                       break;
@@ -168,12 +167,12 @@ class WebDavService {
               resourceType: resourceType,
             ),
           );
-          // log('resource: ${resources[resources.length - 1].toString()}');
+          // logDebug('resource: ${resources[resources.length - 1].toString()}');
         }
       }
     } catch (e) {
       // failed to parse xml body
-      log(e.toString());
+      logError(e.toString());
       return null;
     }
     resources.sort(((a, b) => (a.href).compareTo(b.href)));

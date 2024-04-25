@@ -1,9 +1,11 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../logic/cartabloc.dart';
 import '../../logic/screenconfig.dart';
 import '../../model/cartabook.dart';
+import '../../shared/helpers.dart';
 import '../../shared/settings.dart';
 import '../book/book.dart';
 import '../webbook/webbook.dart';
@@ -71,9 +73,9 @@ class _BookShelfState extends State<BookShelf> {
   // Section List Popup
   //
   Widget _buildBookSections(CartaBook book) {
-    // FIXME: replace with logic
     final logic = context.read<CartaBloc>();
-    // debugPrint(book.toString());
+    logDebug(
+        'buildBookSections.bookId:${book.bookId}, lastSection:${book.lastSection}, lastPosition:${book.lastPosition}');
     return AlertDialog(
       // book title
       title: Text(
@@ -101,9 +103,9 @@ class _BookShelfState extends State<BookShelf> {
                 final bool isCurrentSection =
                     isCurrentBook && logic.currentSectionIdx == index;
                 // book mark
-                final bool hasBookMark = book.lastSection == index &&
-                    book.lastPosition != Duration.zero;
-                // debugPrint(
+                final bool hasBookMark =
+                    book.lastSection == index && book.lastPosition != 0;
+                // logDebug(
                 //     'index:$index, isCurrentSection:$isCurrentSection, hasBookMark: $hasBookMark');
                 return Container(
                   // decorator
@@ -172,66 +174,75 @@ class _BookShelfState extends State<BookShelf> {
   //
   // Book Card
   //
-  Widget _buildBookCard(CartaBook book, bool isPlaying) {
+  Widget _buildBookCard(CartaBook book) {
     final logic = context.read<CartaBloc>();
-    return Card(
-      color: isPlaying ? Theme.of(context).colorScheme.primaryContainer : null,
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-        // Cover Image
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(4.0),
-          child: AspectRatio(
-            aspectRatio: 1.0,
-            child: Image(
-              image: book.getCoverImage(),
-              fit: BoxFit.cover,
+    return StreamBuilder<MediaItem?>(
+        stream: logic.mediaItem,
+        builder: (context, snapshot) {
+          final mediaItem = snapshot.data;
+          final isCurrentBook =
+              mediaItem != null && mediaItem.extras!['bookId'] == book.bookId;
+          return Card(
+            color: isCurrentBook
+                ? Theme.of(context).colorScheme.primaryContainer
+                : null,
+            child: ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+              // Cover Image
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(4.0),
+                child: AspectRatio(
+                  aspectRatio: 1.0,
+                  child: Image(
+                    image: book.getCoverImage(),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              // Book Title
+              title: Text(
+                book.title,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: isCurrentBook
+                      ? Theme.of(context).colorScheme.onPrimaryContainer
+                      : Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+              // Author
+              subtitle: Text(
+                book.authors ?? '',
+                overflow: TextOverflow.ellipsis,
+              ),
+              // Icon
+              trailing: _buildTrailingWidget(book),
+              onTap: () {
+                if (book.source == CartaSource.internet) {
+                  // WebPageBook => open webview : not supported now
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: ((context) => WebBookView(book)),
+                  ));
+                } else {
+                  // All the other Books => show section list dialog
+                  showDialog(
+                    context: context,
+                    builder: (context) => _buildBookSections(book),
+                  ).then((value) async {
+                    if (value != null) {
+                      // directly play the section of the book
+                      await logic.play(book, sectionIdx: value);
+                      // switch to the book info ?
+                      // this is not a good idea given the widget structure
+                      // for example, if you go to the other part of the book
+                      // while reading certain page, it will close the webview
+                      // and display the book info immediately
+                    }
+                  });
+                }
+              },
             ),
-          ),
-        ),
-        // Book Title
-        title: Text(
-          book.title,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: isPlaying
-                ? Theme.of(context).colorScheme.onPrimaryContainer
-                : Theme.of(context).colorScheme.secondary,
-          ),
-        ),
-        // Author
-        subtitle: Text(
-          book.authors ?? '',
-          overflow: TextOverflow.ellipsis,
-        ),
-        // Icon
-        trailing: _buildTrailingWidget(book),
-        onTap: () {
-          if (book.source == CartaSource.internet) {
-            // WebPageBook => open webview : not supported now
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: ((context) => WebBookView(book)),
-            ));
-          } else {
-            // All the other Books => show section list dialog
-            showDialog(
-              context: context,
-              builder: (context) => _buildBookSections(book),
-            ).then((value) async {
-              if (value != null) {
-                // directly play the section of the book
-                await logic.play(book, sectionIdx: value);
-                // switch to the book info ?
-                // this is not a good idea given the widget structure
-                // for example, if you go to the other part of the book
-                // while reading certain page, it will close the webview
-                // and display the book info immediately
-              }
-            });
-          }
-        },
-      ),
-    );
+          );
+        });
   }
 
   @override
@@ -258,10 +269,7 @@ class _BookShelfState extends State<BookShelf> {
           shrinkWrap: true,
           itemCount: logic.books.length,
           itemExtent: 80.0,
-          itemBuilder: (context, index) => _buildBookCard(
-            logic.books[index],
-            logic.currentBookId == logic.books[index].bookId,
-          ),
+          itemBuilder: (context, index) => _buildBookCard(logic.books[index]),
         ),
       ),
     );

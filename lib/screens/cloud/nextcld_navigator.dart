@@ -151,7 +151,7 @@ class _NextCloudNavigatorState extends State<NextCloudNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    // debugPrint('currentDir: $currentDir');
+    // logDebug('currentDir: $currentDir');
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 110,
@@ -222,7 +222,7 @@ class _NextCloudNavigatorState extends State<NextCloudNavigator> {
                           isDir && (files[index].href == currentDir);
                       foundAudioFiles = foundAudioFiles ||
                           files[index].contentType?.primaryType == 'audio';
-                      // debugPrint('foundAudioFiles: $foundAudioFiles');
+                      // logDebug('foundAudioFiles: $foundAudioFiles');
 
                       return curDirItem
                           // hide current directory
@@ -264,7 +264,7 @@ class _NextCloudNavigatorState extends State<NextCloudNavigator> {
                             label: const Text('Add to my bookshelf'),
                             onPressed: () {
                               final book = _parseFiles(files);
-                              // debugPrint('book: $book');
+                              // logDebug('book: $book');
                               if (book != null) {
                                 showDialog(
                                   context: context,

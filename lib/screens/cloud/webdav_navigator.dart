@@ -53,7 +53,7 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
     String author = path.elementAt(1);
     String? imageUri;
     String urlPrefix = '$host$currentPath';
-    // debugPrint('_parseFiles.urlPrefix: $urlPrefix');
+    // logDebug('_parseFiles.urlPrefix: $urlPrefix');
     for (final file in files) {
       final fileName = file.href.split('/').last;
       if (file.contentType?.primaryType == 'audio') {
@@ -166,10 +166,10 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
                 Navigator.of(context).pop();
               } else {
                 final parts = currentPath.split('/');
-                debugPrint('< button.parts: $parts');
+                logDebug('< button.parts: $parts');
                 parts.removeLast();
                 currentPath = parts.join('/');
-                debugPrint('< button.currentDir: $currentPath');
+                logDebug('< button.currentDir: $currentPath');
                 setState(() {});
               }
             },
@@ -205,7 +205,7 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
           if (snapshot.hasData) {
             final files = snapshot.data!;
             for (final file in files) {
-              // debugPrint('file: ${file.toString()}');
+              // logDebug('file: ${file.toString()}');
               if (file.contentType?.primaryType == 'audio') {
                 foundAudioFiles = true;
                 break;
@@ -227,7 +227,7 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
                         isDir && (files[index].href == currentPath);
                     foundAudioFiles = foundAudioFiles ||
                         files[index].contentType?.primaryType == 'audio';
-                    // debugPrint('foundAudioFiles: $foundAudioFiles');
+                    // logDebug('foundAudioFiles: $foundAudioFiles');
                     return curDirItem
                         // hide current directory
                         ? const SizedBox(width: 0, height: 0)
@@ -250,7 +250,7 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
                                 ? () {
                                     // set the new directory
                                     currentPath = files[index].href;
-                                    // debugPrint(
+                                    // logDebug(
                                     //     'ontab.currentPath:$currentPath');
                                     setState(() {});
                                   }
@@ -271,7 +271,7 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
                           label: const Text('Add to my bookshelf'),
                           onPressed: () async {
                             final book = _bookFromDav(files);
-                            // debugPrint('book: ${book.toString()}');
+                            // logDebug('book: ${book.toString()}');
                             if (book != null) {
                               showDialog(
                                 context: context,
@@ -351,7 +351,7 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    // debugPrint('build.currentPath: $currentPath');
+    // logDebug('build.currentPath: $currentPath');
     return Scaffold(
       appBar: _buildAppBar(),
       body: _buildBody(),

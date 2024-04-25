@@ -25,7 +25,7 @@ void main() async {
   initialWindowWidth = size.width;
   initialWindowHeight = size.height;
   isScreenWide = initialWindowWidth > 600;
-  debugPrint('size: ${size.width}, ${size.height}');
+  // logDebug('size: ${size.width}, ${size.height}');
 
   // audio handler
   final CartaAudioHandler handler = await createAudioHandler();
@@ -67,8 +67,8 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: (settings) {
           if (settings.name != null) {
             final uri = Uri.parse(settings.name!);
-            // debugPrint('path: ${uri.path}');
-            // debugPrint('params: ${uri.queryParameters}');
+            // logDebug('path: ${uri.path}');
+            // logDebug('params: ${uri.queryParameters}');
             if (uri.path == '/') {
               return MaterialPageRoute(builder: (context) => const HomePage());
             } else if (uri.path == '/selected') {

@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
+
+import '../shared/helpers.dart';
 // import 'package:rxdart/rxdart.dart';
 
 // import '../logic/cartabloc.dart';
@@ -37,6 +38,7 @@ class CartaAudioHandler extends BaseAudioHandler
   // late final CartaBloc _logic;
   StreamSubscription? _subDuration;
   StreamSubscription? _subPlyState;
+  StreamSubscription? _subCurIndex;
 
   CartaAudioHandler() {
     _init();
@@ -51,11 +53,13 @@ class CartaAudioHandler extends BaseAudioHandler
     // stream subscriptions
     _handleDurationChange();
     _handlePlyStateChange();
+    _handleCurIndexChange();
   }
 
   Future<void> dispose() async {
     await _subDuration?.cancel();
     await _subPlyState?.cancel();
+    await _subCurIndex?.cancel();
     await _player.stop();
     await _player.dispose();
   }
@@ -63,10 +67,9 @@ class CartaAudioHandler extends BaseAudioHandler
   void _handleDurationChange() {
     _subDuration = _player.durationStream.listen((Duration? duration) {
       final index = _player.currentIndex;
-      final qval = queue.value;
-      if (index != null && index >= 0 && index < qval.length) {
-        final item = qval[index];
-        // broadcast updated mediaItem
+      final sequence = _player.sequence;
+      if (index != null && sequence != null && index < sequence.length) {
+        final item = sequence[index].tag as MediaItem;
         mediaItem.add(item.copyWith(duration: duration));
       }
     });
@@ -75,29 +78,33 @@ class CartaAudioHandler extends BaseAudioHandler
   void _handlePlyStateChange() {
     // subscribe to playerStateStream
     _subPlyState = _player.playerStateStream.listen((PlayerState state) async {
-      // log('playerState: ${state.playing}  ${state.processingState}');
+      logDebug('playerState: ${state.playing}  ${state.processingState}');
       if (state.processingState == ProcessingState.ready) {
-        if (state.playing == false) {
-          // about to start playing or paused
-          final item = mediaItem.value;
-          if (item != null) {
-            // keep the current position
-            item.extras!['seekPos'] = _player.position.inSeconds;
-            // report change
-            mediaItem.add(item);
-          }
-        }
+        // about to start playing or just paused
       } else if (state.processingState == ProcessingState.completed) {
         // NOTE (playing, completed) may or MAY NOT be followed by (not playing, complted)
         if (state.playing) {
-          // log('end of the queue');
-          await pause();
+          // logDebug('end of the queue');
+          await stop();
           // clear queue
           if (queue.value.isNotEmpty) {
             await clearQueue();
           }
         }
       }
+    });
+  }
+
+  void _handleCurIndexChange() {
+    _subCurIndex = _player.currentIndexStream.listen((int? index) {
+      /*
+      logDebug('handleCurIndex.index: $index');
+      final sequence = _player.sequence;
+      if (sequence != null) {
+        // update the queue with the sequence
+        queue.add(sequence.map((s) => s.tag as MediaItem).toList());
+      }
+      */
     });
   }
 
@@ -134,22 +141,9 @@ class CartaAudioHandler extends BaseAudioHandler
 
   // expose player properties
   bool get playing => _player.playing;
-  Duration get duration => _player.duration ?? Duration.zero;
   Duration get position => _player.position;
+  Duration get duration => _player.duration ?? Duration.zero;
   Stream<Duration> get positionStream => _player.positionStream;
-
-  // @override
-  // Future<void> pause() async {
-  //   log('handler.pause');
-  //   await _updateBookmark();
-  //   await _player.pause();
-  // }
-  // @override
-  // Future<void> stop() async {
-  //   log('handler.stop');
-  //   await _updateBookmark();
-  //   await _player.stop();
-  // }
 
   @override
   Future<void> play() => _player.play();
@@ -163,8 +157,8 @@ class CartaAudioHandler extends BaseAudioHandler
 
   @override
   Future<void> playMediaItem(MediaItem mediaItem) async {
-    // log('playMediaItem: $mediaItem');
-    // assume that the audioSource is already set
+    // logDebug('playMediaItem: $mediaItem');
+    // Note: we  handle only the section in the current book
     final audioSource = _player.audioSource as ConcatenatingAudioSource;
     // find the index of the item in the source list
     final index = audioSource.children
@@ -181,15 +175,20 @@ class CartaAudioHandler extends BaseAudioHandler
   // QueueHandler implements skipToNext, skipToPrevious
   @override
   Future<void> skipToQueueItem(int index) async {
-    final sequence = _player.sequence;
+    logDebug('skipToQueueItem: $index');
+    final qval = queue.value;
     // validate index
-    if (sequence != null) {
-      if (sequence.isNotEmpty && index >= 0 && index < sequence.length) {
-        // await _player.seek(Duration.zero, index: index);
-      } else if (index == sequence.length) {
-        if (_player.playing) {
-          await stop();
-        }
+    if (index >= 0 && index < qval.length) {
+      // always start at the beginning of the chapter
+      await _player.seek(Duration.zero, index: index);
+      mediaItem.add(qval[index]);
+    } else {
+      // invalid index range => better to stop in this situation
+      if (_player.playing) {
+        await stop();
+      }
+      // probably end of the queue
+      if (index == qval.length) {
         // clear queue
         await clearQueue();
       }
@@ -205,7 +204,8 @@ class CartaAudioHandler extends BaseAudioHandler
 
   @override
   Future<void> addQueueItems(List<MediaItem> mediaItems) async {
-    (_player.audioSource as ConcatenatingAudioSource)
+    logDebug('addQueueItems: $mediaItems');
+    await (_player.audioSource as ConcatenatingAudioSource)
         .addAll(mediaItems.map((m) => _mediaItemToAudioSource(m)).toList());
     // broadcast change
     final qval = queue.value..addAll(mediaItems);
@@ -213,14 +213,17 @@ class CartaAudioHandler extends BaseAudioHandler
   }
 
   Future<void> clearQueue() async {
-    final audioSource = _player.audioSource as ConcatenatingAudioSource;
-    // then clear the queue
-    await audioSource.clear();
+    logDebug('handler.clearQueue');
+    // this does not set the currentIndex to null or zero
+    // await (_player.audioSource as ConcatenatingAudioSource).clear();
+    // this does set the currentIndex to zero
+    await _player.setAudioSource(ConcatenatingAudioSource(children: []));
     queue.add([]);
     mediaItem.add(null);
   }
 
   Future<void> setQueue(List<MediaItem> mediaItems) async {
+    logDebug('setQueue: $mediaItems');
     await clearQueue();
     await addQueueItems(mediaItems);
   }

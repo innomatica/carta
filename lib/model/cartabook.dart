@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
@@ -114,7 +113,7 @@ class CartaBook {
             .toList(),
       );
     } catch (e) {
-      log(e.toString());
+      logError(e.toString());
       rethrow;
     }
   }
@@ -172,7 +171,7 @@ class CartaBook {
         if (section.index >= initIndex) {
           // build tag
           final tag = MediaItem(
-            id: bookId,
+            id: section.uri,
             // section title as title
             title: section.title,
             // book title as album
@@ -190,7 +189,7 @@ class CartaBook {
               'bookTitle': title,
               'sectionIdx': section.index,
               'sectionTitle': section.title,
-              'seekPos': section.seekPos,
+              // 'seekPos': section.seekPos,
             },
           );
           // check if local data for the section exists
@@ -200,46 +199,46 @@ class CartaBook {
               Uri.parse('file://${file.path}'),
               tag: tag,
             ));
-            // debugPrint('file source: ${file.path}');
+            // logDebug('file source: ${file.path}');
           } else {
             // NOTE: this is experimental
             // https://pub.dev/packages/just_audio#working-with-caches
             if (info['cached'] == true) {
-              // debugPrint('${section.title}:LockCachingAudiSource');
+              // logDebug('${section.title}:LockCachingAudiSource');
               sectionData.add(LockCachingAudioSource(
                 Uri.parse(section.uri),
                 headers: headers,
                 tag: tag,
               ));
             } else {
-              // debugPrint('${section.title}:UriAudioSource');
+              // logDebug('${section.title}:UriAudioSource');
               sectionData.add(AudioSource.uri(
                 Uri.parse(section.uri),
                 headers: headers,
                 tag: tag,
               ));
             }
-            // debugPrint('url headers: ${headers.toString()}');
-            // debugPrint('url source: ${section.uri}');
+            // logDebug('url headers: ${headers.toString()}');
+            // logDebug('url source: ${section.uri}');
           }
-          // debugPrint('adding: ${section.title}');
+          // logDebug('adding: ${section.title}');
         }
       }
     }
-    // debugPrint('getAudioSource.return: $sectionData');
+    // logDebug('getAudioSource.return: $sectionData');
     return sectionData;
   }
 
   Map<String, String>? getAuthHeaders() {
-    // debugPrint('getAuthHeaders: $info');
+    // logDebug('getAuthHeaders: $info');
     if (info.containsKey('authentication') &&
         info['authentication'] == 'basic' &&
         info.containsKey('username') &&
         info.containsKey('password')) {
-      // debugPrint('info: $info');
+      // logDebug('info: $info');
       final username = decrypt(info['username']);
       final password = decrypt(info['password']);
-      // debugPrint('username: $username, password: $password');
+      // logDebug('username: $username, password: $password');
       final credential = base64Encode(utf8.encode('$username:$password'));
       return {
         HttpHeaders.authorizationHeader: 'Basic $credential',
@@ -356,19 +355,19 @@ class CartaBook {
       try {
         final file = File('${bookDir.path}/${imageUri!.split('/').last}');
         if (file.existsSync()) {
-          // debugPrint('albumImage:FileImage');
+          // logDebug('albumImage:FileImage');
           return FileImage(file);
         }
-        // debugPrint('albumImage:NetworkImage');
+        // logDebug('albumImage:NetworkImage');
         // NOTE: do not use AWAIT here
         downloadCoverImage();
         // this will download the image twice but for the first time only
         return NetworkImage(imageUri!, headers: getAuthHeaders());
       } catch (e) {
-        debugPrint(e.toString());
+        logError(e.toString());
       }
     }
-    // debugPrint('albumImage:AssetImage');
+    // logDebug('albumImage:AssetImage');
     return const AssetImage(defaultAlbumImage);
   }
 

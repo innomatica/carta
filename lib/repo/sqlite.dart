@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../model/cartabook.dart';
 import '../model/cartaserver.dart';
+import '../shared/helpers.dart';
 
 const databaseName = 'carta_database.db';
 const databaseVersion = 3;
@@ -48,7 +47,7 @@ class SqliteRepo {
   Future open() async {
     final dbPath = await getDatabasesPath();
     String path = join(dbPath, databaseName);
-    log('database: $path');
+    logDebug('database: $path');
 
     _db = await openDatabase(
       databaseName,
@@ -60,7 +59,7 @@ class SqliteRepo {
         // populate sample data here
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        log('version upgrade from $oldVersion to $newVersion');
+        logDebug('version upgrade from $oldVersion to $newVersion');
         if (oldVersion < 3) {
           for (final sql in sqlDropTables) {
             await db.execute(sql);
@@ -89,14 +88,13 @@ class SqliteRepo {
   //
   // Create
   Future<int> addAudioBook(CartaBook book) async {
-    // log('addAudioBook: ${book.toString()}');
+    // logDebug('addAudioBook: ${book.toString()}');
     final db = await getDatabase();
-    final result = db.insert(
+    return db.insert(
       tableAudioBooks,
       book.toSqlite(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    return result;
   }
 
   // Read
@@ -125,59 +123,72 @@ class SqliteRepo {
       limit: query?['limit'],
       offset: query?['offset'],
     );
+    logDebug('sqlite.getAudioBooks:${records.length}');
     return records.map<CartaBook>((e) => CartaBook.fromSqlite(e)).toList();
   }
 
   // Update
   Future<int> updateAudioBook(CartaBook book) async {
-    // log('updateAudioBook: ${book.toString()}');
+    // logDebug('updateAudioBook: ${book.toString()}');
     // if (book.id == null) {
     //   return 0;
     // }
     final db = await getDatabase();
-    final result = db.update(
+    return db.update(
       tableAudioBooks,
       book.toSqlite(),
       where: 'bookId=?',
       whereArgs: [book.bookId],
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    return result;
   }
 
   // Update Data
-  Future<int> updateBookData(String bookId, Map<String, Object?> data) async {
+  // FIXME: replace this with updateAudioBooks
+  // Future<int> updateBookData(String bookId, Map<String, Object?> values) async {
+  //   final db = await getDatabase();
+  //   return db.update(
+  //     tableAudioBooks,
+  //     values,
+  //     where: 'bookId=?',
+  //     whereArgs: [bookId],
+  //     conflictAlgorithm: ConflictAlgorithm.replace,
+  //   );
+  // }
+
+  // Update Data
+  // Warning: data conversion has to be done by the caller
+  Future<int> updateAudioBooks(
+      {required Map<String, Object?> values,
+      Map<String, dynamic>? params}) async {
     final db = await getDatabase();
-    final result = db.update(
+    return db.update(
       tableAudioBooks,
-      data,
-      where: 'bookId=?',
-      whereArgs: [bookId],
+      values,
+      where: params?['where'],
+      whereArgs: params?['whereArgs'],
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    return result;
   }
 
   // Delete
   Future<int> deleteAudioBook(CartaBook book) async {
     final db = await getDatabase();
-    final result = await db.delete(
+    return db.delete(
       tableAudioBooks,
       where: 'bookId = ?',
       whereArgs: [book.bookId],
     );
-    return result;
   }
 
   // Delete by Id
   Future<int> deleteAudioBookByBookId(String bookId) async {
     final db = await getDatabase();
-    final count = await db.delete(
+    return db.delete(
       tableAudioBooks,
       where: 'bookId = ?',
       whereArgs: [bookId],
     );
-    return count;
   }
 
   //
@@ -186,12 +197,11 @@ class SqliteRepo {
   // Create
   Future<int> addBookServer(CartaServer server) async {
     final db = await getDatabase();
-    final result = db.insert(
+    return db.insert(
       tableBookServers,
       server.toSqlite(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    return result;
   }
 
   // Read
@@ -230,24 +240,22 @@ class SqliteRepo {
   // Update
   Future<int> updateBookServer(CartaServer server) async {
     final db = await getDatabase();
-    final result = db.update(
+    return db.update(
       tableBookServers,
       server.toSqlite(),
       where: 'serverId=?',
       whereArgs: [server.serverId],
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    return result;
   }
 
   // Delete
   Future<int> deleteBookServer(CartaServer server) async {
     final db = await getDatabase();
-    final result = await db.delete(
+    return db.delete(
       tableBookServers,
       where: 'serverId=?',
       whereArgs: [server.serverId],
     );
-    return result;
   }
 }

@@ -1,12 +1,11 @@
 import 'dart:convert';
-// import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
 
 import '../model/webdav.dart';
+import '../shared/helpers.dart';
 
 class NextCloudApiService {
   static Future<List<NextCloudResource>?> davPropfind(
@@ -22,7 +21,7 @@ class NextCloudApiService {
     final ncDirRoot = '/remote.php/dav/files/$user';
     // target url
     final url = '$host$ncDirRoot/$libDir';
-    // debugPrint('davPropfind.url:$url');
+    // logDebug('davPropfind.url:$url');
 
     final client = http.Client();
     final request = http.Request('PROPFIND', Uri.parse(url));
@@ -41,23 +40,23 @@ class NextCloudApiService {
     try {
       res = await client.send(request);
       body = await res.stream.transform(utf8.decoder).join();
-      // log('body:$body');
+      // logDebug('body:$body');
       client.close();
     } catch (e) {
-      debugPrint(e.toString());
+      logError(e.toString());
       client.close();
       return null;
     }
 
     // accept only with status codes 200 and 207
     if (res.statusCode != 200 && res.statusCode != 207) {
-      debugPrint('statusCode: ${res.statusCode}');
+      logDebug('statusCode: ${res.statusCode}');
       return null;
     }
 
     try {
       final xmlDoc = XmlDocument.parse(body);
-      // log('xmlDoc: $xmlDoc');
+      // logDebug('xmlDoc: $xmlDoc');
       // iterate over d:response elements
       for (final response
           in xmlDoc.rootElement.findElements('response', namespace: '*')) {
@@ -93,7 +92,7 @@ class NextCloudApiService {
               } else if (subItem.name.local == 'prop') {
                 // prop section
                 for (final subSubItem in subItem.childElements) {
-                  // debugPrint('prop item:$subSubItem');
+                  // logDebug('prop item:$subSubItem');
                   switch (subSubItem.name.local) {
                     case 'getcontentlength':
                       contentLength = int.tryParse(subSubItem.innerText);
@@ -181,7 +180,7 @@ class NextCloudApiService {
       }
     } catch (e) {
       // failed to parse xml body
-      debugPrint(e.toString());
+      logError(e.toString());
       return null;
     }
     return files;

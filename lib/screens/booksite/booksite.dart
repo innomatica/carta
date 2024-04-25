@@ -45,7 +45,7 @@ class _BookSitePageState extends State<BookSitePage> {
 
     _delegate = NavigationDelegate(
       onPageFinished: (_) async {
-        // debugPrint('delegate.onPageFinished:$jsString');
+        // logDebug('delegate.onPageFinished:$jsString');
         if (jsString != null) {
           final isBookPage =
               await _controller.runJavaScriptReturningResult(jsString!);

@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'dart:developer';
+
+import '../shared/helpers.dart';
 
 enum ServerType { nextcloud, webdav, gdrive }
 
@@ -28,7 +29,7 @@ class CartaServer {
         settings: jsonDecode(data['settings']),
       );
     } catch (e) {
-      log(e.toString());
+      logError(e.toString());
       rethrow;
     }
   }

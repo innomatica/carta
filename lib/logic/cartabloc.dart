@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+// import 'package:async/async.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -15,6 +16,7 @@ import '../model/cartaserver.dart';
 import '../repo/sqlite.dart';
 import '../service/audiohandler.dart';
 import '../service/webpage.dart';
+import '../shared/helpers.dart';
 import '../shared/settings.dart';
 
 const sortOptions = ['title', 'authors'];
@@ -33,6 +35,7 @@ class CartaBloc extends ChangeNotifier {
   late final SharedPreferences _prefs;
   late final CartaAudioHandler _handler;
 
+  StreamSubscription? _subQueueIdx;
   StreamSubscription? _subPlayState;
   StreamSubscription? _subMediaItem;
 
@@ -48,14 +51,12 @@ class CartaBloc extends ChangeNotifier {
   CartaBloc(CartaAudioHandler handler) {
     _handler = handler;
     init();
-    // update book server list when start
-    refreshBookServers();
-    refreshBooks();
   }
 
   @override
   dispose() {
     _db.close();
+    _subQueueIdx?.cancel();
     _subPlayState?.cancel();
     _subMediaItem?.cancel();
     _handler.dispose();
@@ -66,8 +67,12 @@ class CartaBloc extends ChangeNotifier {
     _prefs = await SharedPreferences.getInstance();
     _sortIndex = _prefs.getInt('sortIndex') ?? 0;
     _filterIndex = _prefs.getInt('filterIndex') ?? 0;
-    _handlePlayStateChange();
+    _handleQueueIdxChange();
+    _handlePlyStateChange();
     _handleMediaItemChange();
+    // update book server list when start
+    await refreshBookServers();
+    await refreshBooks();
   }
 
   // getters
@@ -78,21 +83,47 @@ class CartaBloc extends ChangeNotifier {
 
   // from handler
   Duration get position => _handler.position;
-  Duration get duration => _handler.duration;
+  BehaviorSubject<List<MediaItem>> get queue => _handler.queue;
+  BehaviorSubject<MediaItem?> get mediaItem => _handler.mediaItem;
   BehaviorSubject<PlaybackState> get playbackState => _handler.playbackState;
   MediaItem? get currentTag => _handler.mediaItem.value;
   String? get currentBookId => currentTag?.extras?['bookId'];
   int? get currentSectionIdx => currentTag?.extras?['sectionIdx'];
+  // from handler.player
+  Duration get duration => _handler.duration;
+  Stream<Duration> get positionStream => _handler.positionStream;
 
-  void _handlePlayStateChange() {
-    _subPlayState = _handler.playbackState
+  void _handleQueueIdxChange() {
+    _subQueueIdx = _handler.playbackState
         .map((e) => e.queueIndex)
         .distinct()
-        .listen((int? index) {
+        .listen((int? index) async {
       // currentIndex of the queue changed
-      debugPrint(
-          '\n====> handler.playbackState.index: $index $currentBookId $currentSectionIdx <====\n');
-      // TODO update book.lastSection
+      logDebug(
+          'handleQueueIdxChange: $index $currentBookId $currentSectionIdx');
+      // update bookmark
+      if (currentBookId != null && currentSectionIdx != null) {
+        await _updateBookMark();
+        await refreshBooks();
+      }
+    });
+  }
+
+  void _handlePlyStateChange() {
+    _subPlayState = _handler.playbackState
+        .map((e) => e.playing)
+        .distinct()
+        .listen((bool playing) async {
+      if (playing == false) {
+        if (_handler.playbackState.value.processingState ==
+            AudioProcessingState.ready) {
+          logDebug(
+              'handlePlyStateChange: $playing ${_handler.playbackState.value.processingState}');
+          // update bookmark
+          await _updateBookMark();
+          await refreshBooks(notify: false);
+        }
+      }
       notifyListeners();
     });
   }
@@ -104,10 +135,13 @@ class CartaBloc extends ChangeNotifier {
   // - pause detected (player.playing = false, processingState = ready)
   //
   void _handleMediaItemChange() {
-    _subMediaItem = _handler.mediaItem.listen((MediaItem? item) {
-      // TODO: update book.lastPosition
+    /* this doesn't work
+    _subMediaItem = _handler.mediaItem.listen((MediaItem? item) async {
+      // update bookmark
+      await _updateBookMark();
       notifyListeners();
     });
+    */
   }
 
   //
@@ -117,7 +151,7 @@ class CartaBloc extends ChangeNotifier {
   Future<void> pause() => _handler.pause();
   Future<void> rewind() => _handler.rewind();
   Future<void> fastForward() => _handler.fastForward();
-  Future<void> seek(Duration posiiton) => _handler.seek(position);
+  Future<void> seek(Duration position) => _handler.seek(position);
   Future<void> setSpeed(double speed) => _handler.setSpeed(speed);
   Future<void> skipToNext() => _handler.skipToNext();
   Future<void> skipToPrevious() => _handler.skipToPrevious();
@@ -129,64 +163,47 @@ class CartaBloc extends ChangeNotifier {
   }
 
   Future<void> play(CartaBook? book, {int sectionIdx = 0}) async {
-    // log('handler.playAudioBook.book: $book');
-    //
+    logDebug('handler.play: $sectionIdx, $book');
     if (book == null) {
       // resume paused book
       resume();
-    } else if (currentBookId == book.bookId &&
-        currentSectionIdx == sectionIdx) {
-      // same book, same section => toogle playing
-      _handler.playing ? pause() : resume();
+    } else if (currentBookId == book.bookId) {
+      // the same book as current one
+      if (currentSectionIdx == sectionIdx) {
+        _handler.playing ? pause() : resume();
+      } else {
+        _handler.skipToQueueItem(sectionIdx);
+      }
     } else {
-      // different book or different section of the book
+      // new book
+      logDebug('play new book');
+      //if currently playing
+      if (_handler.playing &&
+          currentBookId != null &&
+          currentSectionIdx != null) {
+        // save bookmark
+        await _updateBookMark();
+        // and pause before moving on
+        await _handler.pause();
+      }
+
+      // clear existing audio source
+      await _handler.clearQueue();
+      // load audio source
       final audioSource = book.getAudioSource();
       final mediaItems = audioSource.map((s) => s.tag as MediaItem).toList();
-      _handler.setQueue(mediaItems);
-
-/*
-      if (audioSource.isNotEmpty) {
-        Duration initPosition =
-            sectionIdx == (book.lastSection ?? 0) && book.lastPosition != null
-                ? book.lastPosition!
-                : Duration.zero;
-        // it is required to stop before setAudioSource call
-        await _handler.stop();
-        try {
-          // https://pub.dev/packages/just_audio#working-with-caches
-          // Better to clear cache regardless of the source type
-          // if (audioSource[0] is LockCachingAudioSource) {
-
-          // FIXME: bring this block to handler and call
-          try {
-            await AudioPlayer.clearAssetCache();
-          } catch (e) {
-            debugPrint(e.toString());
-          }
-          // }
-          await _player.setAudioSource(
-            ConcatenatingAudioSource(children: audioSource),
-            preload: false,
-            initialIndex: sectionIdx,
-            initialPosition: initPosition,
-          );
-          // hasBook = true;
-          // ready to play new source
-          debugPrint('start a new book/section: ${book.title}, $sectionIdx');
-          queue.add(audioSource.map((e) => e.tag as MediaItem).toList());
-          await _handler.play();
-        } catch (e) {
-          debugPrint(e.toString());
-        }
-      }
-*/
+      await _handler.setQueue(mediaItems);
+      // skip to the section
+      await _handler.skipToQueueItem(sectionIdx);
+      // start play
+      _handler.play();
     }
   }
 
   // Return list of books filtered
   List<CartaBook> get books {
     final filterOption = filterOptions[_filterIndex];
-    // debugPrint('filterOption: $filterOption');
+    // logDebug('filterOption: $filterOption');
     if (filterOption == 'librivox') {
       return _books
           .where((b) =>
@@ -206,18 +223,21 @@ class CartaBloc extends ChangeNotifier {
   // BOOK
   //
   // Refresh list of books
-  Future<void> refreshBooks() async {
+  Future<void> refreshBooks({bool notify = true}) async {
     _books.clear();
-    _books.addAll(await _db.getAudioBooks());
+    final books = await _db.getAudioBooks();
+    _books.addAll(books);
     _sortBooks();
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   // Create
   Future<bool> addAudioBook(CartaBook book) async {
     // add book to database
     await _db.addAudioBook(book);
-    refreshBooks();
+    await refreshBooks();
     return true;
   }
 
@@ -238,45 +258,42 @@ class CartaBloc extends ChangeNotifier {
     await book.deleteBookDirectory();
     // remove database entry
     if (await _db.deleteAudioBook(book) > 0) {
-      refreshBooks();
+      await refreshBooks();
     }
   }
 
   // Update
-  // FIXME: this is actually saveAudioBook
   Future updateAudioBook(CartaBook book) async {
     if (await _db.updateAudioBook(book) > 0) {
-      refreshBooks();
+      await refreshBooks();
     }
   }
 
-  // FIXME: this is real updateAudioBook
-  // Update only certain fields of the book: the caller has to
-  //  1. do the conversion of the field
-  //  2. refresh screen contents when it returns true
-  Future updateBookData(String bookId, Map<String, Object?> data) async {
-    await _db.updateBookData(bookId, data);
+  // Update only certain fields of the book
+  //  Warning: the caller has to do the conversion of each field
+  Future updateBookData(String bookId, Map<String, Object?> values) async {
+    // await _db.updateBookData(bookId, data);
+    logDebug('logic.updateBookData:$bookId, $values');
+    await _db.updateAudioBooks(values: values, params: {
+      'where': 'bookId = ?',
+      'whereArgs': [bookId]
+    });
   }
 
   // Update book.lastSection and book.lastPosition
-  // Future<bool> _updateBookmark() async {
-  //   debugPrint('logic._updateBookmark');
-  //   final tag = currentTag;
-  //   if (tag != null && tag.extras != null) {
-  //     if (tag.extras!.containsKey('bookId') &&
-  //         tag.extras!.containsKey('sectionIdx')) {
-  //       // debugPrint('*********** updating bookmark ${tag.extras!['bookId']}');
-  //       await updateBookData(
-  //         tag.extras!['bookId'],
-  //         {
-  //           'lastSection': tag.extras!['sectionIdx'],
-  //           'lastPosition': secondsToTimeString(position),
-  //         },
-  //       );
-  //     }
-  //   }
-  //   return false;
-  // }
+  Future _updateBookMark() async {
+    if (currentBookId != null && currentSectionIdx != null) {
+      logDebug(
+          'updateBookMark.book:$currentBookId, lastSection:$currentSectionIdx, lastPosition:${_handler.position.inSeconds}');
+      await _db.updateAudioBooks(values: {
+        'lastSection': currentSectionIdx,
+        'lastPosition': secondsToTimeString(_handler.position.inSeconds),
+      }, params: {
+        'where': 'bookId = ?',
+        'whereArgs': [currentBookId],
+      });
+    }
+  }
 
   // Book filter
   void rotateFilterBy() {
@@ -295,7 +312,7 @@ class CartaBloc extends ChangeNotifier {
 
   _sortBooks() {
     final sortOption = sortOptions[_sortIndex];
-    // debugPrint('sortOption: $sortOption');
+    // logDebug('sortOption: $sortOption');
     if (sortOption == 'title') {
       _books.sort((a, b) => a.title.compareTo(b.title));
     } else if (sortOption == 'authors') {
@@ -337,11 +354,11 @@ class CartaBloc extends ChangeNotifier {
     _isDownloading.add(book.bookId);
     // download each section data
     for (final section in book.sections!) {
-      // debugPrint('downloading:${section.index}');
+      // logDebug('downloading:${section.index}');
       notifyListeners();
       // break if cancelled
       if (_cancelRequests.contains(book.bookId)) {
-        debugPrint('download canceled: ${book.title}');
+        logDebug('download canceled: ${book.title}');
         break;
       }
       // otherwise go ahead
@@ -364,7 +381,7 @@ class CartaBloc extends ChangeNotifier {
     }
     // notify the end of download
     _isDownloading.remove(book.bookId);
-    // debugPrint('download done: ${book.title}');
+    // logDebug('download done: ${book.title}');
     notifyListeners();
   }
 
@@ -425,21 +442,21 @@ class CartaBloc extends ChangeNotifier {
   // Create
   Future addBookServer(CartaServer server) async {
     if (await _db.addBookServer(server) > 0) {
-      refreshBookServers();
+      await refreshBookServers();
     }
   }
 
   // Update
   Future updateBookServer(CartaServer server) async {
     if (await _db.updateBookServer(server) > 0) {
-      refreshBookServers();
+      await refreshBookServers();
     }
   }
 
   // Delete
   Future deleteBookServer(CartaServer server) async {
     if (await _db.deleteBookServer(server) > 0) {
-      refreshBookServers();
+      await refreshBookServers();
     }
   }
 }

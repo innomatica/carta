@@ -149,7 +149,7 @@ class _WebDavSettingsState extends State<WebDavSettings> {
                             // get rid of reading and trailing slash
                             'directory': dir.replaceAll(RegExp(r'^/|/$'), ''),
                           });
-                      // debugPrint('server: ${server.toString()}');
+                      // logDebug('server: ${server.toString()}');
                       _bloc.addBookServer(server);
                     } else {
                       widget.server!.title = title;

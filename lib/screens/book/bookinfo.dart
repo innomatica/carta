@@ -7,6 +7,7 @@ import '../../logic/cartabloc.dart';
 import '../../logic/screenconfig.dart';
 import '../../model/cartabook.dart';
 import '../../service/wikipedia.dart';
+import '../../shared/helpers.dart';
 import '../../shared/settings.dart';
 import 'deletebook.dart';
 import 'sharebook.dart';
@@ -55,7 +56,7 @@ class _BookInfoViewState extends State<BookInfoView> {
   //       ),
   //     );
   //   } else {
-  //     debugPrint('localDataState: ${localDataState['state']}');
+  //     logDebug('localDataState: ${localDataState['state']}');
   //     switch (localDataState['state']) {
   //       case LocalDataState.none:
   //         // DOWNLOAD
@@ -297,7 +298,7 @@ class _BookInfoViewState extends State<BookInfoView> {
               try {
                 await launchUrl(Uri.parse(widget.book.info['siteUrl']));
               } catch (e) {
-                debugPrint(e.toString());
+                logError(e.toString());
               }
             },
           ),

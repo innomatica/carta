@@ -1,7 +1,3 @@
-// import 'package:feed_parser/feed_parser.dart';
-// import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:http/http.dart' as http;
 
@@ -15,8 +11,8 @@ class WebPageParser {
   static Future<CartaBook?> getBookFromHtml(
       {required String html, required String url}) async {
     CartaBook? book;
-    // debugPrint('url: $url');
-    // log('html: $html');
+    // logDebug('url: $url');
+    // logDebug('html: $html');
     final document = parse(html);
 
     if (url.contains('archive.org')) {
@@ -42,15 +38,15 @@ class WebPageParser {
       String? title;
       String? uri;
       String? durString;
-      Duration? duration;
+      // Duration? duration;
 
       final theatre = document.querySelectorAll(
           '#theatre-ia-wrap > div[itemtype="http://schema.org/AudioObject"]');
       for (final item in theatre) {
-        // debugPrint('item: ${item.innerHtml}');
+        // logDebug('item: ${item.innerHtml}');
         for (final child in item.children) {
-          // debugPrint('child: ${child.localName}');
-          // debugPrint('child: ${child.attributes}');
+          // logDebug('child: ${child.localName}');
+          // logDebug('child: ${child.attributes}');
           if (child.attributes.containsKey('itemprop')) {
             if (child.attributes['itemprop'] == 'name') {
               // title
@@ -180,14 +176,14 @@ class WebPageParser {
             duration = null;
             // map must be defined inside
             final info = <String, dynamic>{};
-            // debugPrint('row: ${tr.text}');
+            // logDebug('row: ${tr.text}');
             final tds = tr.getElementsByTagName('td');
             for (final td in tds) {
               final atag = td.querySelector('a');
-              // debugPrint('atag: ${atag?.text}');
+              // logDebug('atag: ${atag?.text}');
               if (atag == null) {
                 // duration (comes first) or language
-                // debugPrint('duation: ${td.text}');
+                // logDebug('duation: ${td.text}');
                 duration ??= durationToSeconds(td.text);
               } else if (atag.className == 'play-btn') {
                 // uri first candidate
@@ -269,10 +265,10 @@ class WebPageParser {
         if (res.statusCode == 200) {
           final audioPage = parse(res.body);
           final rows = audioPage.querySelectorAll('#player_table tr');
-          // debugPrint('rows: $rows');
+          // logDebug('rows: $rows');
           int index = 0;
           for (final row in rows) {
-            // debugPrint('row: $row');
+            // logDebug('row: $row');
             final titleRow = row.querySelector('.section span')?.innerHtml;
             if (titleRow != null) {
               final uri =
@@ -306,7 +302,7 @@ class WebPageParser {
         info: {'siteUrl': url},
       );
     }
-    // debugPrint('book:$book');
+    // logDebug('book:$book');
     return book;
   }
 
@@ -316,9 +312,9 @@ class WebPageParser {
       if (res.statusCode == 200) {
         return await getBookFromHtml(html: res.body, url: url);
       }
-      debugPrint('status code: ${res.statusCode}');
+      logDebug('status code: ${res.statusCode}');
     } catch (e) {
-      debugPrint(e.toString());
+      logError(e.toString());
     }
 
     return null;
