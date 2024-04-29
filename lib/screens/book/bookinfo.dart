@@ -33,69 +33,64 @@ class _BookInfoViewState extends State<BookInfoView> {
   //
   // Download Media Data Button
   //
-  // Widget _buildDownloadButton() {
-  //   final bloc = context.watch<CartaBloc>();
-  //   final localDataState = widget.book.getLocalDataState();
-  //   final currentSection = localDataState.containsKey('sections')
-  //       ? localDataState['sections'] + 1
-  //       : 1;
-  //   if (bloc.isDownloading(widget.book.bookId)) {
-  //     // CANCEL
-  //     return TextButton(
-  //       onPressed: () {
-  //         bloc.cancelDownload(widget.book.bookId);
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           const SnackBar(content: Text('download canceled')),
-  //         );
-  //       },
-  //       // download progress
-  //       child: Text(
-  //         'Downloading section $currentSection'
-  //         ' / ${widget.book.sections?.length}',
-  //         style: const TextStyle(color: Colors.grey),
-  //       ),
-  //     );
-  //   } else {
-  //     logDebug('localDataState: ${localDataState['state']}');
-  //     switch (localDataState['state']) {
-  //       case LocalDataState.none:
-  //         // DOWNLOAD
-  //         return TextButton(
-  //           onPressed: () => bloc.downloadMediaData(widget.book),
-  //           child: const Text('Download media data'),
-  //         );
-  //       case LocalDataState.audioOnly:
-  //       case LocalDataState.audioAndCoverImage:
-  //       case LocalDataState.partial:
-  //         // DELETE MEDIA DATA
-  //         return TextButton(
-  //           onPressed: () async {
-  //             await bloc.deleteMediaData(widget.book);
-  //           },
-  //           child: const Text('Delete local media'),
-  //         );
-  //       default:
-  //         return const SizedBox(width: 0, height: 0);
-  //     }
-  //   }
-  // }
-
-  Widget _buildCacheButton(CartaBloc logic) {
-    final info = widget.book.info;
-    final cached = info['cached'] == true;
-    return TextButton(
-      onPressed: () async {
-        info['cached'] = !cached;
-        final flag =
-            await logic.updateBookData(widget.book.bookId, {'info': info});
-        if (flag) {
-          widget.book.info = info;
-          setState(() {});
-        }
-      },
-      child: Text(cached ? 'Download before play' : 'Cache disabled'),
-    );
+  Widget _buildDownloadButton() {
+    final bloc = context.watch<CartaBloc>();
+    final localDataState = widget.book.getLocalDataState();
+    final currentSection = localDataState.containsKey('sections')
+        ? localDataState['sections'] + 1
+        : 1;
+    if (bloc.isDownloading(widget.book.bookId)) {
+      // CANCEL
+      return TextButton(
+        onPressed: () {
+          bloc.cancelDownload(widget.book.bookId);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('download canceled')),
+          );
+        },
+        // download progress
+        child: Text(
+          'Downloading section $currentSection'
+          ' / ${widget.book.sections?.length}',
+          style: const TextStyle(color: Colors.grey),
+        ),
+      );
+    } else {
+      logDebug('localDataState: ${localDataState['state']}');
+      switch (localDataState['state']) {
+        case LocalDataState.none:
+          // DOWNLOAD
+          return TextButton(
+            onPressed: () => bloc.downloadMediaData(widget.book),
+            child: const Text('Download media data'),
+          );
+        case LocalDataState.audioOnly:
+        case LocalDataState.audioAndCoverImage:
+        case LocalDataState.partial:
+          // DELETE MEDIA DATA
+          return TextButton(
+            onPressed: () async {
+              await bloc.deleteMediaData(widget.book);
+            },
+            child: const Text('Delete local media'),
+          );
+        default:
+          return const SizedBox(width: 0, height: 0);
+      }
+    }
   }
+
+  // Widget _buildCacheButton(CartaBloc logic) {
+  //   final cached = widget.book.info['cached'] == true;
+  //   return TextButton(
+  //     onPressed: () async {
+  //       widget.book.info['cached'] = !cached;
+  //       await logic.updateAudioBook(widget.book);
+  //       setState(() {});
+  //     },
+  //     child: Text(cached ? 'Download before play' : 'Cache disabled'),
+  //   );
+  // }
 
   Future<String?> _editField(String title, String? initialValue,
       {int maxLines = 1}) async {
@@ -235,13 +230,9 @@ class _BookInfoViewState extends State<BookInfoView> {
                     final res =
                         await _editField('Edit Author(s)', widget.book.authors);
                     if (res?.isNotEmpty == true) {
-                      final flag = await logic
-                          .updateBookData(widget.book.bookId, {'authors': res});
-                      // update currnt view without rebuiling parent tree
-                      if (flag) {
-                        widget.book.authors = res;
-                        setState(() {});
-                      }
+                      widget.book.authors = res;
+                      await logic.updateAudioBook(widget.book);
+                      setState(() {});
                     }
                   },
                 ),
@@ -272,13 +263,9 @@ class _BookInfoViewState extends State<BookInfoView> {
                     final res = await _editField(
                         'Edit Cover Image URL', widget.book.imageUri);
                     if (res?.isNotEmpty == true) {
-                      final flag = await logic.updateBookData(
-                          widget.book.bookId, {'imageUri': res});
-                      // update currnt view without rebuiling parent tree
-                      if (flag) {
-                        widget.book.imageUri = res;
-                        setState(() {});
-                      }
+                      widget.book.imageUri = res;
+                      await logic.updateAudioBook(widget.book);
+                      setState(() {});
                     }
                   },
                 ),
@@ -293,7 +280,10 @@ class _BookInfoViewState extends State<BookInfoView> {
             title: Text('Source', style: titleStyle),
             subtitle: Text(widget.book.source.name),
             // trailing: enableDownload ? _buildDownloadButton() : null,
-            trailing: _buildCacheButton(logic),
+            // trailing: _buildCacheButton(logic),
+            trailing: widget.book.source == CartaSource.cloud
+                ? _buildDownloadButton()
+                : null,
             onTap: () async {
               try {
                 await launchUrl(Uri.parse(widget.book.info['siteUrl']));
@@ -326,13 +316,9 @@ class _BookInfoViewState extends State<BookInfoView> {
                       maxLines: 10,
                     );
                     if (res?.isNotEmpty == true) {
-                      final flag = await logic.updateBookData(
-                          widget.book.bookId, {'description': res});
-                      // update currnt view without rebuiling parent tree
-                      if (flag) {
-                        widget.book.description = res;
-                        setState(() {});
-                      }
+                      widget.book.description = res;
+                      await logic.updateAudioBook(widget.book);
+                      setState(() {});
                     }
                   },
                 ),

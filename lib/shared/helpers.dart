@@ -34,32 +34,36 @@ String getIdFromUrl(String url) {
   return sha1.convert(utf8.encode(url)).toString().substring(0, 20);
 }
 
-int? timeStringToSeconds(String? time) {
+int? hmsToSeconds(String? time) {
+  int? result;
   if (time != null) {
     // expect hh:mm:ss.ms
     final hms = time.split('.')[0].split(':');
     if (hms.length < 3) {
-      // invalid time string
+      // invalid string
       // return Duration.zero;
-      return 0;
+      result = 0;
     }
-    // return Duration(
-    //   hours: int.tryParse(hms[0]) ?? 0,
-    //   minutes: int.tryParse(hms[1]) ?? 0,
-    //   seconds: int.tryParse(hms[2]) ?? 0,
-    // );
-    return (int.tryParse(hms[0]) ?? 0) * 3600 +
+    result = (int.tryParse(hms[0]) ?? 0) * 3600 +
         (int.tryParse(hms[1]) ?? 0) * 60 +
         (int.tryParse(hms[2]) ?? 0);
   }
-  return null;
+  // logDebug('hmsToSeconds: $time => $result');
+  return result;
 }
 
-String? secondsToTimeString(int? seconds) {
+String secondsToHms(int? seconds) {
+  String result = '00:00:00';
   if (seconds != null) {
-    return '${seconds ~/ 3600}:${seconds ~/ 60}:${seconds % 60}';
+    // return '${seconds ~/ 3600}:${seconds ~/ 60}:${seconds % 60}';
+    int h = seconds ~/ 3600;
+    int m = (seconds - h * 3600) ~/ 60;
+    int s = seconds % 60;
+
+    result = '$h:${(m < 10 ? "0$m:" : "$m:") + (s < 10 ? "0$s" : "$s")}';
   }
-  return null;
+  // logDebug('secondsToHms:$seconds => $result');
+  return result;
 }
 
 // application document directory

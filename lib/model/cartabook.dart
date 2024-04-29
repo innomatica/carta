@@ -73,7 +73,7 @@ class CartaBook {
       authors: result['authors'].join(','),
       description: result['description'],
       language: result['language'],
-      duration: timeStringToSeconds(result['totaltime']),
+      duration: hmsToSeconds(result['totaltime']),
       lastSection: 0,
       // lastPosition: Duration.zero,
       lastPosition: 0,
@@ -93,6 +93,7 @@ class CartaBook {
   }
 
   factory CartaBook.fromSqlite(Map<String, dynamic> data) {
+    // logDebug('fromSqlite: $data');
     try {
       return CartaBook(
         bookId: data['bookId'],
@@ -103,9 +104,9 @@ class CartaBook {
         description: data['description'],
         language: data['language'],
         imageUri: data['imageUri'],
-        duration: timeStringToSeconds(data['duration']),
+        duration: hmsToSeconds(data['duration']),
         lastSection: data['lastSection'],
-        lastPosition: timeStringToSeconds(data['lastPosition']),
+        lastPosition: hmsToSeconds(data['lastPosition']),
         source: CartaSource.values[data['source']],
         info: jsonDecode(data['info']),
         sections: jsonDecode(data['sections'])
@@ -146,9 +147,9 @@ class CartaBook {
       'description': description,
       'language': language,
       'imageUri': imageUri,
-      'duration': secondsToTimeString(duration),
+      'duration': secondsToHms(duration),
       'lastSection': lastSection,
-      'lastPosition': secondsToTimeString(lastPosition),
+      'lastPosition': secondsToHms(lastPosition),
       'source': source.index,
       'info': jsonEncode(info),
       'sections': jsonEncode(sections?.map((e) => e.toDatabase()).toList()),
@@ -160,7 +161,7 @@ class CartaBook {
     return toSqlite().toString();
   }
 
-  List<IndexedAudioSource> getAudioSource({int initIndex = 0}) {
+  List<IndexedAudioSource> getAudioSources({int initIndex = 0}) {
     final sectionData = <IndexedAudioSource>[];
     // book must have valid sections
     if (sections != null && sections!.isNotEmpty) {

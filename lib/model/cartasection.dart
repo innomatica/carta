@@ -25,7 +25,7 @@ class CartaSection {
       index: data['index'],
       title: data['title'] ?? 'Unknown',
       uri: data['uri'],
-      duration: timeStringToSeconds(data['duration']),
+      duration: hmsToSeconds(data['duration']),
       // seekPos: data['seekPos'] ?? 0,
       info: jsonDecode(data['info']),
     );
@@ -36,7 +36,7 @@ class CartaSection {
       'index': index,
       'title': title,
       'uri': uri,
-      'duration': secondsToTimeString(duration),
+      'duration': secondsToHms(duration),
       // 'seekPos': seekPos ?? 0,
       'info': jsonEncode(info),
     };

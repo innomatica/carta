@@ -5,8 +5,6 @@ import '../model/cartabook.dart';
 import '../model/cartasection.dart';
 import '../shared/helpers.dart';
 
-// TODO: confirm duration values in all cases
-
 class WebPageParser {
   static Future<CartaBook?> getBookFromHtml(
       {required String html, required String url}) async {
@@ -302,7 +300,7 @@ class WebPageParser {
         info: {'siteUrl': url},
       );
     }
-    // logDebug('book:$book');
+    logDebug('getBookFromHTML:$book');
     return book;
   }
 
@@ -342,17 +340,19 @@ class WebPageParser {
   */
 
   static int? durationToSeconds(String? durationStr) {
+    int? result;
     if (durationStr != null && durationStr.isNotEmpty) {
       final times = durationStr.split(':');
       if (times.length == 3) {
-        return (int.tryParse(times[0]) ?? 0) * 3600 +
+        result = (int.tryParse(times[0]) ?? 0) * 3600 +
             (int.tryParse(times[1]) ?? 0) * 60 +
             (int.tryParse(times[2]) ?? 0);
       } else if (times.length == 2) {
-        return (int.tryParse(times[1]) ?? 0) * 60 +
-            (int.tryParse(times[2]) ?? 0);
+        result =
+            (int.tryParse(times[0]) ?? 0) * 60 + (int.tryParse(times[1]) ?? 0);
       }
     }
-    return null;
+    // logDebug('durationToSeconds:$durationStr => $result');
+    return result;
   }
 }

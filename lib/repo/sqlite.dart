@@ -144,19 +144,6 @@ class SqliteRepo {
   }
 
   // Update Data
-  // FIXME: replace this with updateAudioBooks
-  // Future<int> updateBookData(String bookId, Map<String, Object?> values) async {
-  //   final db = await getDatabase();
-  //   return db.update(
-  //     tableAudioBooks,
-  //     values,
-  //     where: 'bookId=?',
-  //     whereArgs: [bookId],
-  //     conflictAlgorithm: ConflictAlgorithm.replace,
-  //   );
-  // }
-
-  // Update Data
   // Warning: data conversion has to be done by the caller
   Future<int> updateAudioBooks(
       {required Map<String, Object?> values,

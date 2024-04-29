@@ -142,7 +142,10 @@ class WebDavService {
           // remove trailing slash
           href = href.replaceAll(RegExp(r'/$'), '');
           // in case webdav does not understand certain audio mime-types
-          if (contentType == null) {
+          // logDebug('href: $href, contentType: $contentType');
+          if (contentType == null ||
+              (contentType.primaryType == 'application' &&
+                  contentType.subType == 'octet-stream')) {
             if (href.endsWith('aac')) {
               contentType = ContentType('audio', 'x-aac');
             } else if (href.endsWith('flac')) {

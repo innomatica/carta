@@ -74,20 +74,24 @@ class _BookShelfState extends State<BookShelf> {
   //
   Widget _buildBookSections(CartaBook book) {
     final logic = context.read<CartaBloc>();
-    logDebug(
-        'buildBookSections.bookId:${book.bookId}, lastSection:${book.lastSection}, lastPosition:${book.lastPosition}');
+    // logDebug('buildBookSections.bookId:${book.bookId}, '
+    //     'lastSection:${book.lastSection}, lastPosition:${book.lastPosition}');
     return AlertDialog(
+      //
       // book title
+      //
       title: Text(
         book.title,
         style: TextStyle(
           color: Theme.of(context).colorScheme.tertiary,
-          fontSize: 16.0,
+          fontSize: 17.0,
           fontWeight: FontWeight.w700,
           overflow: TextOverflow.ellipsis,
         ),
       ),
       backgroundColor: Theme.of(context).dialogBackgroundColor.withOpacity(0.9),
+      contentPadding:
+          const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
       content: SizedBox(
         width: isScreenWide ? 600 : double.maxFinite,
         child: StreamBuilder<int?>(
@@ -103,22 +107,24 @@ class _BookShelfState extends State<BookShelf> {
                 final bool isCurrentSection =
                     isCurrentBook && logic.currentSectionIdx == index;
                 // book mark
-                final bool hasBookMark =
+                final bool hasBookmark =
                     book.lastSection == index && book.lastPosition != 0;
                 // logDebug(
-                //     'index:$index, isCurrentSection:$isCurrentSection, hasBookMark: $hasBookMark');
+                //     'index:$index, isCurrentSection:$isCurrentSection, hasBookmark: $hasBookmark');
                 return Container(
                   // decorator
                   decoration: BoxDecoration(
                       color: isCurrentSection
                           ? Theme.of(context).colorScheme.tertiaryContainer
                           : null,
-                      border: hasBookMark && !isCurrentBook
+                      border: hasBookmark && !isCurrentBook
                           ? Border.all(
                               color: Theme.of(context).colorScheme.outline)
                           : null,
                       borderRadius: BorderRadius.circular(5.0)),
+                  //
                   // section title and play time
+                  //
                   child: TextButton(
                     onPressed: () {
                       // return with the selected section index
@@ -126,13 +132,16 @@ class _BookShelfState extends State<BookShelf> {
                     },
                     child: Row(
                       children: [
+                        //
                         // section title
+                        //
                         Expanded(
                           child: Text(
                             book.sections?[index].title ?? '',
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               // saved section indicator (book)
+                              fontSize: 15.0,
                               color: isCurrentSection
                                   ? Theme.of(context)
                                       .colorScheme
@@ -141,13 +150,16 @@ class _BookShelfState extends State<BookShelf> {
                             ),
                           ),
                         ),
+                        //
                         // section duration
+                        //
                         book.sections?[index].duration != null
                             ? Text(
-                                book.sections?[index].duration
-                                        ?.toString()
-                                        .split('.')[0] ??
-                                    '',
+                                // book.sections?[index].duration
+                                //         ?.toString()
+                                //         .split('.')[0] ??
+                                //     '',
+                                secondsToHms(book.sections?[index].duration),
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: isCurrentSection

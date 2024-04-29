@@ -133,7 +133,8 @@ class BookTitle extends StatelessWidget {
       builder: (context, snapshot) {
         // final tag = logic.currentTag;
         final tag = snapshot.data;
-        final bookTitle = tag?.album ?? '... media is loading ...';
+        // final bookTitle = tag?.album ?? '\u2022' * 6;
+        final bookTitle = tag?.album ?? '\u231b';
         final sectionTitle = tag?.title ?? '';
 
         switch (layout) {

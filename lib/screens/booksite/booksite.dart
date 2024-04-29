@@ -147,7 +147,7 @@ class _BookSitePageState extends State<BookSitePage> {
                 if (book != null) {
                   final res = await bloc.addAudioBook(book);
                   if (res) {
-                    message = 'Book is created on the bookshelf';
+                    message = 'The book is registered';
                   } else {
                     message = 'Failed to add to the bookshelf';
                   }

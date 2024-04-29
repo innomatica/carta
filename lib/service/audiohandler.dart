@@ -1,14 +1,11 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
+// import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../shared/helpers.dart';
-// import 'package:rxdart/rxdart.dart';
-
-// import '../logic/cartabloc.dart';
-// import '../model/cartabook.dart';
-// import '../shared/helpers.dart';
 
 const fastForwardInterval = Duration(seconds: 30);
 const rewindInterval = Duration(seconds: 30);
@@ -37,8 +34,9 @@ class CartaAudioHandler extends BaseAudioHandler
   final _player = AudioPlayer();
   // late final CartaBloc _logic;
   StreamSubscription? _subDuration;
-  StreamSubscription? _subPlyState;
-  StreamSubscription? _subCurIndex;
+  StreamSubscription? _subPlayState;
+  StreamSubscription? _subCurrIndex;
+  StreamSubscription? _subPlayEvent;
 
   CartaAudioHandler() {
     _init();
@@ -52,14 +50,16 @@ class CartaAudioHandler extends BaseAudioHandler
     queue.add([]);
     // stream subscriptions
     _handleDurationChange();
-    _handlePlyStateChange();
-    _handleCurIndexChange();
+    _handlePlayStateChange();
+    _handleCurrIndexChange();
+    _handlePlayEventChange();
   }
 
   Future<void> dispose() async {
     await _subDuration?.cancel();
-    await _subPlyState?.cancel();
-    await _subCurIndex?.cancel();
+    await _subPlayState?.cancel();
+    await _subCurrIndex?.cancel();
+    await _subPlayEvent?.cancel();
     await _player.stop();
     await _player.dispose();
   }
@@ -75,16 +75,16 @@ class CartaAudioHandler extends BaseAudioHandler
     });
   }
 
-  void _handlePlyStateChange() {
+  void _handlePlayStateChange() {
     // subscribe to playerStateStream
-    _subPlyState = _player.playerStateStream.listen((PlayerState state) async {
+    _subPlayState = _player.playerStateStream.listen((PlayerState state) async {
       logDebug('playerState: ${state.playing}  ${state.processingState}');
       if (state.processingState == ProcessingState.ready) {
         // about to start playing or just paused
       } else if (state.processingState == ProcessingState.completed) {
         // NOTE (playing, completed) may or MAY NOT be followed by (not playing, complted)
-        if (state.playing) {
-          // logDebug('end of the queue');
+        if (state.playing && queue.value.isNotEmpty) {
+          logDebug('handlePlayStateChange.end of the queue');
           await stop();
           // clear queue
           if (queue.value.isNotEmpty) {
@@ -95,8 +95,8 @@ class CartaAudioHandler extends BaseAudioHandler
     });
   }
 
-  void _handleCurIndexChange() {
-    _subCurIndex = _player.currentIndexStream.listen((int? index) {
+  void _handleCurrIndexChange() {
+    _subCurrIndex = _player.currentIndexStream.listen((int? index) {
       /*
       logDebug('handleCurIndex.index: $index');
       final sequence = _player.sequence;
@@ -105,6 +105,20 @@ class CartaAudioHandler extends BaseAudioHandler
         queue.add(sequence.map((s) => s.tag as MediaItem).toList());
       }
       */
+    });
+  }
+
+  void _handlePlayEventChange() {
+    _subPlayEvent = _player.playbackEventStream.listen((PlaybackEvent event) {},
+        onError: (Object e, StackTrace st) {
+      if (e is PlatformException) {
+        logError('PlatformException: ${e.code} ${e.message} ${e.details}');
+      } else if (e is PlayerException) {
+        logError('PlayerException: ${e.code} ${e.message} ${e.details}');
+      } else {
+        logError('Unknown Error: $e');
+      }
+      _showError();
     });
   }
 
@@ -144,6 +158,8 @@ class CartaAudioHandler extends BaseAudioHandler
   Duration get position => _player.position;
   Duration get duration => _player.duration ?? Duration.zero;
   Stream<Duration> get positionStream => _player.positionStream;
+  Stream<PlayerState> get playerStateStream => _player.playerStateStream;
+  Stream<PlaybackEvent> get playbackEventStream => _player.playbackEventStream;
 
   @override
   Future<void> play() => _player.play();
@@ -185,10 +201,12 @@ class CartaAudioHandler extends BaseAudioHandler
     } else {
       // invalid index range => better to stop in this situation
       if (_player.playing) {
+        logError('invalid index requested: stop');
         await stop();
       }
       // probably end of the queue
       if (index == qval.length) {
+        logDebug('skipToQueueItem.end of the queue');
         // clear queue
         await clearQueue();
       }
@@ -198,13 +216,17 @@ class CartaAudioHandler extends BaseAudioHandler
   UriAudioSource _mediaItemToAudioSource(MediaItem mediaItem) =>
       AudioSource.uri(Uri.parse(mediaItem.id), tag: mediaItem);
 
-  // @override
-  // Future<void> addQueueItem(MediaItem mediaItem) async {
-  // }
+  List<MediaItem> get _queueFromAudioSource =>
+      _player.audioSource is ConcatenatingAudioSource
+          ? (_player.audioSource as ConcatenatingAudioSource)
+              .children
+              .map((s) => (s as UriAudioSource).tag as MediaItem)
+              .toList()
+          : <MediaItem>[];
 
   @override
   Future<void> addQueueItems(List<MediaItem> mediaItems) async {
-    logDebug('addQueueItems: $mediaItems');
+    // logDebug('addQueueItems: $mediaItems');
     await (_player.audioSource as ConcatenatingAudioSource)
         .addAll(mediaItems.map((m) => _mediaItemToAudioSource(m)).toList());
     // broadcast change
@@ -213,80 +235,44 @@ class CartaAudioHandler extends BaseAudioHandler
   }
 
   Future<void> clearQueue() async {
-    logDebug('handler.clearQueue');
-    // this does not set the currentIndex to null or zero
+    logDebug('===>handler.clearQueue currentIndex: ${_player.currentIndex}');
+    // this may not work
     // await (_player.audioSource as ConcatenatingAudioSource).clear();
-    // this does set the currentIndex to zero
+    // in such cases, use this
     await _player.setAudioSource(ConcatenatingAudioSource(children: []));
     queue.add([]);
     mediaItem.add(null);
+    logDebug('<===handler.clearQueue currentIndex: ${_player.currentIndex}');
   }
 
-  Future<void> setQueue(List<MediaItem> mediaItems) async {
-    logDebug('setQueue: $mediaItems');
-    await clearQueue();
-    await addQueueItems(mediaItems);
+  Future<void> setAudioSource(List<IndexedAudioSource> audioSources,
+      {int initialIndex = 0, int initialPosition = 0}) async {
+    // clear cache regardless of the source type
+    // try {
+    //   await AudioPlayer.clearAssetCache();
+    // } catch (e) {
+    //   logError(e.toString());
+    // }
+
+    await _player.setAudioSource(
+      ConcatenatingAudioSource(children: audioSources),
+      // preload: false,
+      // initialIndex: sectionIdx,
+      // initialPosition: initPosition,
+    );
+
+    queue.add(_queueFromAudioSource);
+
+    // final mediaItems = audioSources.map((s) => s.tag as MediaItem).toList();
+    // await setQueue(mediaItems);
+    // skip to the section
+    await skipToQueueItem(initialIndex);
+    // seek position
+    await seek(Duration(seconds: initialPosition));
   }
 
-  // Emit bookId and sectionIdx of currently playing book
-  // Stream<PlayingBookState?> get playingBookStateStream {
-  //   return Rx.combineLatest2<bool, SequenceState?, PlayingBookState?>(
-  //     _player.playingStream,
-  //     _player.sequenceStateStream,
-  //     (isPlaying, sequenceState) {
-  //       if (isPlaying && sequenceState?.currentSource?.tag != null) {
-  //         final tag = sequenceState?.currentSource?.tag;
-  //         return PlayingBookState(
-  //           bookId: tag.extras['bookId'],
-  //           sectionIdx: tag.extras['sectionIdx'],
-  //         );
-  //       }
-  //       return null;
-  //     },
-  //   );
-  // }
-
-  // Check https://github.com/suragch/audio_video_progress_bar/
-  // for the example
-  // Stream<DurationState> get durationStateStream {
-  //   return Rx.combineLatest2<Duration, PlaybackEvent, DurationState>(
-  //     _player.positionStream,
-  //     _player.playbackEventStream,
-  //     (position, playbackEvent) => DurationState(
-  //       progress: position,
-  //       buffered: playbackEvent.bufferedPosition,
-  //       total: playbackEvent.duration,
-  //     ),
-  //   );
-  // }
+  void _showError() {
+    // TODO: https://stackoverflow.com/questions/59787163/how-do-i-show-dialog-anywhere-in-the-app-without-context
+    // showDialog(context: context, builder: builder);
+  }
 }
-
-// class DurationState {
-//   final Duration progress;
-//   final Duration buffered;
-//   final Duration? total;
-
-//   const DurationState({
-//     required this.progress,
-//     required this.buffered,
-//     this.total,
-//   });
-// }
-
-// class PlayingBookState {
-//   final String bookId;
-//   final int sectionIdx;
-
-//   const PlayingBookState({
-//     required this.bookId,
-//     required this.sectionIdx,
-//   });
-
-//   @override
-//   String toString() {
-//     return {
-//       "bookId": bookId,
-//       "sectionIdx": sectionIdx,
-//     }.toString();
-//   }
-// }

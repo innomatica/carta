@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:just_audio/just_audio.dart';
 import 'package:mime/mime.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,9 +36,7 @@ class CartaBloc extends ChangeNotifier {
   late final SharedPreferences _prefs;
   late final CartaAudioHandler _handler;
 
-  StreamSubscription? _subQueueIdx;
   StreamSubscription? _subPlayState;
-  StreamSubscription? _subMediaItem;
 
   final _books = <CartaBook>[];
   // download related variables
@@ -56,9 +55,7 @@ class CartaBloc extends ChangeNotifier {
   @override
   dispose() {
     _db.close();
-    _subQueueIdx?.cancel();
     _subPlayState?.cancel();
-    _subMediaItem?.cancel();
     _handler.dispose();
     super.dispose();
   }
@@ -67,9 +64,7 @@ class CartaBloc extends ChangeNotifier {
     _prefs = await SharedPreferences.getInstance();
     _sortIndex = _prefs.getInt('sortIndex') ?? 0;
     _filterIndex = _prefs.getInt('filterIndex') ?? 0;
-    _handleQueueIdxChange();
-    _handlePlyStateChange();
-    _handleMediaItemChange();
+    _handlePlayStateChange();
     // update book server list when start
     await refreshBookServers();
     await refreshBooks();
@@ -93,55 +88,30 @@ class CartaBloc extends ChangeNotifier {
   Duration get duration => _handler.duration;
   Stream<Duration> get positionStream => _handler.positionStream;
 
-  void _handleQueueIdxChange() {
-    _subQueueIdx = _handler.playbackState
-        .map((e) => e.queueIndex)
-        .distinct()
-        .listen((int? index) async {
-      // currentIndex of the queue changed
-      logDebug(
-          'handleQueueIdxChange: $index $currentBookId $currentSectionIdx');
-      // update bookmark
-      if (currentBookId != null && currentSectionIdx != null) {
-        await _updateBookMark();
-        await refreshBooks();
-      }
-    });
-  }
-
-  void _handlePlyStateChange() {
-    _subPlayState = _handler.playbackState
-        .map((e) => e.playing)
-        .distinct()
-        .listen((bool playing) async {
-      if (playing == false) {
-        if (_handler.playbackState.value.processingState ==
-            AudioProcessingState.ready) {
-          logDebug(
-              'handlePlyStateChange: $playing ${_handler.playbackState.value.processingState}');
-          // update bookmark
-          await _updateBookMark();
-          await refreshBooks(notify: false);
+  //
+  // Due to some potential issues, we need to directly access to the
+  // _handler.player.playerStateStream instead of _handler.playbackStateStream
+  //
+  void _handlePlayStateChange() {
+    _subPlayState = _handler.playerStateStream.listen((PlayerState state) {
+      logDebug('playerState: ${state.playing}  ${state.processingState}');
+      if (state.processingState == ProcessingState.ready) {
+        if (state.playing) {
+          // logDebug('START: $currentBookId, $currentSectionIdx, $position');
+        } else {
+          // logDebug('PAUSED: $currentBookId, $currentSectionIdx, $position');
+          if (position.inSeconds > 0) _updateBookmark();
+        }
+      } else if (state.processingState == ProcessingState.buffering) {
+        if (state.playing) {
+          // logDebug('SEEK: $currentBookId, $currentSectionIdx, $position');
+          if (position.inSeconds > 0) _updateBookmark();
+        } else {
+          // you can update lastSection
+          // logDebug('LOAD: $currentBookId, $currentSectionIdx, $position');
         }
       }
-      notifyListeners();
     });
-  }
-
-  //
-  // MediaItemChange handler: called when
-  //
-  // - new episode is loaded => mediaItem duration updated
-  // - pause detected (player.playing = false, processingState = ready)
-  //
-  void _handleMediaItemChange() {
-    /* this doesn't work
-    _subMediaItem = _handler.mediaItem.listen((MediaItem? item) async {
-      // update bookmark
-      await _updateBookMark();
-      notifyListeners();
-    });
-    */
   }
 
   //
@@ -162,39 +132,42 @@ class CartaBloc extends ChangeNotifier {
     }
   }
 
-  Future<void> play(CartaBook? book, {int sectionIdx = 0}) async {
-    logDebug('handler.play: $sectionIdx, $book');
+  Future<void> play(CartaBook? book, {int? sectionIdx}) async {
+    // logDebug('handler.play: $sectionIdx, $book');
     if (book == null) {
       // resume paused book
       resume();
     } else if (currentBookId == book.bookId) {
       // the same book as current one
       if (currentSectionIdx == sectionIdx) {
+        logDebug(
+            'play same book same section: ${book.title} ${book.bookId} $sectionIdx');
         _handler.playing ? pause() : resume();
       } else {
-        _handler.skipToQueueItem(sectionIdx);
+        logDebug(
+            'play same book different section: ${book.title} ${book.bookId} $sectionIdx');
+        if (sectionIdx != null) _handler.skipToQueueItem(sectionIdx);
       }
     } else {
       // new book
-      logDebug('play new book');
-      //if currently playing
+      logDebug('play new book: ${book.title} ${book.bookId} $sectionIdx');
+      // if currently playing
       if (_handler.playing &&
           currentBookId != null &&
           currentSectionIdx != null) {
-        // save bookmark
-        await _updateBookMark();
-        // and pause before moving on
+        // and pause before moving on => this will save the bookmark
         await _handler.pause();
       }
 
-      // clear existing audio source
-      await _handler.clearQueue();
-      // load audio source
-      final audioSource = book.getAudioSource();
-      final mediaItems = audioSource.map((s) => s.tag as MediaItem).toList();
-      await _handler.setQueue(mediaItems);
-      // skip to the section
-      await _handler.skipToQueueItem(sectionIdx);
+      // load new audio source
+      final audioSources = book.getAudioSources();
+      await _handler.setAudioSource(
+        audioSources,
+        initialIndex: sectionIdx ?? book.lastSection ?? 0,
+        initialPosition:
+            sectionIdx == book.lastSection ? book.lastPosition ?? 0 : 0,
+      );
+
       // start play
       _handler.play();
     }
@@ -223,14 +196,11 @@ class CartaBloc extends ChangeNotifier {
   // BOOK
   //
   // Refresh list of books
-  Future<void> refreshBooks({bool notify = true}) async {
+  Future<void> refreshBooks() async {
     _books.clear();
-    final books = await _db.getAudioBooks();
-    _books.addAll(books);
+    _books.addAll(await _db.getAudioBooks());
     _sortBooks();
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners();
   }
 
   // Create
@@ -269,29 +239,20 @@ class CartaBloc extends ChangeNotifier {
     }
   }
 
-  // Update only certain fields of the book
-  //  Warning: the caller has to do the conversion of each field
-  Future updateBookData(String bookId, Map<String, Object?> values) async {
-    // await _db.updateBookData(bookId, data);
-    logDebug('logic.updateBookData:$bookId, $values');
-    await _db.updateAudioBooks(values: values, params: {
-      'where': 'bookId = ?',
-      'whereArgs': [bookId]
-    });
-  }
-
   // Update book.lastSection and book.lastPosition
-  Future _updateBookMark() async {
+  Future _updateBookmark({bool refresh = true}) async {
     if (currentBookId != null && currentSectionIdx != null) {
-      logDebug(
-          'updateBookMark.book:$currentBookId, lastSection:$currentSectionIdx, lastPosition:${_handler.position.inSeconds}');
+      logWarn(
+          'updateBookmark.book:$currentBookId, lastSection:$currentSectionIdx,'
+          ' lastPosition:${_handler.position.inSeconds}');
       await _db.updateAudioBooks(values: {
         'lastSection': currentSectionIdx,
-        'lastPosition': secondsToTimeString(_handler.position.inSeconds),
+        'lastPosition': secondsToHms(_handler.position.inSeconds),
       }, params: {
         'where': 'bookId = ?',
         'whereArgs': [currentBookId],
       });
+      if (refresh) refreshBooks();
     }
   }
 
