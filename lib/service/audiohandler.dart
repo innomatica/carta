@@ -188,6 +188,28 @@ class CartaAudioHandler extends BaseAudioHandler
   @override
   Future<void> seek(Duration position) => _player.seek(position);
 
+  // SeekHandler.fastForward not working, needs override
+  @override
+  Future<void> fastForward() async {
+    if (_player.duration != null) {
+      final newPosition = _player.position + fastForwardInterval;
+      newPosition > _player.duration!
+          ? await seek(_player.duration!)
+          : await seek(newPosition);
+    }
+  }
+
+  // SeekHandler.rewind not working, needs override
+  @override
+  Future<void> rewind() async {
+    if (_player.duration != null) {
+      final newPosition = _player.position - rewindInterval;
+      newPosition > Duration.zero
+          ? await seek(newPosition)
+          : await seek(Duration.zero);
+    }
+  }
+
   // QueueHandler implements skipToNext, skipToPrevious
   @override
   Future<void> skipToQueueItem(int index) async {
