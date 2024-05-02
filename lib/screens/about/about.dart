@@ -1,11 +1,9 @@
-// import 'dart:io' show Platform;
-
-import 'package:cartaapp/service/repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../shared/settings.dart';
+import '../../service/repository.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
@@ -53,17 +51,6 @@ class _AboutPageState extends State<AboutPage> {
             onTap: () => launchUrl(Uri.parse(urlSourceRepo),
                 mode: LaunchMode.externalApplication),
           ),
-          // Play Store
-          // ListTile(
-          //   title: Text('Play Store', style: titleStyle),
-          //   subtitle: const Text('Review Apps, Report Bugs'),
-          //   onTap: () {
-          //     final url = urlGooglePlay();
-          //     if (url != null) {
-          //       launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-          //     }
-          //   },
-          // ),
           // QR Code
           ListTile(
             title: Text('Repository QR Code', style: titleStyle),
@@ -108,13 +95,13 @@ class _AboutPageState extends State<AboutPage> {
             onTap: () => launchUrl(Uri.parse(urlAppIconSource),
                 mode: LaunchMode.externalApplication),
           ),
-          // // Store Image
-          // ListTile(
-          //   title: Text('Store Background Image', style: titleStyle),
-          //   subtitle: const Text("Photo by Florencia Viadana at unsplash.com"),
-          //   onTap: () => launchUrl(Uri.parse(urlStoreImageSource),
-          //       mode: LaunchMode.externalApplication),
-          // ),
+          // Background Image
+          ListTile(
+            title: Text('Background Image', style: titleStyle),
+            subtitle: const Text("Photo by Florencia Viadana at unsplash.com"),
+            onTap: () => launchUrl(Uri.parse(urlStoreImageSource),
+                mode: LaunchMode.externalApplication),
+          ),
           // Disclaimer
           ListTile(
             title: Text('Disclaimer', style: titleStyle),

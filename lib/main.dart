@@ -45,8 +45,8 @@ void main() async {
       providers: [
         ChangeNotifierProvider<ScreenConfig>(
             create: (context) => ScreenConfig()),
-        ChangeNotifierProvider<CartaBloc>(create: (_) => CartaBloc(handler)),
         ChangeNotifierProvider<CartaRepo>(create: (_) => CartaRepo()),
+        ChangeNotifierProvider<CartaBloc>(create: (_) => CartaBloc(handler)),
       ],
       child: const MyApp(),
     ),

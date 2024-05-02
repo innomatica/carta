@@ -8,12 +8,9 @@ const emailDeveloper = 'nuntium.ubique@gmail.com';
 const defaultAlbumImage = 'assets/images/open-book-512.png';
 const defaultLibriVoxImage = 'assets/images/book-cover-150x150.gif';
 const bookPanelBgndImage = 'assets/images/house_of_books.jpg';
-// const playStoreUrlQrCode = 'assets/images/com.innomatic.cartaapp.png';
 const sourceRepoUrlQrCode = 'assets/images/com.innomatic.cartaapp.png';
 
 // urls
-// const urlGooglePlay = 'https://play.google.com/store/apps/details?id=$appId';
-// const urlAppStore = null;
 const urlHomePage = 'https://www.innomatic.ca';
 const urlSourceRepo = 'https://github.com/innomatica/carta';
 const urlAppRelease = 'https://github.com/innomatica/carta/releases';
