@@ -8,8 +8,8 @@ import 'package:just_audio/just_audio.dart';
 import 'package:mime/mime.dart';
 
 import '../enc_dec.dart';
-import '../shared/constants.dart';
 import '../shared/helpers.dart';
+import '../shared/settings.dart';
 import 'cartacard.dart';
 import 'cartasection.dart';
 

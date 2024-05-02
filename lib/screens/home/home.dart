@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../logic/cartabloc.dart';
 import '../../logic/screenconfig.dart';
 // import '../../service/audiohandler.dart';
-import '../../shared/constants.dart';
+import '../../service/repository.dart';
 import '../../shared/settings.dart';
 import '../about/about.dart';
 import '../settings/settings.dart';
@@ -139,7 +139,12 @@ class _HomePageState extends State<HomePage> {
   //
   Widget _buildMenuButton(CartaBloc logic) {
     return PopupMenuButton<String>(
-      icon: const Icon(Icons.menu_rounded),
+      icon: Consumer<CartaRepo>(
+        builder: (_, repo, __) => repo.newAvailable
+            ? Icon(Icons.menu_rounded,
+                color: Theme.of(context).colorScheme.error)
+            : const Icon(Icons.menu_rounded),
+      ),
       onSelected: (String item) {
         if (item == 'Set Sleep Timer') {
           if (_sleepTimer != null) {
@@ -221,7 +226,13 @@ class _HomePageState extends State<HomePage> {
               Icon(Icons.info_rounded,
                   color: Theme.of(context).colorScheme.primary),
               const SizedBox(width: 8.0),
-              const Text('About'),
+              Consumer<CartaRepo>(
+                builder: (context, repo, child) => repo.newAvailable
+                    ? Text('About',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.error))
+                    : const Text('About'),
+              ),
             ],
           ),
         ),

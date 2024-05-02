@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../shared/constants.dart';
 import '../../shared/settings.dart';
 
 class BookIntroView extends StatelessWidget {

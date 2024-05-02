@@ -241,7 +241,7 @@ class WebPageParser {
       if (author.contains('(')) {
         author = author.split('(')[0].trim();
       }
-      // FIXME: this is fragile description
+      // FIXME: this is fragile operation
       final description =
           document.querySelectorAll('.entry-content p')[2].innerHtml;
       // image url

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../logic/cartabloc.dart';
 // import '../../service/audiohandler.dart';
-import '../../shared/constants.dart';
+import '../../shared/settings.dart';
 
 //
 // Progress Bar
