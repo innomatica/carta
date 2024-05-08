@@ -86,7 +86,7 @@ class CartaAudioHandler extends BaseAudioHandler
   void _handlePlyStateChange() {
     // subscribe to playerStateStream
     _subPlyState = _player.playerStateStream.listen((PlayerState state) async {
-      logDebug('playerState: ${state.playing}  ${state.processingState}');
+      // logDebug('playerState: ${state.playing}  ${state.processingState}');
       if (state.processingState == ProcessingState.ready) {
         if (state.playing == false) {
           // paused or loading done
@@ -224,7 +224,7 @@ class CartaAudioHandler extends BaseAudioHandler
   // QueueHandler implements skipToNext, skipToPrevious
   @override
   Future<void> skipToQueueItem(int index) async {
-    logDebug('skipToQueueItem: $index');
+    // logDebug('skipToQueueItem: $index');
     final qval = queue.value;
     // validate index
     if (index >= 0 && index < qval.length) {
@@ -282,7 +282,7 @@ class CartaAudioHandler extends BaseAudioHandler
   }
 
   void clearQueue() {
-    logDebug('handler.clearQueue currentIndex: ${_player.currentIndex}');
+    // logDebug('handler.clearQueue currentIndex: ${_player.currentIndex}');
     queue.add([]);
     mediaItem.add(null);
   }

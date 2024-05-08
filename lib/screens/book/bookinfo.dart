@@ -56,7 +56,7 @@ class _BookInfoViewState extends State<BookInfoView> {
         ),
       );
     } else {
-      logDebug('localDataState: ${localDataState['state']}');
+      // logDebug('localDataState: ${localDataState['state']}');
       switch (localDataState['state']) {
         case LocalDataState.none:
           // DOWNLOAD
@@ -79,18 +79,6 @@ class _BookInfoViewState extends State<BookInfoView> {
       }
     }
   }
-
-  // Widget _buildCacheButton(CartaBloc logic) {
-  //   final cached = widget.book.info['cached'] == true;
-  //   return TextButton(
-  //     onPressed: () async {
-  //       widget.book.info['cached'] = !cached;
-  //       await logic.updateAudioBook(widget.book);
-  //       setState(() {});
-  //     },
-  //     child: Text(cached ? 'Download before play' : 'Cache disabled'),
-  //   );
-  // }
 
   Future<String?> _editField(String title, String? initialValue,
       {int maxLines = 1}) async {

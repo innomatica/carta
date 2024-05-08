@@ -95,7 +95,7 @@ class CartaBloc extends ChangeNotifier {
   void _handlePlayStateChange() {
     _subPlayState =
         _handler.playerStateStream.listen((PlayerState state) async {
-      logDebug('playerState: ${state.playing}  ${state.processingState}');
+      // logDebug('playerState: ${state.playing}  ${state.processingState}');
       if (state.processingState == ProcessingState.ready) {
         if (state.playing) {
           // logDebug('START: $currentBookId, $currentSectionIdx, $position');
@@ -262,15 +262,17 @@ class CartaBloc extends ChangeNotifier {
   }
 
   Future _resetBookmark({bool refresh = true}) async {
-    logWarn('resetBoomark.book:$currentBookId');
-    await _db.updateAudioBooks(values: {
-      'lastSection': null,
-      'lastPosition': null,
-    }, params: {
-      'where': 'bookId = ?',
-      'whereArgs': [currentBookId],
-    });
-    if (refresh) refreshBooks();
+    if (currentBookId != null) {
+      logWarn('resetBoomark.book:$currentBookId');
+      await _db.updateAudioBooks(values: {
+        'lastSection': null,
+        'lastPosition': null,
+      }, params: {
+        'where': 'bookId = ?',
+        'whereArgs': [currentBookId],
+      });
+      if (refresh) refreshBooks();
+    }
   }
 
   // Book filter
@@ -336,7 +338,7 @@ class CartaBloc extends ChangeNotifier {
       notifyListeners();
       // break if cancelled
       if (_cancelRequests.contains(book.bookId)) {
-        logDebug('download canceled: ${book.title}');
+        // logDebug('download canceled: ${book.title}');
         break;
       }
       // otherwise go ahead
