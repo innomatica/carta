@@ -4,12 +4,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'logic/cartabloc.dart';
+import 'logic/github.dart';
 import 'logic/screenconfig.dart';
 import 'screens/settings/settings.dart';
 import 'screens/catalog/catalog.dart';
 import 'screens/home/home.dart';
 import 'service/audiohandler.dart';
-import 'logic/github.dart';
 import 'shared/apptheme.dart';
 import 'shared/helpers.dart';
 import 'shared/notfound.dart';

@@ -93,22 +93,27 @@ class CartaBloc extends ChangeNotifier {
   // _handler.player.playerStateStream instead of _handler.playbackStateStream
   //
   void _handlePlayStateChange() {
-    _subPlayState = _handler.playerStateStream.listen((PlayerState state) {
+    _subPlayState =
+        _handler.playerStateStream.listen((PlayerState state) async {
       logDebug('playerState: ${state.playing}  ${state.processingState}');
       if (state.processingState == ProcessingState.ready) {
         if (state.playing) {
           // logDebug('START: $currentBookId, $currentSectionIdx, $position');
         } else {
           // logDebug('PAUSED: $currentBookId, $currentSectionIdx, $position');
-          if (position.inSeconds > 0) _updateBookmark();
+          if (position.inSeconds > 0) await _updateBookmark();
         }
       } else if (state.processingState == ProcessingState.buffering) {
         if (state.playing) {
           // logDebug('SEEK: $currentBookId, $currentSectionIdx, $position');
-          if (position.inSeconds > 0) _updateBookmark();
+          if (position.inSeconds > 0) await _updateBookmark();
         } else {
           // you can update lastSection
           // logDebug('LOAD: $currentBookId, $currentSectionIdx, $position');
+        }
+      } else if (state.processingState == ProcessingState.completed) {
+        if (state.playing) {
+          await _resetBookmark();
         }
       }
     });
@@ -254,6 +259,18 @@ class CartaBloc extends ChangeNotifier {
       });
       if (refresh) refreshBooks();
     }
+  }
+
+  Future _resetBookmark({bool refresh = true}) async {
+    logWarn('resetBoomark.book:$currentBookId');
+    await _db.updateAudioBooks(values: {
+      'lastSection': null,
+      'lastPosition': null,
+    }, params: {
+      'where': 'bookId = ?',
+      'whereArgs': [currentBookId],
+    });
+    if (refresh) refreshBooks();
   }
 
   // Book filter

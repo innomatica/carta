@@ -1,4 +1,5 @@
 import 'package:async/async.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,59 +54,63 @@ class _PlayerScreenState extends State<PlayerScreen> {
   @override
   Widget build(BuildContext context) {
     final logic = context.read<CartaBloc>();
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 24.0,
-        horizontal: 24.0,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // album image and title
-          isScreenWide
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    BookCover(logic, size: 60),
-                    const SizedBox(width: 48.0),
-                    BookTitle(logic),
-                  ],
-                )
-              : Column(
-                  children: [
-                    BookTitle(logic),
-                    const SizedBox(height: 16.0),
-                    BookCover(logic),
-                  ],
-                ),
-          // progress bar
-          const SizedBox(height: 16.0),
-          buildProgressBar(logic),
-          // buttons
-          Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: isScreenWide
-                ? <Widget>[
-                    buildSpeedSelector(logic, size: 18),
-                    buildPreviousButton(logic, size: 36),
-                    buildRewindButton(logic, size: 36),
-                    buildPlayButton(logic, size: 48),
-                    buildForwardButton(logic, size: 36),
-                    buildNextButton(logic, size: 36),
-                    _buildMoreButton(logic),
-                  ]
-                : <Widget>[
-                    buildSpeedSelector(logic, size: 18),
-                    buildRewindButton(logic, size: 36),
-                    buildPlayButton(logic, size: 48),
-                    buildForwardButton(logic, size: 36),
-                    _buildMoreButton(logic),
-                  ],
-          ),
-        ],
-      ),
+    return StreamBuilder<MediaItem?>(
+      stream: logic.mediaItem,
+      builder: (context, snapshot) => snapshot.hasData
+          ? Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 24.0,
+                horizontal: 24.0,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // album image and title
+                  isScreenWide
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            BookCover(logic, size: 60),
+                            const SizedBox(width: 48.0),
+                            BookTitle(logic),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            BookTitle(logic),
+                            const SizedBox(height: 16.0),
+                            BookCover(logic),
+                          ],
+                        ),
+                  // progress bar
+                  const SizedBox(height: 16.0),
+                  buildProgressBar(logic),
+                  // buttons
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: isScreenWide
+                        ? <Widget>[
+                            buildSpeedSelector(logic, size: 18),
+                            buildPreviousButton(logic, size: 36),
+                            buildRewindButton(logic, size: 36),
+                            buildPlayButton(logic, size: 48),
+                            buildForwardButton(logic, size: 36),
+                            buildNextButton(logic, size: 36),
+                            _buildMoreButton(logic),
+                          ]
+                        : <Widget>[
+                            buildSpeedSelector(logic, size: 18),
+                            buildRewindButton(logic, size: 36),
+                            buildPlayButton(logic, size: 48),
+                            buildForwardButton(logic, size: 36),
+                            _buildMoreButton(logic),
+                          ],
+                  ),
+                ],
+              ),
+            )
+          : const SizedBox(height: 0.0),
     );
   }
 }

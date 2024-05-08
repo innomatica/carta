@@ -23,7 +23,7 @@ const urlSourcePlusRepo = 'https://github.com/innomatica/cartaplus';
 
 // github
 const githubUser = 'innomatica';
-const githubRepo = 'Carta';
+const githubRepo = 'carta';
 
 // selected books
 const urlSelectedBooksJson =

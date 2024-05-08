@@ -245,16 +245,10 @@ class _HomePageState extends State<HomePage> {
   //
   Widget? _buildBottomSheet() {
     final logic = context.read<CartaBloc>();
-    // needs to redraw whenever the playing state changes
-    return StreamBuilder<AudioProcessingState>(
-      stream: logic.playbackState.map((e) => e.processingState).distinct(),
+    return StreamBuilder<MediaItem?>(
+      stream: logic.mediaItem,
       builder: (context, snapshot) {
-        if (snapshot.hasData &&
-            [
-              AudioProcessingState.loading,
-              AudioProcessingState.buffering,
-              AudioProcessingState.ready,
-            ].contains(snapshot.data)) {
+        if (snapshot.hasData) {
           return Container(
             color: Theme.of(context).colorScheme.surfaceVariant,
             padding: const EdgeInsets.only(

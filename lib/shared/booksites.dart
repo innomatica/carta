@@ -3,8 +3,12 @@ const urlInternetArchive = 'https://archive.org/';
 const urlInternetArchiveAudio = 'https://archive.org/details/audio';
 const urlInternetArchiveRadioShows =
     'https://archive.org/details/radioprograms';
+const urlInternetArchive101MusicRecords =
+    'https://archive.org/details/vinyl_101musicrecords';
 const urlInternetArchiveBBCRadio =
     'https://archive.org/details/folksoundomy_bbcradio';
+const urlInternetArchiveBostonPublicLibrary =
+    'https://archive.org/details/vinyl_bostonpubliclibrary';
 const urlInternetArchiveRussianAudiobooks =
     'https://archive.org/details/audioboo_ru';
 const urlInternetArchiveBlog = 'https://blog.archive.org/';
@@ -109,9 +113,19 @@ const bookSiteData = {
         'value': 'bbc',
       },
       {
+        'title': 'Boston Public Library LP Records',
+        'url': urlInternetArchiveBostonPublicLibrary,
+        'value': 'boston',
+      },
+      {
         'title': 'Russian Audiobooks',
         'url': urlInternetArchiveRussianAudiobooks,
         'value': 'russian',
+      },
+      {
+        'title': '101 Music Records LP Collection',
+        'url': urlInternetArchive101MusicRecords,
+        'value': '101music',
       },
       {
         'title': 'Blog',
