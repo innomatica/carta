@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../shared/settings.dart';
-import '../../service/repository.dart';
+import '../../logic/github.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});

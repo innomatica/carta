@@ -9,7 +9,7 @@ import 'screens/settings/settings.dart';
 import 'screens/catalog/catalog.dart';
 import 'screens/home/home.dart';
 import 'service/audiohandler.dart';
-import 'service/repository.dart';
+import 'logic/github.dart';
 import 'shared/apptheme.dart';
 import 'shared/helpers.dart';
 import 'shared/notfound.dart';

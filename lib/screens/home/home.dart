@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../logic/cartabloc.dart';
 import '../../logic/screenconfig.dart';
 // import '../../service/audiohandler.dart';
-import '../../service/repository.dart';
+import '../../logic/github.dart';
 import '../../shared/settings.dart';
 import '../about/about.dart';
 import '../settings/settings.dart';
