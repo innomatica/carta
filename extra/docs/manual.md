@@ -1,107 +1,123 @@
 # Instruction
 
-* [Add Audiobooks from LibriVox](#add-audiobooks-from-librivox)
-* [Add Radio Shows from Internet Archive](#add-radio-shows-from-internet-archive)
-* [Add Audiobooks from Private WebDAV Server](#add-audiobooks-from-private-webdav-server)
-* [Set Up Private WebDAV Server](#set-up-private-webdav-server)
-* [Share Books, Delete Books](#share-books-delete-books)
-* [Use Wide Screen Devices (Tablets and Chromebooks)](#use-wide-screen-devices-tablets-chromebooks)
-* [Read Book Text](#read-book-text)
+## Buttons, Menus, Screens
 
-## Add Audiobooks from LibriVox
+At the top, from the left you have three buttons:
 
-* From the menu at the top right corner of the home screen,
-select ***LibriVox***
+* Sort: sort books by title or author name
+* Cartegory: show books by the source
+* Menu: sleep timer, manual, settings, ...
 
-![](./res/menu_librivox.png){: style="width:400px"}
+![](./res/top_bar.png){: style="width:400px"}
 
-* Search books using Web UI
+At bottom, you have
 
-![](./res/librivox_search.png){: style="width:400px"}
+* Add audiobook button
+* Audio player (tab to expand)
 
-* Select the book you want and head over to the book page
+![](./res/bottom_controls.png){: style="width:400px"}
 
-![](./res/librivox_search_result.png){: style="width:400px"}
+On each book title, there is a book info button at the right end.
+The shape of the icon indicates the source of the book.
 
-* Find ***+ Add to my bookshelf*** button at the bottom and tap it
+![](./res/book_info_button.png){: style="width:400px"}
 
-![](./res/librivox_book_add.png){: style="width:400px"}
+There you can find detailed information about the book. You can 
+edit some items including cover image URL, book text URL, and book description.
+You can also delete the book here.
 
-* Return to home screen by tapping **<<** button at the top
+![](./res/book_details.png){: style="width:400px"}
 
-## Add Radio Shows from Internet Archive
+## Add Audiobooks
 
-* From the menu at the top right corner of the home screen,
-select ***Internet Archive***
+Tap the **+** button at the bottom and select a book source
 
-![](./res/menu_archive.png){: style="width:400px"}
+![](./res/add_book.png){: style="width:400px"}
 
-* From the menu at the top right corner of the screen, select
-***BBC Radio Shows***
+### LibroVox, Internet Archive, Legamus
 
-![](./res/archive_bbc_radio.png){: style="width:400px"}
+You can navigate these sites using the internal browser. You can also use the 
+menu at the top right corner for some popular choices.
 
-* Choose the item you want and head over to the details page
+![](./res/librivox.png){: style="width:400px"}
 
-![](./res/bbc_radio_show.png){: style="width:400px"}
+Once, you get to the book page you want, you will see **Add to my bookself** 
+button poped up at the bottom
 
-* Find ***+ Add to my bookshelf*** button at the bottom and tap it
+![](./res/librivox_add.png){: style="width:400px"}
 
-![](./res/archive_item_add.png){: style="width:400px"}
 
-## Add Audiobooks from Private WebDAV Server
+### Cloud WebDAV Server
 
-* Go to Settings page and enter your WebDAV parameters
+If you choose **Cloud WebDAV Server**, you will be brought to the **Settings** 
+page where you can register your WebDAV server
 
-![](./res/webdav_settings.png){: style="width:400px"}
+![](./res/settings.png){: style="width:400px"}
 
-* In case of Nextcloud, check this [document for the directory](https://docs.nextcloud.com/server/latest/user_manual/en/files/access_webdav.html#third-party-webdav-clients)
+#### Nextcloud sample
 
-![](./res/nextcloud_settings.png){: style="width:400px"}
+![](./res/nextcloud.png){: style="width:400px"}
 
-* You should be able to navigate your server add books from your server
+Nextcloud has unique url for the WebDAV access. Go to your nextcloud console
+and check **Files > Files settings > WebDAV**.
+Also visit [this page](https://docs.nextcloud.com/server/stable/user_manual/en/files/access_webdav.html)
+for further information.
 
-![](./res/webdav_menu_item.png){: style="width:400px"}
+#### Koofr Cloud Sample
 
-## Set Up Private WebDAV Server
+![](./res/koofr.png){: style="width:400px"}
+
+In case of Koofr cloud, first you need to generate a new password for the app
+then use enter it here.
+Go to your Koofr page and proceed to **Account > Preferences > Password** page,
+there you can generate a password for each app so that you don't have to 
+expose your main account password.
+
+#### Other Types of WebDAV Servers
+
+This app has been tested with 
+[Apache mod_dav](https://httpd.apache.org/docs/2.4/mod/mod_dav.html) 
+and [rclone serve.](https://rclone.org/commands/rclone_serve_webdav/)
+However it should work with other types of WebDAV servers too.
+
+![](./res/rclone.png){: style="width:400px"}
+
+In this case, actual url depends on the configuration of the server.
+
+After setting up servers, you can access them through the **+** menu.
+
+![](./res/add_book_later.png){: style="width:400px"}
+
+## Set Up a WebDAV Server
 
 If you are new to WebDAV, visit [this page for easy setup](https://github.com/innomatica/carta/tree/master/extra/webdav)
 
-## Share Books, Delete Books
 
-* Tap the icon at the right end of the book and go to the details page
+## On Tablets and Chromebooks
 
-![](./res/book_detail_button.png){: style="width:400px"}
+On wide screen devices, app shows book list on the left, book details on the right by default.
 
-* In the book details page, find ***share*** button and ***delete*** button
-
-![](./res/book_detail_page.png){: style="width:400px"}
-
-## Use Wide Screen Devices (Tablets, Chromebooks)
-
-* App shows book list on the left, book details on the right by default
 
 ![](./res/wide_screen_split_view.png){: style="width:800px"}
 
-* You can switch between split view and book only view using the button
-at the top left corner
+You can switch between split view and book details only view using the button
+at the top left corner. Book details only view is useful when you read the book text.
 
-![](./res/screen_selector.png){: style="width:400px"}
 
-* Book only view is useful when you read book text
+### Access Book Text
 
-![](./res/book_only_view.png){: style="width:800px"}
-
-## Read Book Text
-
-* In the book details page find Text URL and tap it
+In the book details page find Text URL and tap it
 
 ![](./res/book_text_url.png){: style="width:400px"}
 
-* In most cases, it will lead you to the [Gutenberg Project](https://gutenberg.org/) site.
-* Find ***Read this book online*** link and click it
+In most cases, it will lead you to the [Gutenberg Project](https://gutenberg.org/) site.
+Find ***Read this book online*** link there.
 
 ![](./res/actual_text_link.png){: style="width:400px"}
+
+You will be able to read the text while listening to the audio
+
+![](./res/book_text_page.png){: style="width:800px"}
 
 Note that
 

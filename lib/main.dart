@@ -35,10 +35,6 @@ void main() async {
   final appDocDir = await getApplicationDocumentsDirectory();
   appDocDirPath = appDocDir.path;
 
-  // check update
-  final repo = CartaRepo();
-  repo.checkVersion();
-
   // start app
   runApp(
     MultiProvider(

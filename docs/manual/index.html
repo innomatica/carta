@@ -48,19 +48,33 @@
                 </li>
               </ul>
               <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="./">Instruction</a>
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Instruction</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#add-audiobooks-from-librivox">Add Audiobooks from LibriVox</a>
+    <li class="toctree-l2"><a class="reference internal" href="#buttons-menus-screens">Buttons, Menus, Screens</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#add-radio-shows-from-internet-archive">Add Radio Shows from Internet Archive</a>
+    <li class="toctree-l2"><a class="reference internal" href="#add-audiobooks">Add Audiobooks</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#librovox-internet-archive-legamus">LibroVox, Internet Archive, Legamus</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#add-audiobooks-from-private-webdav-server">Add Audiobooks from Private WebDAV Server</a>
+    <li class="toctree-l3"><a class="reference internal" href="#cloud-webdav-server">Cloud WebDAV Server</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#nextcloud-sample">Nextcloud sample</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#share-books-delete-books">Share Books, Delete Books</a>
+    <li class="toctree-l4"><a class="reference internal" href="#koofr-cloud-sample">Koofr Cloud Sample</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#use-wide-screen-devices-tablets-chromebooks">Use Wide Screen Devices (Tablets, Chromebooks)</a>
+    <li class="toctree-l4"><a class="reference internal" href="#other-types-of-webdav-servers">Other Types of WebDAV Servers</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#read-book-text">Read Book Text</a>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#set-up-a-webdav-server">Set Up a WebDAV Server</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#on-tablets-and-chromebooks">On Tablets and Chromebooks</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#access-book-text">Access Book Text</a>
+    </li>
+        </ul>
     </li>
     </ul>
                 </li>
@@ -93,100 +107,78 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="instruction">Instruction</h1>
+<h2 id="buttons-menus-screens">Buttons, Menus, Screens</h2>
+<p>At the top, from the left you have three buttons:</p>
 <ul>
-<li><a href="#add-audiobooks-from-librivox">Add Audiobooks from LibriVox</a></li>
-<li><a href="#add-radio-shows-from-internet-archive">Add Radio Shows from Internet Archive</a></li>
-<li><a href="#add-audiobooks-from-private-webdav-server">Add Audiobooks from Private WebDAV Server</a></li>
-<li><a href="#share-books-delete-books">Share Books, Delete Books</a></li>
-<li><a href="#use-wide-screen-devices-tablets-chromebooks">Use Wide Screen Devices (Tablets and Chromebooks)</a></li>
-<li><a href="#read-book-text">Read Book Text</a></li>
+<li>Sort: sort books by title or author name</li>
+<li>Cartegory: show books by the source</li>
+<li>Menu: sleep timer, manual, settings, ...</li>
 </ul>
-<h2 id="add-audiobooks-from-librivox">Add Audiobooks from LibriVox</h2>
+<p><img alt="" src="../res/top_bar.png" style="width:400px" /></p>
+<p>At bottom, you have</p>
 <ul>
-<li>From the menu at the top right corner of the home screen,
-select <strong><em>LibriVox</em></strong></li>
+<li>Add audiobook button</li>
+<li>Audio player (tab to expand)</li>
 </ul>
-<p><img alt="" src="../res/menu_librivox.png" style="width:400px" /></p>
-<ul>
-<li>Search books using Web UI</li>
-</ul>
-<p><img alt="" src="../res/librivox_search.png" style="width:400px" /></p>
-<ul>
-<li>Select the book you want and head over to the book page</li>
-</ul>
-<p><img alt="" src="../res/librivox_search_result.png" style="width:400px" /></p>
-<ul>
-<li>Find <strong><em>+ Add to my bookshelf</em></strong> button at the bottom and tap it</li>
-</ul>
-<p><img alt="" src="../res/librivox_book_add.png" style="width:400px" /></p>
-<ul>
-<li>Return to home screen by tapping <strong>&lt;&lt;</strong> button at the top</li>
-</ul>
-<h2 id="add-radio-shows-from-internet-archive">Add Radio Shows from Internet Archive</h2>
-<ul>
-<li>From the menu at the top right corner of the home screen,
-select <strong><em>Internet Archive</em></strong></li>
-</ul>
-<p><img alt="" src="../res/menu_archive.png" style="width:400px" /></p>
-<ul>
-<li>From the menu at the top right corner of the screen, select
-<strong><em>BBC Radio Shows</em></strong></li>
-</ul>
-<p><img alt="" src="../res/archive_bbc_radio.png" style="width:400px" /></p>
-<ul>
-<li>Choose the item you want and head over to the details page</li>
-</ul>
-<p><img alt="" src="../res/bbc_radio_show.png" style="width:400px" /></p>
-<ul>
-<li>Find <strong><em>+ Add to my bookshelf</em></strong> button at the bottom and tap it</li>
-</ul>
-<p><img alt="" src="../res/archive_item_add.png" style="width:400px" /></p>
-<h2 id="add-audiobooks-from-private-webdav-server">Add Audiobooks from Private WebDAV Server</h2>
-<ul>
-<li>Go to Settings page and enter your WebDAV parameters</li>
-</ul>
-<p><img alt="" src="../res/webdav_settings.png" style="width:400px" /></p>
-<ul>
-<li>In case of Nextcloud, check this <a href="https://docs.nextcloud.com/server/latest/user_manual/en/files/access_webdav.html#third-party-webdav-clients">document for the directory</a></li>
-</ul>
-<p><img alt="" src="../res/nextcloud_settings.png" style="width:400px" /></p>
-<ul>
-<li>You should be able to navigate your server from the Add button</li>
-</ul>
-<p><img alt="" src="../res/webdav_menu_item.png" style="width:400px" /></p>
-<h2 id="share-books-delete-books">Share Books, Delete Books</h2>
-<ul>
-<li>Tap the icon at the right end of the book and go to the details page</li>
-</ul>
-<p><img alt="" src="../res/book_detail_button.png" style="width:400px" /></p>
-<ul>
-<li>In the book details page, find <strong><em>share</em></strong> button and <strong><em>delete</em></strong> button</li>
-</ul>
-<p><img alt="" src="../res/book_detail_page.png" style="width:400px" /></p>
-<h2 id="use-wide-screen-devices-tablets-chromebooks">Use Wide Screen Devices (Tablets, Chromebooks)</h2>
-<ul>
-<li>App shows book list on the left, book details on the right by default</li>
-</ul>
+<p><img alt="" src="../res/bottom_controls.png" style="width:400px" /></p>
+<p>On each book title, there is a book info button at the right end.
+The shape of the icon indicates the source of the book.</p>
+<p><img alt="" src="../res/book_info_button.png" style="width:400px" /></p>
+<p>There you can find detailed information about the book. You can 
+edit some items including cover image URL, book text URL, and book description.
+You can also delete the book here.</p>
+<p><img alt="" src="../res/book_details.png" style="width:400px" /></p>
+<h2 id="add-audiobooks">Add Audiobooks</h2>
+<p>Tap the <strong>+</strong> button at the bottom and select a book source</p>
+<p><img alt="" src="../res/add_book.png" style="width:400px" /></p>
+<h3 id="librovox-internet-archive-legamus">LibroVox, Internet Archive, Legamus</h3>
+<p>You can navigate these sites using the internal browser. You can also use the 
+menu at the top right corner for some popular choices.</p>
+<p><img alt="" src="../res/librivox.png" style="width:400px" /></p>
+<p>Once, you get to the book page you want, you will see <strong>Add to my bookself</strong> 
+button poped up at the bottom</p>
+<p><img alt="" src="../res/librivox_add.png" style="width:400px" /></p>
+<h3 id="cloud-webdav-server">Cloud WebDAV Server</h3>
+<p>If you choose <strong>Cloud WebDAV Server</strong>, you will be brought to the <strong>Settings</strong> 
+page where you can register your WebDAV server</p>
+<p><img alt="" src="../res/settings.png" style="width:400px" /></p>
+<h4 id="nextcloud-sample">Nextcloud sample</h4>
+<p><img alt="" src="../res/nextcloud.png" style="width:400px" /></p>
+<p>Nextcloud has unique url for the WebDAV access. Go to your nextcloud console
+and check <strong>Files &gt; Files settings &gt; WebDAV</strong>.
+Also visit <a href="https://docs.nextcloud.com/server/stable/user_manual/en/files/access_webdav.html">this page</a>
+for further information.</p>
+<h4 id="koofr-cloud-sample">Koofr Cloud Sample</h4>
+<p><img alt="" src="../res/koofr.png" style="width:400px" /></p>
+<p>In case of Koofr cloud, first you need to generate a new password for the app
+then use enter it here.
+Go to your Koofr page and proceed to <strong>Account &gt; Preferences &gt; Password</strong> page,
+there you can generate a password for each app so that you don't have to 
+expose your main account password.</p>
+<h4 id="other-types-of-webdav-servers">Other Types of WebDAV Servers</h4>
+<p>This app has been tested with 
+<a href="https://httpd.apache.org/docs/2.4/mod/mod_dav.html">Apache mod_dav</a> 
+and <a href="https://rclone.org/commands/rclone_serve_webdav/">rclone serve.</a>
+However it should work with other types of WebDAV servers too.</p>
+<p><img alt="" src="../res/rclone.png" style="width:400px" /></p>
+<p>In this case, actual url depends on the configuration of the server.</p>
+<p>After setting up servers, you can access them through the <strong>+</strong> menu.</p>
+<p><img alt="" src="../res/add_book_later.png" style="width:400px" /></p>
+<h2 id="set-up-a-webdav-server">Set Up a WebDAV Server</h2>
+<p>If you are new to WebDAV, visit <a href="https://github.com/innomatica/carta/tree/master/extra/webdav">this page for easy setup</a></p>
+<h2 id="on-tablets-and-chromebooks">On Tablets and Chromebooks</h2>
+<p>On wide screen devices, app shows book list on the left, book details on the right by default.</p>
 <p><img alt="" src="../res/wide_screen_split_view.png" style="width:800px" /></p>
-<ul>
-<li>You can switch between split view and book only view using the button
-at the top left corner</li>
-</ul>
-<p><img alt="" src="../res/screen_selector.png" style="width:400px" /></p>
-<ul>
-<li>Book only view is useful when you read book text</li>
-</ul>
-<p><img alt="" src="../res/book_only_view.png" style="width:800px" /></p>
-<h2 id="read-book-text">Read Book Text</h2>
-<ul>
-<li>In the book details page find Text URL and tap it</li>
-</ul>
+<p>You can switch between split view and book details only view using the button
+at the top left corner. Book details only view is useful when you read the book text.</p>
+<h3 id="access-book-text">Access Book Text</h3>
+<p>In the book details page find Text URL and tap it</p>
 <p><img alt="" src="../res/book_text_url.png" style="width:400px" /></p>
-<ul>
-<li>In most cases, it will lead you to the <a href="https://gutenberg.org/">Gutenberg Project</a> site.</li>
-<li>Find <strong><em>Read this book online</em></strong> link and click it</li>
-</ul>
+<p>In most cases, it will lead you to the <a href="https://gutenberg.org/">Gutenberg Project</a> site.
+Find <strong><em>Read this book online</em></strong> link there.</p>
 <p><img alt="" src="../res/actual_text_link.png" style="width:400px" /></p>
+<p>You will be able to read the text while listening to the audio</p>
+<p><img alt="" src="../res/book_text_page.png" style="width:800px" /></p>
 <p>Note that</p>
 <ul>
 <li>Most smartphones are too small to read text</li>

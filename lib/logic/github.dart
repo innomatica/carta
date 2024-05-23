@@ -12,7 +12,8 @@ class CartaRepo extends ChangeNotifier {
   int? _latestVersion;
 
   CartaRepo() {
-    _init();
+    _currentVersion = int.parse(appVersion.split('+')[1]);
+    _checkVersion();
   }
 
   Release? get latestRelease => _latestRelease;
@@ -20,12 +21,7 @@ class CartaRepo extends ChangeNotifier {
       _latestVersion != null && (_latestVersion! > _currentVersion);
   String? get urlRelease => _latestRelease?.assets?[0].browserDownloadUrl;
 
-  Future _init() async {
-    _currentVersion = int.parse(appVersion.split('+')[1]);
-    await checkVersion();
-  }
-
-  Future checkVersion() async {
+  Future _checkVersion() async {
     try {
       _latestRelease = await _github.repositories
           .getLatestRelease(RepositorySlug(githubUser, githubRepo));
@@ -33,8 +29,8 @@ class CartaRepo extends ChangeNotifier {
       final tag = _latestRelease?.tagName;
       if (tag != null && tag.contains('+')) {
         _latestVersion = int.tryParse(tag.split('+')[1]);
-        // logDebug(
-        //     'latest version: $_latestVersion vs $_currentVersion : $newAvailable');
+        logDebug(
+            'latest version: $_latestVersion vs $_currentVersion : $newAvailable');
       }
     } catch (e) {
       logError(e.toString());
