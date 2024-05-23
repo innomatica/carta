@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:cartaapp/shared/settings.dart';
 // import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
@@ -14,8 +15,8 @@ Future<CartaAudioHandler> createAudioHandler() async {
   return await AudioService.init(
     builder: () => CartaAudioHandler(),
     config: const AudioServiceConfig(
-      androidNotificationChannelId: 'com.innomatic.carta.channel.audio',
-      androidNotificationChannelName: 'Carta playback',
+      androidNotificationChannelId: androidNotificationChannelId,
+      androidNotificationChannelName: androidNotificationChannelName,
       androidNotificationOngoing: true,
       // this will keep the foreground on during pause
       // check: https://pub.dev/packages/audio_service

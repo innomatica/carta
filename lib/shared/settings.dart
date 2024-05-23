@@ -1,8 +1,12 @@
 // app info
+import 'package:flutter/material.dart';
+
 const appId = 'com.innomatic.cartaapp';
 const appName = 'Carta';
 const appVersion = '2.6.2+47';
 const emailDeveloper = 'nuntium.ubique@gmail.com';
+const androidNotificationChannelId = 'com.innomatic.carta.channel.audio';
+const androidNotificationChannelName = 'Carta playback';
 
 // asset images
 const defaultAlbumImage = 'assets/images/open-book-512.png';
@@ -56,3 +60,7 @@ bool isScreenWide = false;
 
 // bottom padding
 double bottomPadding = 52.0;
+
+// seed color
+const seedColorLight = Colors.deepOrangeAccent;
+const seedColorDark = Colors.deepOrangeAccent;
