@@ -1,0 +1,93 @@
+<d:multistatus xmlns:d="DAV:" xmlns:s="http://sabredav.org/ns" 
+    xmlns:oc="http://owncloud.org/ns" 
+    xmlns:nc="http://nextcloud.org/ns">
+    <d:response>
+        <d:href>/remote.php/dav/files/admin/Audiobooks/Ira%20Levin/Stepford%20Wives/</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:creationdate>1970-01-01T00:00:00+00:00</d:creationdate>
+                <d:displayname>Stepford Wives</d:displayname>
+                <d:getetag>"664df3bba037a"</d:getetag>
+                <d:getlastmodified>Wed, 22 May 2024 13:31:39 GMT</d:getlastmodified>
+                <d:resourcetype>
+                    <d:collection/>
+                </d:resourcetype>
+                <oc:id>00000158oc3k6569snvz</oc:id>
+                <oc:fileid>158</oc:fileid>
+                <oc:favorite>0</oc:favorite>
+                <oc:owner-display-name>admin</oc:owner-display-name>
+                <oc:size>227554844</oc:size>
+                <oc:permissions>RGDNVCK</oc:permissions>
+                <nc:contained-folder-count>0</nc:contained-folder-count>
+                <nc:contained-file-count>2</nc:contained-file-count>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:getcontentlanguage/>
+                <d:getcontentlength/>
+                <d:getcontenttype/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/remote.php/dav/files/admin/Audiobooks/Ira%20Levin/Stepford%20Wives/Stepford%20Wives%20-%20Ira%20Levin.m4b</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:creationdate>1970-01-01T00:00:00+00:00</d:creationdate>
+                <d:displayname>Stepford Wives - Ira Levin.m4b</d:displayname>
+                <d:getcontentlength>227527928</d:getcontentlength>
+                <d:getcontenttype>audio/m4b</d:getcontenttype>
+                <d:getetag>"5d230b69a2e43be110a5a7ce2e3d8d45"</d:getetag>
+                <d:getlastmodified>Tue, 21 May 2024 15:48:45 GMT</d:getlastmodified>
+                <d:resourcetype/>
+                <oc:id>00000216oc3k6569snvz</oc:id>
+                <oc:fileid>216</oc:fileid>
+                <oc:favorite>0</oc:favorite>
+                <oc:owner-display-name>admin</oc:owner-display-name>
+                <oc:size>227527928</oc:size>
+                <oc:permissions>RGDNVW</oc:permissions>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:getcontentlanguage/>
+                <nc:contained-folder-count/>
+                <nc:contained-file-count/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/remote.php/dav/files/admin/Audiobooks/Ira%20Levin/Stepford%20Wives/The%20Stepford%20Wives.jpg</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:creationdate>1970-01-01T00:00:00+00:00</d:creationdate>
+                <d:displayname>The Stepford Wives.jpg</d:displayname>
+                <d:getcontentlength>26916</d:getcontentlength>
+                <d:getcontenttype>image/jpeg</d:getcontenttype>
+                <d:getetag>"4f3b7c10d794733c42ec7742f01d891f"</d:getetag>
+                <d:getlastmodified>Tue, 21 May 2024 15:46:07 GMT</d:getlastmodified>
+                <d:resourcetype/>
+                <oc:id>00000161oc3k6569snvz</oc:id>
+                <oc:fileid>161</oc:fileid>
+                <oc:favorite>0</oc:favorite>
+                <oc:owner-display-name>admin</oc:owner-display-name>
+                <oc:size>26916</oc:size>
+                <oc:permissions>RGDNVW</oc:permissions>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:getcontentlanguage/>
+                <nc:contained-folder-count/>
+                <nc:contained-file-count/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+</d:multistatus>

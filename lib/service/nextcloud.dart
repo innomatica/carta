@@ -12,16 +12,17 @@ class NextCloudApiService {
     String host,
     String user,
     String pass,
-    String libDir,
+    String dir,
   ) async {
     // remove leading and trailing slash
-    libDir = libDir.replaceAll(RegExp(r'^/|/$'), '');
+    dir = dir.replaceAll(RegExp(r'^/|/$'), '');
     final files = <NextCloudResource>[];
     // Nextcloud file root
     final ncDirRoot = '/remote.php/dav/files/$user';
     // target url
-    final url = '$host$ncDirRoot/$libDir';
-    // logDebug('davPropfind.url:$url');
+    // final url = '$host$ncDirRoot/$libDir';
+    final url = '$host/$dir';
+    logDebug('nextcloud.davPropfind.url:$url, $user, $pass, $host, $dir');
 
     final client = http.Client();
     final request = http.Request('PROPFIND', Uri.parse(url));

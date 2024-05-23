@@ -25,8 +25,9 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
   late final String host;
   late final String user;
   late final String pass;
+  late final String directory;
 
-  String currentPath = '/';
+  String currentPath = '';
 
   @override
   void initState() {
@@ -35,7 +36,8 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
     host = widget.server.url;
     user = widget.server.settings?['username'] ?? '';
     pass = widget.server.settings?['password'] ?? '';
-    currentPath = '/${widget.server.settings?['directory']}';
+    directory = widget.server.settings?['directory'] ?? '';
+    currentPath = directory;
   }
 
   //
@@ -53,7 +55,7 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
     String author = path.elementAt(1);
     String? imageUri;
     String urlPrefix = '$host$currentPath';
-    // logDebug('_parseFiles.urlPrefix: $urlPrefix');
+    logDebug('_parseFiles.urlPrefix: $urlPrefix');
     for (final file in files) {
       final fileName = file.href.split('/').last;
       if (file.contentType?.primaryType == 'audio') {
@@ -162,7 +164,7 @@ class _WebDavNavigatorState extends State<WebDavNavigator> {
           // < button
           IconButton(
             onPressed: () {
-              if (currentPath == '/') {
+              if (currentPath == directory) {
                 Navigator.of(context).pop();
               } else {
                 final parts = currentPath.split('/');

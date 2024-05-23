@@ -1,4 +1,5 @@
 import 'dart:convert';
+// import 'dart:developer';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -12,16 +13,14 @@ class WebDavService {
     String host,
     String user,
     String pass,
-    String libDir,
+    String path,
   ) async {
     // remove leading and trailing slash
-    // libDir = libDir.replaceAll(RegExp(r'^/|/$'), '');
+    // path = path.replaceAll(RegExp(r'^/|/$'), '');
     final resources = <WebDavResource>[];
     // target url
-    // final url = '$host/$libDir';
-    // apache2 webdav redirection
-    final url = '$host/$libDir/';
-    // logDebug('davPropfind.url.user.pass:$url, $user, $pass');
+    final url = '$host$path';
+    logDebug('webdav.davPropfind.url.user.pass:$url,$user,$path');
 
     final client = http.Client();
     final request = http.Request('PROPFIND', Uri.parse(url));
@@ -37,22 +36,34 @@ class WebDavService {
     // result
     http.StreamedResponse res;
     String body;
+
     // send request
+
     try {
       res = await client.send(request);
       body = await res.stream.transform(utf8.decoder).join();
       // logDebug('body:$body');
       client.close();
     } catch (e) {
-      logError(e.toString());
+      /*
+      If you get "SocketException: OS Error: Connection refused, errno=111"
+      and if you are connecting to "localhost" from an emulator then check the 
+      following article:
+
+      https://stackoverflow.com/questions/55785581/socketexception-os-error-connection-refused-errno-111-in-flutter-using-djan
+
+      Basically, you need to use "10.0.2.2" instead of "localhost" and need to
+      add it to the trusted domain of the nextcloud instance
+
+      podman exec --user www-data -it {container name} php occ config:system:set trusted_domains 10 --value="10.0.2.2"
+      */
+      logError('connection failed: $e');
       client.close();
       return null;
     }
     // accept only with status codes 200 and 207
     if (res.statusCode != 200 && res.statusCode != 207) {
       logDebug('statusCode: ${res.statusCode}');
-      // logDebug('res: $res');
-      // logDebug('body: $body');
       return null;
     }
     // decode XML
@@ -71,6 +82,14 @@ class WebDavService {
         String? etag;
         DateTime? lastModified;
         WebDavResourceType? resourceType;
+        // int? id;
+        // int? fileId;
+        // int? favorite;
+        // String? ownerDisplayName;
+        // int? size;
+        // String? permissions;
+        // int? containedFolderCount;
+        // int? containedFileCount;
         for (final item in response.childElements) {
           if (item.name.local == 'href') {
             // D:href => http encoded
@@ -132,6 +151,38 @@ class WebDavService {
                         resourceType = WebDavResourceType.collection;
                       }
                       break;
+                    // //
+                    // // OpenCloud dialects
+                    // //
+                    // case 'id':
+                    //   id = int.tryParse(subSubItem.innerText);
+                    //   break;
+                    // case 'fileid':
+                    //   fileId = int.tryParse(subSubItem.innerText);
+                    //   break;
+                    // case 'favorite':
+                    //   favorite = int.tryParse(subSubItem.innerText);
+                    //   break;
+                    // case 'owner-display-name':
+                    //   ownerDisplayName = subSubItem.innerText;
+                    //   break;
+                    // case 'size':
+                    //   size = int.tryParse(subSubItem.innerText);
+                    //   break;
+                    // case 'permissions':
+                    //   permissions = subSubItem.innerText;
+                    //   break;
+                    // //
+                    // // NextCloud dialects
+                    // //
+                    // case 'contained-folder-count':
+                    //   containedFolderCount = int.tryParse(subSubItem.innerText);
+                    //   break;
+                    // case 'contained-file-count':
+                    //   containedFileCount = int.tryParse(subSubItem.innerText);
+                    //   break;
+                    default:
+                      break;
                   }
                 }
               }
@@ -158,7 +209,7 @@ class WebDavService {
           }
           resources.add(
             WebDavResource(
-              // remove trailing slash
+              // remove trailing slash is desired
               href: href,
               creationDate: creationDate,
               displayName: displayName,
@@ -179,6 +230,7 @@ class WebDavService {
       return null;
     }
     resources.sort(((a, b) => (a.href).compareTo(b.href)));
+    // logDebug('resources: ${resources.toString()}');
     return resources;
   }
 
@@ -186,18 +238,38 @@ class WebDavService {
     String xml = '<?xml version="1.0" encoding="UTF-8"?>';
     if (method == 'PROPFIND') {
       xml = '$xml '
-          '<D:propfind xmlns:D="DAV:">'
-          ' <D:prop>'
-          '   <D:creationdate />'
-          '   <D:displayname />'
-          '   <D:getcontentlanguage />'
-          '   <D:getcontentlength />'
-          '   <D:getcontenttype />'
-          '   <D:getetag />'
-          '   <D:getlastmodified />'
-          '   <D:resourcetype />'
-          ' </D:prop>'
-          '</D:propfind>';
+          '<d:propfind xmlns:d="DAV:"'
+          '   xmlns:oc="http://owncloud.org/ns"'
+          '   xmlns:nc="http://nextcloud.org/ns">'
+          ' <d:prop>'
+          '   <d:creationdate />'
+          '   <d:displayname />'
+          '   <d:getcontentlanguage />'
+          '   <d:getcontentlength />'
+          '   <d:getcontenttype />'
+          '   <d:getetag />'
+          '   <d:getlastmodified />'
+          '   <d:resourcetype />'
+          // // opencloud dialects
+          // '   <oc:id />'
+          // '   <oc:fileid />'
+          // '   <oc:favorite />'
+          // '   <oc:comments-href />'
+          // '   <oc:comments-count />'
+          // '   <oc:comments-unread />'
+          // '   <oc:owner-id />'
+          // '   <oc:owner-display-name />'
+          // '   <oc:share-types />'
+          // '   <oc:checksums />'
+          // '   <nc:has-preview />'
+          // '   <oc:size />'
+          // '   <oc:permissions />'
+          // // nextcloud dialects
+          // '   <nc:rich-workspace />'
+          // '   <nc:contained-folder-count />'
+          // '   <nc:contained-file-count />'
+          ' </d:prop>'
+          '</d:propfind>';
     }
     return xml;
   }
