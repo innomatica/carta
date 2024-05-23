@@ -1,6 +1,6 @@
 # Carta
 
-With Carta, you can enjoying listening to free public domain audiobooks from
+With Carta, you can enjoy listening to free public domain audiobooks from
 
 - [LibriVox](https://librivox.org/)
 - [Internet Archive](https://archive.org)
