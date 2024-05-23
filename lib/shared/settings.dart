@@ -1,7 +1,7 @@
 // app info
 const appId = 'com.innomatic.cartaapp';
 const appName = 'Carta';
-const appVersion = '2.6.1+45';
+const appVersion = '2.6.2+47';
 const emailDeveloper = 'nuntium.ubique@gmail.com';
 
 // asset images
