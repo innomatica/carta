@@ -10,7 +10,7 @@ At the top, from the left you have three buttons:
 
 ![](./res/top_bar.png){: style="width:400px"}
 
-At bottom, you have
+At the bottom, you have
 
 * Add audiobook button
 * Audio player (tab to expand)
@@ -59,7 +59,8 @@ page where you can register your WebDAV server
 ![](./res/nextcloud.png){: style="width:400px"}
 
 Nextcloud has unique url for the WebDAV access. Go to your nextcloud console
-and check **Files > Files settings > WebDAV**.
+and check **Files > Files settings > WebDAV** page.
+As it is notified in the page, if you enabled 2FA, you need to use app specific password instead of your account password.
 Also visit [this page](https://docs.nextcloud.com/server/stable/user_manual/en/files/access_webdav.html)
 for further information.
 
@@ -67,11 +68,8 @@ for further information.
 
 ![](./res/koofr.png){: style="width:400px"}
 
-In case of Koofr cloud, first you need to generate a new password for the app
-then use enter it here.
-Go to your Koofr page and proceed to **Account > Preferences > Password** page,
-there you can generate a password for each app so that you don't have to 
-expose your main account password.
+Koofr also require you to use app password instead of account password.
+Visit your Koofr web console and proceed to **Account > Preferences > Password** page, there you can generate a password for the app use.
 
 #### Other Types of WebDAV Servers
 
