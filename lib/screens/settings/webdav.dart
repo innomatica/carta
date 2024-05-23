@@ -70,7 +70,7 @@ class _WebDavSettingsState extends State<WebDavSettings> {
       return 'url should start with http or https';
     } else {
       if (_serverType == ServerType.koofr &&
-          value != "https://app.koofr.net/dav/Koofr") {
+          !value.startsWith("https://app.koofr.net/dav/Koofr")) {
         return 'incorrect webdav url for Koofr';
       } else if (_serverType == ServerType.nextcloud &&
           !value.contains('remote.php/dav/files')) {
