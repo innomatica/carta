@@ -10,7 +10,7 @@ as well as personal collections from
 
 - [Nextcloud](https://nextcloud.com)
 - [Koofr Cloud](https://koofr.eu)
-- Other WebDAV instances such as Apache modDAV and Rclone serve
+- Other WebDAV instances such as Apache mod_dav and Rclone serve
 
 # Note to Users
 
