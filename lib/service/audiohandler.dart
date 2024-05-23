@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:cartaapp/shared/settings.dart';
-// import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../shared/helpers.dart';
+import '../shared/settings.dart';
 
 const fastForwardInterval = Duration(seconds: 30);
 const rewindInterval = Duration(seconds: 30);
