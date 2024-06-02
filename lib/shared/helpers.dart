@@ -43,18 +43,19 @@ int? hmsToSeconds(String? time) {
       // invalid string
       // return Duration.zero;
       result = 0;
+    } else {
+      result = (int.tryParse(hms[0]) ?? 0) * 3600 +
+          (int.tryParse(hms[1]) ?? 0) * 60 +
+          (int.tryParse(hms[2]) ?? 0);
     }
-    result = (int.tryParse(hms[0]) ?? 0) * 3600 +
-        (int.tryParse(hms[1]) ?? 0) * 60 +
-        (int.tryParse(hms[2]) ?? 0);
   }
   // logDebug('hmsToSeconds: $time => $result');
   return result;
 }
 
 String secondsToHms(int? seconds) {
-  String result = '00:00:00';
-  if (seconds != null) {
+  String result = '';
+  if (seconds != null && seconds > 0) {
     // return '${seconds ~/ 3600}:${seconds ~/ 60}:${seconds % 60}';
     int h = seconds ~/ 3600;
     int m = (seconds - h * 3600) ~/ 60;
