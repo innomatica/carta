@@ -1,0 +1,20 @@
+services:
+  webdav:
+    container_name: rclone-webdav
+    image: docker.io/rclone/rclone:1.66
+    restart: unless-stopped
+    command:
+      - "serve"
+      - "webdav"
+      #- "--verbose"
+      - "--htpasswd"
+      - "/config/rsync/davpass"
+      - "--addr"
+      - "0.0.0.0:4000"
+      - "--read-only"
+      - "/webdav"
+    ports:
+      - "4000:4000"
+    volumes:
+      - /var/mnt/webdav:/webdav:Z
+      - ${PWD}/davpass:/config/rsync/davpass:Z

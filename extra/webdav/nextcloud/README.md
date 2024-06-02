@@ -30,6 +30,7 @@ Come back to the setup script and proceed to the step (2).
 Use following parameters
 
 * title: (any title of your choice)
-* site url: (server domain name)
-* username / password: (as entered above)
-* directory: remote.php/dav/files/(username)/Media
+* server type: nextcloud
+* username / password: (nextcloud account or app account created separately)
+* site url: {server url}/remote.php/dav/files/{username}/
+

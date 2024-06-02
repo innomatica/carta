@@ -1,0 +1,16 @@
+services:
+
+  webdav:
+    build: .
+    image: localhost/webdav:0.1.0
+    container_name: webdav
+    volumes:
+      - ${PWD}/data/htdocs:/var/www/localhost/htdocs:ro,Z
+      - /var/mnt/webdav:/var/www/localhost/webdav:ro,Z
+      - ${PWD}/data/config/lighttpd.user:/etc/lighttpd/lighttpd.user:ro,Z
+      - webdav_db:/var/lib/lighttpd/db
+    ports:
+      - 4000:80
+
+volumes:
+  webdav_db:

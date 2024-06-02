@@ -1,25 +1,25 @@
-# Set up
+# Apache WebDAV Server
+
+
+## Set up and Launch
 
 Run
 ```
 bash setup.sh
 ```
 
-This will generate
+This will generate following files:
 
 * `.env`
 * `httpd.conf`
 * `user.passwd`
 
-
-# Launch Server
-
-Run
+Then launch server
 ```
-docker compose up -d
+docker-compose up -d
 ```
 
-# Carta Settings
+## Carta Settings
 
 Note that your media directory will be mounted at `/usr/local/apache2/webdav`
 and will be served at `{your server url}/webdav`
@@ -27,12 +27,16 @@ and will be served at `{your server url}/webdav`
 Use following parameters
 
 * title: (any title of your choice)
-* site url: (server domain name or IP address entered above)
-* username / password: (as entered above)
-* directory: webdav
+* server type: webdav
+* username / password: (as created above)
+* site url: {server url}/webdav
 
+## Note
 
-# Reference
+`mod_dav` may not work with certain versions of `apach2` especially recent ones.
+Try other versions in such occasion.
+
+## Reference
 
 * [Apache Module mod_dav](https://httpd.apache.org/docs/2.4/mod/mod_dav.html)
 * [Authentication and Authorization](https://httpd.apache.org/docs/2.4/howto/auth.html)
