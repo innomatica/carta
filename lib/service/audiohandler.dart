@@ -73,11 +73,16 @@ class CartaAudioHandler extends BaseAudioHandler
   void _handleDurationChange() {
     // subscribe to the duration chane
     _subDuration = _player.durationStream.listen((Duration? duration) {
-      // logDebug('handler.durationChange: $duration, ${_player.playerState}');
-      if (duration != null && _player.playing) {
-        // broadcast duration change
-        if (currentMediaItem != null) {
-          mediaItem.add(currentMediaItem!.copyWith(duration: duration));
+      logDebug('handler.durationChange: $duration, ${_player.playerState}');
+      if (_player.playerState.processingState == ProcessingState.ready) {
+        if (_player.playing) {
+          logDebug('handler.durationChange => end of chapter');
+        } else if (duration != null) {
+          logDebug('handler.durationChange => update duration');
+          // broadcast duration change
+          if (currentTag != null) {
+            mediaItem.add(currentTag!.copyWith(duration: duration));
+          }
         }
       }
     });
@@ -105,7 +110,7 @@ class CartaAudioHandler extends BaseAudioHandler
   void _handleCurIndexChange() {
     _subCurIndex = _player.currentIndexStream.listen((int? index) {
       // new section loaded
-      mediaItem.add(currentMediaItem);
+      mediaItem.add(currentTag);
     });
   }
 
@@ -170,7 +175,7 @@ class CartaAudioHandler extends BaseAudioHandler
           currentIndex! < sequence!.length
       ? sequence?.elementAt(currentIndex!)
       : null;
-  MediaItem? get currentMediaItem => currentSection?.tag as MediaItem?;
+  MediaItem? get currentTag => currentSection?.tag as MediaItem?;
 
   @override
   Future<void> play() => _player.play();
