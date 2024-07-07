@@ -224,9 +224,9 @@ class CartaBloc extends ChangeNotifier {
   // Delete
   Future deleteAudioBook(CartaBook book) async {
     if (book.bookId == currentBookId) {
-      if (_handler.playing) {
-        await _handler.stop();
-      }
+      // if (_handler.playing) {
+      await _handler.stop();
+      // }
       _handler.clearQueue();
     }
     // remove stored data regardless of book.source
@@ -329,9 +329,9 @@ class CartaBloc extends ChangeNotifier {
     if (!bookDir.existsSync()) {
       await bookDir.create();
     }
-    // download cover image: no longer necessary
-    // book.downloadCoverImage();
     _isDownloading.add(book.bookId);
+    // download cover image first
+    await book.downloadCoverImage();
     // download each section data
     for (final section in book.sections!) {
       // logDebug('downloading:${section.index}');

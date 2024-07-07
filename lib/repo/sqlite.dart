@@ -123,7 +123,7 @@ class SqliteRepo {
       limit: query?['limit'],
       offset: query?['offset'],
     );
-    // logDebug('sqlite.getAudioBooks:${records.length}');
+    // logDebug('sqlite.getAudioBooks:$records');
     return records.map<CartaBook>((e) => CartaBook.fromSqlite(e)).toList();
   }
 
